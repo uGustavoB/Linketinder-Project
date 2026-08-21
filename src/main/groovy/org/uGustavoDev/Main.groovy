@@ -1,5 +1,30 @@
 package org.uGustavoDev
 
+import org.uGustavoDev.service.LinketinderService
+import org.uGustavoDev.ui.ConsoleUI
+
 static void main(String[] args) {
-  println "Hello world!"
+  LinketinderService service = new LinketinderService()
+  boolean executando = true
+
+  ConsoleUI.limparTela()
+
+  while (executando) {
+    int opcao = ConsoleUI.pedirOpcaoPrincipal()
+
+    switch (opcao) {
+      case 1:
+        service.listarCandidatos()
+        ConsoleUI.aguardarContinuacao()
+        break
+      case 2:
+        service.listarEmpresas()
+        ConsoleUI.aguardarContinuacao()
+        break
+      case 0:
+        ConsoleUI.imprimirMensagem("Encerrando o Linketinder. Até logo!")
+        executando = false
+        break
+    }
+  }
 }
