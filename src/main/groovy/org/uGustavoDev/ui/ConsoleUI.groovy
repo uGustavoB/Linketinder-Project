@@ -1,6 +1,8 @@
 package org.uGustavoDev.ui
 
 import java.time.format.DateTimeFormatter
+import org.uGustavoDev.model.Candidato
+import org.uGustavoDev.model.Empresa
 
 class ConsoleUI {
   private static final Scanner scanner = new Scanner(System.in)
@@ -72,8 +74,48 @@ class ConsoleUI {
     println "Escolha uma ação:"
     println "1 - Listar Candidatos"
     println "2 - Listar Empresas"
+    println "3 - Cadastrar Candidato"
+    println "4 - Cadastrar Empresa"
     println "0 - Sair"
 
-    return lerEscolha("Sua escolha: ", 0, 2)
+    return lerEscolha("Sua escolha: ", 0, 4)
+  }
+
+  static Candidato pedirDadosCandidato() {
+    imprimirCabecalho("Cadastro de Candidato")
+    String nome = lerTexto("Nome: ")
+    String email = lerTexto("Email: ")
+    String estado = lerTexto("Estado (ex: SP): ")
+    String pais = lerTexto("País: ")
+    String cep = lerTexto("CEP: ")
+    String descricao = lerTexto("Descrição Pessoal: ")
+    String cpf = lerTexto("CPF: ")
+    
+    int idade = lerEscolha("Idade: ", 14, 120)
+    
+    String compsStr = lerTexto("Competências (separadas por vírgula): ", true)
+    List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
+
+    def candidato = new Candidato(nome, email, estado, pais, cep, descricao, cpf, idade)
+    candidato.competencias = competencias
+    return candidato
+  }
+
+  static Empresa pedirDadosEmpresa() {
+    imprimirCabecalho("Cadastro de Empresa")
+    String nome = lerTexto("Nome da Empresa: ")
+    String email = lerTexto("Email Corporativo: ")
+    String estado = lerTexto("Estado (ex: SP): ")
+    String pais = lerTexto("País: ")
+    String cep = lerTexto("CEP: ")
+    String descricao = lerTexto("Descrição da Empresa: ")
+    String cnpj = lerTexto("CNPJ: ")
+    
+    String compsStr = lerTexto("Competências requeridas (separadas por vírgula): ", true)
+    List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
+
+    def empresa = new Empresa(nome, email, estado, pais, cep, descricao, cnpj)
+    empresa.competencias = competencias
+    return empresa
   }
 }

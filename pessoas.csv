@@ -3,8 +3,10 @@ CANDIDATO;Gustavo;gustavo@email.com;Brasil;PB;58000-000;Desenvolvedor buscando a
 CANDIDATO;Ana Silva;ana@email.com;Brasil;SP;01000-000;Especialista em frontend e design de interfaces.;222.222.222-22;30;Angular,TypeScript
 CANDIDATO;Carlos Eduardo;carlos@email.com;Brasil;RJ;20000-000;Engenheiro de dados com foco em pipelines.;333.333.333-33;28;Python,SQL
 CANDIDATO;Mariana Souza;mariana@email.com;Brasil;MG;30000-000;Desenvolvedora focada em ecossistemas mobile.;444.444.444-44;23;Flutter,Dart
+CANDIDATO;João Pedro;joao@email.com;Brasil;SC;88000-000;Arquiteto de software e entusiasta open-source.;555.555.555-55;35;ava,Docker,AWS
 EMPRESA;Google;careers@google.com;Brasil;SP;04538-133;Empresa multinacional de servicos online e software.;06.990.590/0001-23;;Python,Java,Go,Cloud
 EMPRESA;Meta;jobs@meta.com;Brasil;SP;04538-133;Conglomerado de tecnologia e midias sociais.;13.654.497/0001-32;;React,JavaScript,Python,C++
 EMPRESA;Nubank;vagas@nubank.com.br;Brasil;SP;05425-070;Pioneira no segmento de servicos financeiros atuando como banco digital.;18.236.120/0001-58;;Clojure,Flutter,Datomic
 EMPRESA;Itau Unibanco;carreiras@itau.com.br;Brasil;SP;04344-902;Maior banco privado do Brasil e da America Latina.;60.872.504/0001-23;;Java,Spring Boot,AWS,Angular
+EMPRESA;Mercado Livre;talentos@mercadolivre.com;Brasil;SP;06233-903;Empresa de tecnologia que oferece solucoes de comercio eletronico.;03.007.331/0001-41;;Java,Golang,Python,React
 EMPRESA;Mercado Livre;talentos@mercadolivre.com;Brasil;SP;06233-903;Empresa de tecnologia que oferece solucoes de comercio eletronico.;03.007.331/0001-41;;Java,Golang,Python,React
