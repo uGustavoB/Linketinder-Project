@@ -12,4 +12,16 @@ class Empresa extends Pessoa {
   String obterDocumento() {
     return this.cnpj
   }
+
+  @Override
+  String toString() {
+    return """\
+EMPRESA: $nome
+Email: $email
+Local: $estado, $pais - CEP: $CEP
+CNPJ: $cnpj
+Descrição: $descricao
+Competências: ${competencias.join(', ')}
+----------------------------------------"""
+  }
 }

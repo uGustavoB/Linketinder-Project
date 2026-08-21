@@ -14,4 +14,16 @@ class Candidato extends Pessoa {
   String obterDocumento() {
     return this.cpf
   }
+
+  @Override
+  String toString() {
+    return """\
+CANDIDATO: $nome ($idade anos)
+Email: $email
+Local: $estado, $pais - CEP: $CEP
+CPF: $cpf
+Descrição: $descricao
+Competências: ${competencias.join(', ')}
+----------------------------------------"""
+  }
 }
