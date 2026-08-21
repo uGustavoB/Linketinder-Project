@@ -1,9 +1,14 @@
 plugins {
     id 'groovy'
+    id 'application'
 }
 
 group = 'org.uGustavoDev'
 version = '1.0-SNAPSHOT'
+
+application {
+    mainClass = 'org.uGustavoDev.Main'
+}
 
 repositories {
     mavenCentral()
@@ -18,4 +23,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+run {
+    standardInput = System.in
+    jvmArgs = ["-Dfile.encoding=UTF-8"]
 }
