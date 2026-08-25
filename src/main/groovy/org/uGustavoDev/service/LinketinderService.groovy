@@ -2,7 +2,6 @@ package org.uGustavoDev.service
 
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
-import org.uGustavoDev.model.Pessoa
 import org.uGustavoDev.ui.ConsoleUI
 
 class LinketinderService {
@@ -14,22 +13,8 @@ class LinketinderService {
     }
 
     void inicializarDados() {
-        def pessoasCsv = CsvService.carregarPessoas()
-        if (!pessoasCsv.isEmpty()) {
-            candidatos = pessoasCsv.findAll { it instanceof Candidato } as List<Candidato>
-            empresas = pessoasCsv.findAll { it instanceof Empresa } as List<Empresa>
-        } else {
-            inicializarCandidatos()
-            inicializarEmpresas()
-            salvarDados()
-        }
-    }
-
-    void salvarDados() {
-        List<Pessoa> todasPessoas = []
-        todasPessoas.addAll(candidatos)
-        todasPessoas.addAll(empresas)
-        CsvService.salvarPessoas(todasPessoas)
+        inicializarCandidatos()
+        inicializarEmpresas()
     }
 
     void inicializarCandidatos() {
@@ -72,12 +57,10 @@ class LinketinderService {
 
     void adicionarCandidato(Candidato candidato) {
         candidatos.add(candidato)
-        salvarDados()
     }
 
     void adicionarEmpresa(Empresa empresa) {
         empresas.add(empresa)
-        salvarDados()
     }
 
     void listarCandidatos() {
