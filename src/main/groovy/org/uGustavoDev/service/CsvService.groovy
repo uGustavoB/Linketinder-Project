@@ -14,7 +14,7 @@ class CsvService {
             file.withPrintWriter("UTF-8") { writer ->
                 // Cabeçalho
                 writer.println("Tipo;Nome;Email;Pais;Estado;CEP;Descricao;Documento;Idade;Competencias")
-                
+
                 pessoas.each { pessoa ->
                     String tipo = pessoa instanceof Candidato ? "CANDIDATO" : "EMPRESA"
                     String nome = pessoa.nome?.replace(";", ",") ?: ""
@@ -26,7 +26,7 @@ class CsvService {
                     String documento = pessoa.obterDocumento()?.replace(";", ",") ?: ""
                     String idade = pessoa instanceof Candidato ? pessoa.idade.toString() : ""
                     String competencias = pessoa.competencias ? pessoa.competencias.join(",").replace(";", ",") : ""
-                    
+
                     writer.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s%n",
                             tipo, nome, email, pais, estado, cep, descricao, documento, idade, competencias)
                 }
@@ -39,7 +39,7 @@ class CsvService {
     static List<Pessoa> carregarPessoas() {
         List<Pessoa> pessoas = []
         File arquivo = new File(ARQUIVO_CSV)
-        
+
         if (!arquivo.exists()) {
             return pessoas
         }
@@ -62,9 +62,9 @@ class CsvService {
                             String documento = dados[7]
                             String idadeStr = dados[8]
                             String competenciasStr = dados[9]
-                            
+
                             List<String> competencias = competenciasStr ? competenciasStr.split(",").toList() : []
-                            
+
                             if (tipo == "CANDIDATO") {
                                 Integer idade = idadeStr ? idadeStr.toInteger() : 0
                                 def candidato = new Candidato(nome, email, estado, pais, cep, descricao, documento, idade)
@@ -82,7 +82,7 @@ class CsvService {
         } catch (Exception e) {
             System.err.println("Erro ao carregar o arquivo CSV: " + e.getMessage())
         }
-        
+
         return pessoas
     }
 }
