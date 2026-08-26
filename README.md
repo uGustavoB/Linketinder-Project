@@ -4,7 +4,7 @@
 
 Bem-vindo ao projeto **LinkeTinder**, um sistema inovador idealizado a partir do insight do grande empresário Dr. Antônio Paçoca. O objetivo desta plataforma é revolucionar o processo de recrutamento, unindo a praticidade de "match" do Tinder com o mapeamento e validação de competências técnicas do LinkedIn.
 
-Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, onde é possível cadastrar e gerenciar perfis de Candidatos e de Empresas, visualizar suas qualificações e armazenar esses dados de forma persistente num único repositório unificado.
+Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, onde é possível cadastrar e gerenciar perfis de Candidatos e de Empresas, visualizar suas qualificações e armazenar esses dados em listas na memória.
 
 ---
 
@@ -12,7 +12,7 @@ Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, o
 
 - **Cadastro de Candidatos e Empresas**: Adicione novos perfis com informações detalhadas, capturando inclusive a lista das competências técnicas de cada um.
 - **Listagem Estruturada**: Visualize os candidatos e as empresas de forma bastante amigável no terminal, através de formato de tabela elegante (sem emojis ou caracteres que quebrem terminais nativos).
-- **Persistência em CSV**: Os dados são salvos de forma automática e imediata no arquivo `pessoas.csv` após qualquer novo cadastro, e carregados na inicialização da aplicação, evitando a perda de dados.
+- **Armazenamento em Memória**: Os dados são gerenciados em listas na memória, inicializados com dados pré-cadastrados e atualizados a cada novo cadastro.
 
 ---
 
@@ -20,22 +20,30 @@ Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, o
 
 ```
 src/
-└── main/
+├── main/
+│   └── groovy/
+│       └── org/
+│           └── uGustavoDev/
+│               ├── Main.groovy              # Ponto de entrada da aplicação
+│               ├── model/
+│               │   ├── Pessoa.groovy        # Classe base (abstrata)
+│               │   ├── Candidato.groovy     # Entidade de Candidato
+│               │   ├── Empresa.groovy       # Entidade de Empresa
+│               │   └── interfaces/
+│               │       └── IPessoa.groovy   # Interface de contrato (ex: obterDocumento)
+│               ├── service/
+│               │   └── LinketinderService.groovy # Lógica de negócios e gerenciamento das listas
+│               └── ui/
+│                   └── ConsoleUI.groovy     # Gerenciamento de interface e leitura de inputs
+└── test/
     └── groovy/
         └── org/
             └── uGustavoDev/
-                ├── Main.groovy              # Ponto de entrada da aplicação
                 ├── model/
-                │   ├── Pessoa.groovy        # Classe base (abstrata)
-                │   ├── Candidato.groovy     # Entidade de Candidato
-                │   ├── Empresa.groovy       # Entidade de Empresa
-                │   └── interfaces/
-                │       └── IPessoa.groovy   # Interface de contrato (ex: obterDocumento)
-                ├── service/
-                │   ├── CsvService.groovy         # Responsável pela persistência em CSV
-                │   └── LinketinderService.groovy # Lógica de negócios e gerenciamento das listas
-                └── ui/
-                    └── ConsoleUI.groovy     # Gerenciamento de interface e leitura de inputs
+                │   ├── CandidatoSpec.groovy # Testes unitários de Candidato
+                │   └── EmpresaSpec.groovy   # Testes unitários de Empresa
+                └── services/
+                    └── LinketinderServiceSpec.groovy # Testes unitários do serviço
 ```
 
 ---
@@ -48,9 +56,11 @@ src/
 | `Pessoa.groovy`             | Classe mãe abstrata contendo as propriedades em comum entre perfis: Nome, E-mail, País, Estado, CEP, Descrição e as Competências.                 |
 | `Candidato.groovy`          | Entidade que herda de `Pessoa` adicionando particularidades exclusivas como o `cpf` e `idade`.                                                    |
 | `Empresa.groovy`            | Entidade que herda de `Pessoa` e adiciona particularidades exclusivas corporativas, como o `cnpj`.                                                |
-| `LinketinderService.groovy` | Serviço encarregado pelas regras de negócio, pela inicialização de mock de dados (ex: Big Techs), pelo carregamento inicial e listas na RAM.      |
-| `CsvService.groovy`         | Classe com lógica puramente voltada para I/O: ler o `pessoas.csv` unificando entidades via coluna `Tipo`, e persistir novos cadastros via stream. |
+| `LinketinderService.groovy` | Serviço encarregado pelas regras de negócio, pela inicialização de mock de dados (ex: Big Techs) e gerenciamento das listas na memória.            |
 | `ConsoleUI.groovy`          | Isola toda a complexidade da CLI: limpeza de terminal, formatação ASCII de cabeçalhos, validação de inputs (evitar nulls) e impressão de dados.   |
+| `CandidatoSpec.groovy`      | Testes unitários para validar a criação, atributos e métodos do Candidato.                                                                       |
+| `EmpresaSpec.groovy`        | Testes unitários para validar a criação, atributos e métodos da Empresa.                                                                         |
+| `LinketinderServiceSpec.groovy` | Testes unitários desenvolvidos com TDD para validar o gerenciamento e inserção nas listas de candidatos e empresas.                              |
 
 ---
 
@@ -71,6 +81,7 @@ src/
 
 - **Groovy** (Linguagem escolhida para produtividade e compatibilidade com o ecossistema Java)
 - **Gradle** (Gerenciador de dependências e automação de build)
+- **Spock Framework** (Framework de testes unitários e BDD)
 
 ---
 
@@ -86,7 +97,17 @@ src/
     cd Linketinder-Project
     ```
 
-3. Execute o projeto usando o Gradle Wrapper:
+3. Execute os testes unitários:
+    - **No Windows:**
+      ```bash
+      gradlew.bat test
+      ```
+    - **No Linux/Mac:**
+      ```bash
+      ./gradlew test
+      ```
+
+4. Execute o projeto usando o Gradle Wrapper:
     - **No Windows:**
       ```bash
       ./gradlew.bat -q --console plain run
