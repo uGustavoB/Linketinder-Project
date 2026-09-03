@@ -70,24 +70,22 @@ class CandidatoSpec extends Specification {
 
     def "deve retornar o CPF ao chamar obterDocumento()"() {
         given: "um candidato com CPF"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", 21)
+        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
 
         expect: "obterDocumento() retorna o CPF correto"
         candidato.obterDocumento() == "111.111.111-11"
     }
 
-    def "deve formatar a representação textual no toString() com sucesso"() {
-        given: "um candidato com competências"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor", "111.111.111-11", 25)
-        candidato.adicionarCompetencias(["Groovy", "Spock"])
+    def "nao deve falhar ao tentar remover uma competência inexistente"() {
+        given: "um candidato com algumas competências"
+        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
+        candidato.adicionarCompetencia("Java")
 
-        when: "o método toString é executado"
-        String resultado = candidato.toString()
+        when: "tentamos remover uma competência que nao esta na lista"
+        candidato.removerCompetencia("C#")
 
-        then: "a string contém todos os dados formatados do candidato"
-        resultado.contains("CANDIDATO: Gustavo (25 anos)")
-        resultado.contains("Email: gustavo@example.com")
-        resultado.contains("CPF: 111.111.111-11")
-        resultado.contains("Competências: Groovy, Spock")
+        then: "a lista original permanece inalterada e nenhuma exceção é lançada"
+        candidato.competencias.size() == 1
+        candidato.competencias.contains("Java")
     }
 }

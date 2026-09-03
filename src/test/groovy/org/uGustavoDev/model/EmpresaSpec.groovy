@@ -74,18 +74,16 @@ class EmpresaSpec extends Specification{
         empresa.obterDocumento() == "12.345.678/0001-90"
     }
 
-    def "deve formatar a representação textual no toString() com sucesso"() {
-        given: "uma empresa com competências"
+    def "nao deve falhar ao tentar remover uma competência inexistente"() {
+        given: "uma empresa com algumas competências"
         Empresa empresa = new Empresa("Google", "google@google.com", "CA", "USA", "12345-678", "Empresa de tecnologia.", "12.345.678/0001-90")
-        empresa.adicionarCompetencias(["Java", "Go"])
+        empresa.adicionarCompetencia("Java")
 
-        when: "o método toString é executado"
-        String resultado = empresa.toString()
+        when: "tentamos remover uma competência que nao esta na lista"
+        empresa.removerCompetencia("C#")
 
-        then: "a string contém todos os dados formatados da empresa"
-        resultado.contains("EMPRESA: Google")
-        resultado.contains("Email: google@google.com")
-        resultado.contains("CNPJ: 12.345.678/0001-90")
-        resultado.contains("Competências: Java, Go")
+        then: "a lista original permanece inalterada e nenhuma exceção é lançada"
+        empresa.competencias.size() == 1
+        empresa.competencias.contains("Java")
     }
 }
