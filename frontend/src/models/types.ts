@@ -1,3 +1,9 @@
+export interface Formacao {
+    curso: string;
+    instituicao?: string;
+    nivel?: string;
+}
+
 export interface Competencia {
     nome: string;
 }
@@ -16,6 +22,7 @@ export interface Pessoa {
 export interface Candidato extends Pessoa {
     cpf: string;
     idade: number;
+    formacoes: Formacao[];
 }
 
 export interface Empresa extends Pessoa {
