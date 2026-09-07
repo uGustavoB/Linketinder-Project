@@ -1,3 +1,6 @@
+import type { Candidato, Competencia, Empresa, Formacao } from '../models/types.ts';
+import { adicionarCandidato, adicionarEmpresa, listaCandidatos, listaEmpresas } from '../services/armazenamento.ts';
+
 export function renderizarCadastroPessoa(): string {
     return `
         <div>
@@ -113,4 +116,85 @@ export function configurarCadastro(): void {
 
     radioCandidato.addEventListener('change', alternarFormularios);
     radioEmpresa.addEventListener('change', alternarFormularios);
+
+    formularioCandidato.addEventListener('submit', (evento: SubmitEvent) => {
+        evento.preventDefault();
+
+        const nome = document.querySelector<HTMLInputElement>('#nome-candidato')?.value.trim() || '';
+        const email = document.querySelector<HTMLInputElement>('#email-candidato')?.value.trim() || '';
+        const cpf = document.querySelector<HTMLInputElement>('#cpf')?.value.trim() || '';
+        const idade = Number(document.querySelector<HTMLInputElement>('#idade')?.value) || 0;
+        const estado = document.querySelector<HTMLInputElement>('#estado-candidato')?.value.trim() || '';
+        const cep = document.querySelector<HTMLInputElement>('#cep-candidato')?.value.trim() || '';
+        const pais = document.querySelector<HTMLInputElement>('#pais-candidato')?.value.trim() || '';
+        const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-candidato')?.value.trim() || '';
+        const formacoesTexto = document.querySelector<HTMLInputElement>('#formacoes')?.value || '';
+        const competenciasTexto = document.querySelector<HTMLInputElement>('#competencias-candidato')?.value || '';
+
+        const formacoes: Formacao[] = formacoesTexto
+            .split(',')
+            .map((item) => ({ curso: item.trim() }))
+            .filter((item) => item.curso.length > 0);
+
+        const competencias: Competencia[] = competenciasTexto
+            .split(',')
+            .map((item) => ({ nome: item.trim() }))
+            .filter((item) => item.nome.length > 0);
+
+        const novoCandidato: Candidato = {
+            id: String(Date.now()),
+            nome,
+            email,
+            cpf,
+            idade,
+            estado,
+            cep,
+            pais,
+            descricao,
+            formacoes,
+            competencias
+        };
+
+        adicionarCandidato(novoCandidato);
+        formularioCandidato.reset();
+        alert('Candidato cadastrado com sucesso!');
+        console.log('Candidato criado:', novoCandidato);
+        console.log('Lista de candidatos:', listaCandidatos);
+    });
+
+    formularioEmpresa.addEventListener('submit', (evento: SubmitEvent) => {
+        evento.preventDefault();
+
+        const nome = document.querySelector<HTMLInputElement>('#nome-empresa')?.value.trim() || '';
+        const email = document.querySelector<HTMLInputElement>('#email-empresa')?.value.trim() || '';
+        const cnpj = document.querySelector<HTMLInputElement>('#cnpj')?.value.trim() || '';
+        const estado = document.querySelector<HTMLInputElement>('#estado-empresa')?.value.trim() || '';
+        const cep = document.querySelector<HTMLInputElement>('#cep-empresa')?.value.trim() || '';
+        const pais = document.querySelector<HTMLInputElement>('#pais-empresa')?.value.trim() || '';
+        const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-empresa')?.value.trim() || '';
+        const competenciasTexto = document.querySelector<HTMLInputElement>('#competencias-empresa')?.value || '';
+
+        const competencias: Competencia[] = competenciasTexto
+            .split(',')
+            .map((item) => ({ nome: item.trim() }))
+            .filter((item) => item.nome.length > 0);
+
+        const novaEmpresa: Empresa = {
+            id: String(Date.now()),
+            nome,
+            email,
+            cnpj,
+            estado,
+            cep,
+            pais,
+            descricao,
+            competencias
+        };
+
+        adicionarEmpresa(novaEmpresa);
+        formularioEmpresa.reset();
+        alert('Empresa cadastrada com sucesso!');
+        console.log('Empresa criada:', novaEmpresa);
+        console.log('Lista de empresas:', listaEmpresas);
+    });
 }
