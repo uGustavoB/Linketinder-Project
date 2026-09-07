@@ -1,6 +1,6 @@
-import './style.css'
-import {renderHome} from "./views/Home.ts";
-import {renderCadastroCandidato} from "./views/CadastroCandidato.ts";
+import './style.css';
+import { renderHome } from './views/Home.ts';
+import { renderizarCadastroPessoa, configurarCadastro } from './views/CadastroPessoa.ts';
 
 const app: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -8,11 +8,11 @@ function router(): void {
     const hash: string = window.location.hash.slice(1) || '/';
 
     switch (hash) {
+        case '/cadastro':
         case '/cadastro-candidato':
-            app.innerHTML = renderCadastroCandidato();
-            break;
         case '/cadastro-empresa':
-            app.innerHTML = '<h1>Cadastro de Empresa (Em breve)</h1>';
+            app.innerHTML = renderizarCadastroPessoa();
+            configurarCadastro();
             break;
         case '/perfil-empresa':
             app.innerHTML = '<h1>Perfil da Empresa (Em breve)</h1>';
