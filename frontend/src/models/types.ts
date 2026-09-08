@@ -29,3 +29,8 @@ export interface Candidato extends Pessoa {
 export interface Empresa extends Pessoa {
     cnpj: string;
 }
+
+export interface UsuarioLogado {
+    tipo: 'candidato' | 'empresa';
+    dados: Candidato | Empresa;
+}

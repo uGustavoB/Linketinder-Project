@@ -1,4 +1,4 @@
-import { listaCandidatos, listaEmpresas } from '../services/armazenamento.ts';
+import { listaCandidatos, listaEmpresas, salvarUsuarioLogado } from '../services/armazenamento.ts';
 
 export function renderizarLogin(): string {
     return `
@@ -39,6 +39,7 @@ export function configurarLogin(): void {
         );
 
         if (candidato) {
+            salvarUsuarioLogado({ tipo: 'candidato', dados: candidato });
             alert(`Login realizado com sucesso! Identificado como Candidato: ${candidato.nome}`);
             console.log('Usuário autenticado (Candidato):', candidato);
             window.location.hash = '#/home';
@@ -50,6 +51,7 @@ export function configurarLogin(): void {
         );
 
         if (empresa) {
+            salvarUsuarioLogado({ tipo: 'empresa', dados: empresa });
             alert(`Login realizado com sucesso! Identificado como Empresa: ${empresa.nome}`);
             console.log('Usuário autenticado (Empresa):', empresa);
             window.location.hash = '#/perfil-empresa';

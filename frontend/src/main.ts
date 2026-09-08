@@ -1,6 +1,6 @@
 import './style.css';
 import { renderizarLogin, configurarLogin } from './views/Login.ts';
-import { renderHome } from './views/Home.ts';
+import {configurarHome, renderHome} from './views/Home.ts';
 import { renderizarCadastroPessoa, configurarCadastro } from './views/CadastroPessoa.ts';
 
 const app: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
@@ -17,6 +17,7 @@ function router(): void {
             break;
         case '/home':
             app.innerHTML = renderHome();
+            configurarHome()
             break;
         case '/perfil-empresa':
             app.innerHTML = '<h1>Perfil da Empresa (Em breve)</h1>';
