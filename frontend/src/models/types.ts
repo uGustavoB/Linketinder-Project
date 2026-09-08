@@ -12,6 +12,7 @@ export interface Pessoa {
     id: string;
     nome: string;
     email: string;
+    senha?: string;
     pais: string;
     estado: string;
     cep: string;

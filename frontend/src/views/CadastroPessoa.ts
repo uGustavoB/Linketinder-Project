@@ -27,6 +27,9 @@ export function renderizarCadastroPessoa(): string {
                 <label for="email-candidato">E-mail:</label>
                 <input type="email" id="email-candidato" placeholder="E-mail" required />
 
+                <label for="senha-candidato">Senha:</label>
+                <input type="password" id="senha-candidato" placeholder="Senha" required />
+
                 <label for="cpf">CPF:</label>
                 <input type="text" id="cpf" placeholder="CPF" required />
 
@@ -63,6 +66,9 @@ export function renderizarCadastroPessoa(): string {
                 <label for="email-empresa">E-mail:</label>
                 <input type="email" id="email-empresa" placeholder="E-mail" required />
 
+                <label for="senha-empresa">Senha:</label>
+                <input type="password" id="senha-empresa" placeholder="Senha" required />
+
                 <label for="cnpj">CNPJ:</label>
                 <input type="text" id="cnpj" placeholder="CNPJ" required />
 
@@ -85,7 +91,7 @@ export function renderizarCadastroPessoa(): string {
             </form>
 
             <br />
-            <a href="#/">Voltar para Home</a>
+            <a href="#/login">Já possui cadastro? Fazer Login</a>
         </div>
     `;
 }
@@ -122,6 +128,7 @@ export function configurarCadastro(): void {
 
         const nome = document.querySelector<HTMLInputElement>('#nome-candidato')?.value.trim() || '';
         const email = document.querySelector<HTMLInputElement>('#email-candidato')?.value.trim() || '';
+        const senha = document.querySelector<HTMLInputElement>('#senha-candidato')?.value || '';
         const cpf = document.querySelector<HTMLInputElement>('#cpf')?.value.trim() || '';
         const idade = Number(document.querySelector<HTMLInputElement>('#idade')?.value) || 0;
         const estado = document.querySelector<HTMLInputElement>('#estado-candidato')?.value.trim() || '';
@@ -145,6 +152,7 @@ export function configurarCadastro(): void {
             id: String(Date.now()),
             nome,
             email,
+            senha,
             cpf,
             idade,
             estado,
@@ -167,6 +175,7 @@ export function configurarCadastro(): void {
 
         const nome = document.querySelector<HTMLInputElement>('#nome-empresa')?.value.trim() || '';
         const email = document.querySelector<HTMLInputElement>('#email-empresa')?.value.trim() || '';
+        const senha = document.querySelector<HTMLInputElement>('#senha-empresa')?.value || '';
         const cnpj = document.querySelector<HTMLInputElement>('#cnpj')?.value.trim() || '';
         const estado = document.querySelector<HTMLInputElement>('#estado-empresa')?.value.trim() || '';
         const cep = document.querySelector<HTMLInputElement>('#cep-empresa')?.value.trim() || '';
@@ -183,6 +192,7 @@ export function configurarCadastro(): void {
             id: String(Date.now()),
             nome,
             email,
+            senha,
             cnpj,
             estado,
             cep,
