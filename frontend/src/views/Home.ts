@@ -6,6 +6,7 @@ export function renderHome(): string {
                 <ul>
                     <li><a href="#/cadastro">Cadastrar Candidato / Empresa</a></li>
                     <li><a href="#/perfil-empresa">Visão da Empresa (Gráficos e Tabela)</a></li>
+                    <li><a href="#/login">Login</a></li>
                 </ul>
             </nav>
         </div>
