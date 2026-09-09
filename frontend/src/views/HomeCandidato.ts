@@ -14,6 +14,7 @@ export function renderHomeCandidato(): string {
             <p>Bem-vindo, ${usuarioLogado.dados.nome}!</p>
             <nav>
                 <ul>
+                    <li><a href="#/vagas-candidato">Vagas Disponíveis</a></li>
                     <li><a href="#/login" id="btn-logout">Sair</a></li>
                 </ul>
             </nav>

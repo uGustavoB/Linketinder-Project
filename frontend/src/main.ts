@@ -4,6 +4,7 @@ import { renderHomeCandidato, configurarHomeCandidato } from './views/HomeCandid
 import { renderHomeEmpresa, configurarHomeEmpresa } from './views/HomeEmpresa.ts';
 import { renderizarCadastroPessoa, configurarCadastro } from './views/CadastroPessoa.ts';
 import { renderizarPerfilEmpresa, configurarPerfilEmpresa } from './views/PerfilEmpresa.ts';
+import { renderizarVagasCandidato } from './views/VagasCandidato.ts';
 import { obterUsuarioLogado } from './services/armazenamento.ts';
 
 const app: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
@@ -23,6 +24,9 @@ function router(): void {
         case '/home-empresa':
             app.innerHTML = renderHomeEmpresa();
             configurarHomeEmpresa();
+            break;
+        case '/vagas-candidato':
+            app.innerHTML = renderizarVagasCandidato();
             break;
         case '/home': {
             const usuarioLogado = obterUsuarioLogado();
