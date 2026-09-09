@@ -1,4 +1,4 @@
-import type {Candidato, Empresa, UsuarioLogado} from '../models/types.ts';
+import type {Candidato, Empresa, UsuarioLogado, Vaga} from '../models/types.ts';
 
 function carregarDoLocalStorage<T>(chave: string): T[] {
     const dados = localStorage.getItem(chave);
@@ -14,6 +14,7 @@ function carregarDoLocalStorage<T>(chave: string): T[] {
 
 export const listaCandidatos: Candidato[] = carregarDoLocalStorage<Candidato>('candidatos');
 export const listaEmpresas: Empresa[] = carregarDoLocalStorage<Empresa>('empresas');
+export const listaVagas: Vaga[] = carregarDoLocalStorage<Vaga>('vagas');
 
 function salvarCandidatos(): void {
     localStorage.setItem('candidatos', JSON.stringify(listaCandidatos));
@@ -21,6 +22,10 @@ function salvarCandidatos(): void {
 
 function salvarEmpresas(): void {
     localStorage.setItem('empresas', JSON.stringify(listaEmpresas));
+}
+
+function salvarVagas(): void {
+    localStorage.setItem('vagas', JSON.stringify(listaVagas));
 }
 
 export function adicionarCandidato(candidato: Candidato): void {
@@ -32,6 +37,12 @@ export function adicionarEmpresa(empresa: Empresa): void {
     listaEmpresas.push(empresa);
     salvarEmpresas();
 }
+
+export function adicionarVaga(vaga: Vaga): void {
+    listaVagas.push(vaga);
+    salvarVagas();
+}
+
 
 export function salvarUsuarioLogado(usuario: UsuarioLogado): void {
     localStorage.setItem('usuarioLogado', JSON.stringify(usuario));

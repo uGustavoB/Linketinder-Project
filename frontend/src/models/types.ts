@@ -30,7 +30,17 @@ export interface Empresa extends Pessoa {
     cnpj: string;
 }
 
+export interface Vaga {
+    id: string;
+    empresaId: string;
+    nome: string;
+    descricao: string;
+    local: string;
+    competencias: Competencia[];
+}
+
 export interface UsuarioLogado {
     tipo: 'candidato' | 'empresa';
     dados: Candidato | Empresa;
 }
+
