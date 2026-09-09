@@ -1,16 +1,17 @@
 import { obterUsuarioLogado, removerUsuarioLogado } from '../services/armazenamento.ts';
 
-export function renderHome(): string {
+export function renderHomeEmpresa(): string {
     const usuarioLogado = obterUsuarioLogado();
 
-    if (!usuarioLogado) {
+    if (!usuarioLogado || usuarioLogado.tipo !== 'empresa') {
         window.location.hash = '#/login';
         return '';
     }
 
     return `
         <div>
-            <h1>Bem-vindo ao Linketinder ${usuarioLogado.dados.nome}</h1>
+            <h1>Home da Empresa</h1>
+            <p>Bem-vinda, ${usuarioLogado.dados.nome}!</p>
             <nav>
                 <ul>
                     <li><a href="#/perfil-empresa">Visão da Empresa (Gráficos e Tabela)</a></li>
@@ -21,11 +22,11 @@ export function renderHome(): string {
     `;
 }
 
-export function configurarHome(): void {
+export function configurarHomeEmpresa(): void {
     const btnLogout = document.querySelector<HTMLButtonElement>('#btn-logout');
 
     if (btnLogout) {
-        btnLogout.addEventListener('click', (e: PointerEvent) => {
+        btnLogout.addEventListener('click', (e: MouseEvent) => {
             e.preventDefault();
 
             removerUsuarioLogado();

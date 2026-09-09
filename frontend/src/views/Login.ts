@@ -42,7 +42,7 @@ export function configurarLogin(): void {
             salvarUsuarioLogado({ tipo: 'candidato', dados: candidato });
             alert(`Login realizado com sucesso! Identificado como Candidato: ${candidato.nome}`);
             console.log('Usuário autenticado (Candidato):', candidato);
-            window.location.hash = '#/home';
+            window.location.hash = '#/home-candidato';
             return;
         }
 
@@ -54,7 +54,7 @@ export function configurarLogin(): void {
             salvarUsuarioLogado({ tipo: 'empresa', dados: empresa });
             alert(`Login realizado com sucesso! Identificado como Empresa: ${empresa.nome}`);
             console.log('Usuário autenticado (Empresa):', empresa);
-            window.location.hash = '#/perfil-empresa';
+            window.location.hash = '#/home-empresa';
             return;
         }
 

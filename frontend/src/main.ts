@@ -1,7 +1,9 @@
 import './style.css';
 import { renderizarLogin, configurarLogin } from './views/Login.ts';
-import {configurarHome, renderHome} from './views/Home.ts';
+import { renderHomeCandidato, configurarHomeCandidato } from './views/HomeCandidato.ts';
+import { renderHomeEmpresa, configurarHomeEmpresa } from './views/HomeEmpresa.ts';
 import { renderizarCadastroPessoa, configurarCadastro } from './views/CadastroPessoa.ts';
+import { obterUsuarioLogado } from './services/armazenamento.ts';
 
 const app: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -10,19 +12,35 @@ function router(): void {
 
     switch (hash) {
         case '/cadastro':
-        case '/cadastro-candidato':
-        case '/cadastro-empresa':
             app.innerHTML = renderizarCadastroPessoa();
             configurarCadastro();
             break;
-        case '/home':
-            app.innerHTML = renderHome();
-            configurarHome()
+        case '/home-candidato':
+            app.innerHTML = renderHomeCandidato();
+            configurarHomeCandidato();
             break;
+        case '/home-empresa':
+            app.innerHTML = renderHomeEmpresa();
+            configurarHomeEmpresa();
+            break;
+        case '/home': {
+            const usuarioLogado = obterUsuarioLogado();
+
+            if (usuarioLogado?.tipo === 'empresa') {
+                app.innerHTML = renderHomeEmpresa();
+                configurarHomeEmpresa();
+            } else if (usuarioLogado?.tipo === 'candidato') {
+                app.innerHTML = renderHomeCandidato();
+                configurarHomeCandidato();
+            } else {
+                window.location.hash = '#/login';
+            }
+
+            break;
+        }
         case '/perfil-empresa':
             app.innerHTML = '<h1>Perfil da Empresa (Em breve)</h1>';
             break;
-        case '/login':
         default:
             app.innerHTML = renderizarLogin();
             configurarLogin();
@@ -32,4 +50,5 @@ function router(): void {
 
 window.addEventListener('hashchange', router);
 window.addEventListener('DOMContentLoaded', router);
+
 
