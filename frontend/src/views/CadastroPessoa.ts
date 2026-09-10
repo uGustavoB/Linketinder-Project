@@ -51,8 +51,12 @@ export function renderizarCadastroPessoa(): string {
                 <label for="formacoes">Formações Acadêmicas:</label>
                 <input type="text" id="formacoes" placeholder="Formações Acadêmicas (separadas por vírgula)" required />
                 
-                <label for="competencias-candidato">Competências:</label>
-                <input type="text" id="competencias-candidato" placeholder="Competências (separadas por vírgula)" required />
+                <label for="competencia-candidato">Competência:</label>
+                <div class="campo-competencia">
+                    <input type="text" id="competencia-candidato" placeholder="Ex: TypeScript" />
+                    <button type="button" id="adicionar-competencia-candidato">Adicionar</button>
+                </div>
+                <div id="lista-competencias-candidato" class="lista-competencias"></div>
                 
                 <button type="submit">Salvar</button>
             </form>
@@ -84,8 +88,12 @@ export function renderizarCadastroPessoa(): string {
                 <label for="descricao-empresa">Descrição:</label>
                 <textarea id="descricao-empresa" placeholder="Descrição da Empresa"></textarea>
                 
-                <label for="competencias-empresa">Competências requeridas:</label>
-                <input type="text" id="competencias-empresa" placeholder="Competências (separadas por vírgula)" required />
+                <label for="competencia-empresa">Competência requerida:</label>
+                <div class="campo-competencia">
+                    <input type="text" id="competencia-empresa" placeholder="Ex: TypeScript" />
+                    <button type="button" id="adicionar-competencia-empresa">Adicionar</button>
+                </div>
+                <div id="lista-competencias-empresa" class="lista-competencias"></div>
                 
                 <button type="submit">Salvar</button>
             </form>
@@ -101,10 +109,43 @@ export function configurarCadastro(): void {
     const radioEmpresa = document.querySelector<HTMLInputElement>('#tipo-empresa');
     const formularioCandidato = document.querySelector<HTMLFormElement>('#form-candidato');
     const formularioEmpresa = document.querySelector<HTMLFormElement>('#form-empresa');
+    const campoCompetenciaCandidato = document.querySelector<HTMLInputElement>('#competencia-candidato');
+    const campoCompetenciaEmpresa = document.querySelector<HTMLInputElement>('#competencia-empresa');
+    const botaoAdicionarCompetenciaCandidato = document.querySelector<HTMLButtonElement>('#adicionar-competencia-candidato');
+    const botaoAdicionarCompetenciaEmpresa = document.querySelector<HTMLButtonElement>('#adicionar-competencia-empresa');
+    const listaCompetenciasCandidato = document.querySelector<HTMLDivElement>('#lista-competencias-candidato');
+    const listaCompetenciasEmpresa = document.querySelector<HTMLDivElement>('#lista-competencias-empresa');
+    const competenciasCandidato: Competencia[] = [];
+    const competenciasEmpresa: Competencia[] = [];
 
-    if (!radioCandidato || !radioEmpresa || !formularioCandidato || !formularioEmpresa) {
+    if (!radioCandidato || !radioEmpresa || !formularioCandidato || !formularioEmpresa || !campoCompetenciaCandidato || !campoCompetenciaEmpresa || !botaoAdicionarCompetenciaCandidato || !botaoAdicionarCompetenciaEmpresa || !listaCompetenciasCandidato || !listaCompetenciasEmpresa) {
         return;
     }
+
+    function renderizarCompetencias(lista: HTMLDivElement, competencias: Competencia[]): void {
+        lista.textContent = competencias.map((competencia) => competencia.nome).join(', ');
+    }
+
+    function adicionarCompetencia(campo: HTMLInputElement, lista: HTMLDivElement, competencias: Competencia[]): void {
+        const nome = campo.value.trim();
+
+        if (!nome) {
+            return;
+        }
+
+        competencias.push({ nome });
+        renderizarCompetencias(lista, competencias);
+        campo.value = '';
+        campo.focus();
+    }
+
+    botaoAdicionarCompetenciaCandidato.addEventListener('click', () => {
+        adicionarCompetencia(campoCompetenciaCandidato, listaCompetenciasCandidato, competenciasCandidato);
+    });
+
+    botaoAdicionarCompetenciaEmpresa.addEventListener('click', () => {
+        adicionarCompetencia(campoCompetenciaEmpresa, listaCompetenciasEmpresa, competenciasEmpresa);
+    });
 
     function alternarFormularios(): void {
         if (!formularioCandidato || !formularioEmpresa) {
@@ -136,17 +177,11 @@ export function configurarCadastro(): void {
         const pais = document.querySelector<HTMLInputElement>('#pais-candidato')?.value.trim() || '';
         const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-candidato')?.value.trim() || '';
         const formacoesTexto = document.querySelector<HTMLInputElement>('#formacoes')?.value || '';
-        const competenciasTexto = document.querySelector<HTMLInputElement>('#competencias-candidato')?.value || '';
 
         const formacoes: Formacao[] = formacoesTexto
             .split(',')
             .map((item) => ({ curso: item.trim() }))
             .filter((item) => item.curso.length > 0);
-
-        const competencias: Competencia[] = competenciasTexto
-            .split(',')
-            .map((item) => ({ nome: item.trim() }))
-            .filter((item) => item.nome.length > 0);
 
         const novoCandidato: Candidato = {
             id: String(Date.now()),
@@ -160,11 +195,13 @@ export function configurarCadastro(): void {
             pais,
             descricao,
             formacoes,
-            competencias
+            competencias: [...competenciasCandidato]
         };
 
         adicionarCandidato(novoCandidato);
         formularioCandidato.reset();
+        competenciasCandidato.length = 0;
+        renderizarCompetencias(listaCompetenciasCandidato, competenciasCandidato);
         alert('Candidato cadastrado com sucesso!');
         console.log('Candidato criado:', novoCandidato);
         console.log('Lista de candidatos:', listaCandidatos);
@@ -181,12 +218,6 @@ export function configurarCadastro(): void {
         const cep = document.querySelector<HTMLInputElement>('#cep-empresa')?.value.trim() || '';
         const pais = document.querySelector<HTMLInputElement>('#pais-empresa')?.value.trim() || '';
         const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-empresa')?.value.trim() || '';
-        const competenciasTexto = document.querySelector<HTMLInputElement>('#competencias-empresa')?.value || '';
-
-        const competencias: Competencia[] = competenciasTexto
-            .split(',')
-            .map((item) => ({ nome: item.trim() }))
-            .filter((item) => item.nome.length > 0);
 
         const novaEmpresa: Empresa = {
             id: String(Date.now()),
@@ -198,11 +229,13 @@ export function configurarCadastro(): void {
             cep,
             pais,
             descricao,
-            competencias
+            competencias: [...competenciasEmpresa]
         };
 
         adicionarEmpresa(novaEmpresa);
         formularioEmpresa.reset();
+        competenciasEmpresa.length = 0;
+        renderizarCompetencias(listaCompetenciasEmpresa, competenciasEmpresa);
         alert('Empresa cadastrada com sucesso!');
         console.log('Empresa criada:', novaEmpresa);
         console.log('Lista de empresas:', listaEmpresas);

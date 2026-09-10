@@ -77,6 +77,24 @@ form div {
     gap: 5px;
 }
 
+form .campo-competencia {
+    flex-direction: row;
+}
+
+.campo-competencia input {
+    flex: 1;
+}
+
+.campo-competencia button {
+    flex-shrink: 0;
+}
+
+.lista-competencias {
+    min-height: 20px;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
 fieldset {
     border: 1px solid #ced4da;
     border-radius: 8px;
