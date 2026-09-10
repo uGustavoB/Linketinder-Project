@@ -89,7 +89,8 @@ form .campo-competencia {
     flex-shrink: 0;
 }
 
-.lista-competencias {
+.lista-competencias,
+.lista-formacoes {
     min-height: 20px;
     color: #495057;
     font-size: 0.9rem;

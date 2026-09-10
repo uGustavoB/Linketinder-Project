@@ -48,8 +48,13 @@ export function renderizarCadastroPessoa(): string {
                 <label for="descricao-candidato">Descrição:</label>
                 <textarea id="descricao-candidato" placeholder="Descrição"></textarea>
                 
-                <label for="formacoes">Formações Acadêmicas:</label>
-                <input type="text" id="formacoes" placeholder="Formações Acadêmicas (separadas por vírgula)" required />
+                <label for="curso-formacao">Formação Acadêmica:</label>
+                <div class="campo-formacao">
+                    <input type="text" id="curso-formacao" placeholder="Curso" />
+                    <input type="text" id="instituicao-formacao" placeholder="Instituição" />
+                    <button type="button" id="adicionar-formacao">Adicionar</button>
+                </div>
+                <div id="lista-formacoes-candidato" class="lista-formacoes"></div>
                 
                 <label for="competencia-candidato">Competência:</label>
                 <div class="campo-competencia">
@@ -109,17 +114,46 @@ export function configurarCadastro(): void {
     const radioEmpresa = document.querySelector<HTMLInputElement>('#tipo-empresa');
     const formularioCandidato = document.querySelector<HTMLFormElement>('#form-candidato');
     const formularioEmpresa = document.querySelector<HTMLFormElement>('#form-empresa');
+    const campoCursoFormacao = document.querySelector<HTMLInputElement>('#curso-formacao');
+    const campoInstituicaoFormacao = document.querySelector<HTMLInputElement>('#instituicao-formacao');
+    const botaoAdicionarFormacao = document.querySelector<HTMLButtonElement>('#adicionar-formacao');
+    const listaFormacoesCandidato = document.querySelector<HTMLDivElement>('#lista-formacoes-candidato');
     const campoCompetenciaCandidato = document.querySelector<HTMLInputElement>('#competencia-candidato');
     const campoCompetenciaEmpresa = document.querySelector<HTMLInputElement>('#competencia-empresa');
     const botaoAdicionarCompetenciaCandidato = document.querySelector<HTMLButtonElement>('#adicionar-competencia-candidato');
     const botaoAdicionarCompetenciaEmpresa = document.querySelector<HTMLButtonElement>('#adicionar-competencia-empresa');
     const listaCompetenciasCandidato = document.querySelector<HTMLDivElement>('#lista-competencias-candidato');
     const listaCompetenciasEmpresa = document.querySelector<HTMLDivElement>('#lista-competencias-empresa');
+    const formacoesCandidato: Formacao[] = [];
     const competenciasCandidato: Competencia[] = [];
     const competenciasEmpresa: Competencia[] = [];
 
-    if (!radioCandidato || !radioEmpresa || !formularioCandidato || !formularioEmpresa || !campoCompetenciaCandidato || !campoCompetenciaEmpresa || !botaoAdicionarCompetenciaCandidato || !botaoAdicionarCompetenciaEmpresa || !listaCompetenciasCandidato || !listaCompetenciasEmpresa) {
+    if (!radioCandidato || !radioEmpresa || !formularioCandidato || !formularioEmpresa || !campoCursoFormacao || !campoInstituicaoFormacao || !botaoAdicionarFormacao || !listaFormacoesCandidato || !campoCompetenciaCandidato || !campoCompetenciaEmpresa || !botaoAdicionarCompetenciaCandidato || !botaoAdicionarCompetenciaEmpresa || !listaCompetenciasCandidato || !listaCompetenciasEmpresa) {
         return;
+    }
+
+    function renderizarFormacoes(lista: HTMLDivElement, formacoes: Formacao[]): void {
+        lista.textContent = formacoes
+            .map((formacao) => [formacao.curso, formacao.instituicao].filter(Boolean).join(' - '))
+            .join(', ');
+    }
+
+    function adicionarFormacao(campoCurso: HTMLInputElement, campoInstituicao: HTMLInputElement, lista: HTMLDivElement, formacoes: Formacao[]): void {
+        const curso = campoCurso.value.trim();
+        const instituicao = campoInstituicao.value.trim();
+
+        if (!curso) {
+            return;
+        }
+
+        formacoes.push({
+            curso,
+            ...(instituicao && { instituicao })
+        });
+        renderizarFormacoes(lista, formacoes);
+        campoCurso.value = '';
+        campoInstituicao.value = '';
+        campoCurso.focus();
     }
 
     function renderizarCompetencias(lista: HTMLDivElement, competencias: Competencia[]): void {
@@ -138,6 +172,10 @@ export function configurarCadastro(): void {
         campo.value = '';
         campo.focus();
     }
+
+    botaoAdicionarFormacao.addEventListener('click', () => {
+        adicionarFormacao(campoCursoFormacao, campoInstituicaoFormacao, listaFormacoesCandidato, formacoesCandidato);
+    });
 
     botaoAdicionarCompetenciaCandidato.addEventListener('click', () => {
         adicionarCompetencia(campoCompetenciaCandidato, listaCompetenciasCandidato, competenciasCandidato);
@@ -176,12 +214,11 @@ export function configurarCadastro(): void {
         const cep = document.querySelector<HTMLInputElement>('#cep-candidato')?.value.trim() || '';
         const pais = document.querySelector<HTMLInputElement>('#pais-candidato')?.value.trim() || '';
         const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-candidato')?.value.trim() || '';
-        const formacoesTexto = document.querySelector<HTMLInputElement>('#formacoes')?.value || '';
 
-        const formacoes: Formacao[] = formacoesTexto
-            .split(',')
-            .map((item) => ({ curso: item.trim() }))
-            .filter((item) => item.curso.length > 0);
+        if (formacoesCandidato.length === 0) {
+            alert('Adicione pelo menos uma formação acadêmica.');
+            return;
+        }
 
         const novoCandidato: Candidato = {
             id: String(Date.now()),
@@ -194,13 +231,15 @@ export function configurarCadastro(): void {
             cep,
             pais,
             descricao,
-            formacoes,
+            formacoes: [...formacoesCandidato],
             competencias: [...competenciasCandidato]
         };
 
         adicionarCandidato(novoCandidato);
         formularioCandidato.reset();
+        formacoesCandidato.length = 0;
         competenciasCandidato.length = 0;
+        renderizarFormacoes(listaFormacoesCandidato, formacoesCandidato);
         renderizarCompetencias(listaCompetenciasCandidato, competenciasCandidato);
         alert('Candidato cadastrado com sucesso!');
         console.log('Candidato criado:', novoCandidato);
