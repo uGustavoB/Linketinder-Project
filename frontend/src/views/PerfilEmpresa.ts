@@ -1,5 +1,5 @@
 import type { Competencia, Empresa, Vaga } from '../models/types.ts';
-import { adicionarVaga, listaVagas, obterUsuarioLogado } from '../services/armazenamento.ts';
+import { adicionarVaga, listaCandidatos, listaVagas, obterUsuarioLogado } from '../services/armazenamento.ts';
 
 export function renderizarPerfilEmpresa(): string {
     const usuarioLogado = obterUsuarioLogado();
@@ -37,6 +37,44 @@ export function renderizarPerfilEmpresa(): string {
         `
         : '<p>Nenhuma vaga cadastrada até o momento.</p>';
 
+    const tabelaCandidatosHtml = listaCandidatos.length > 0
+        ? `
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Instituição</th>
+                        <th>Competências</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${listaCandidatos.map((candidato) => {
+                        const cursos = candidato.formacoes.length > 0
+                            ? candidato.formacoes.map((formacao) => formacao.curso).join(', ')
+                            : 'Nenhum curso informado.';
+                        const instituicoes = candidato.formacoes.length > 0
+                            ? candidato.formacoes.map((formacao) => formacao.instituicao || 'Não informada').join(', ')
+                            : 'Nenhuma instituição informada.';
+                        const competencias = candidato.competencias.length > 0
+                            ? candidato.competencias.map((competencia) => competencia.nome).join(', ')
+                            : 'Nenhuma competência cadastrada.';
+                        const descricao = candidato.descricao || 'Nenhuma descrição cadastrada.';
+
+                        return `
+                            <tr>
+                                <td>${cursos}</td>
+                                <td>${instituicoes}</td>
+                                <td>${competencias}</td>
+                                <td>${descricao}</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `
+        : '<p>Nenhum candidato cadastrado até o momento.</p>';
+
     return `
         <div>
             <h2>Perfil da Empresa: ${empresa.nome}</h2>
@@ -64,6 +102,13 @@ export function renderizarPerfilEmpresa(): string {
             <h3>Vagas Cadastradas (${vagasDaEmpresa.length})</h3>
             <div id="container-vagas">
                 ${tabelaVagasHtml}
+            </div>
+
+            <hr />
+
+            <h3>Candidatos Disponíveis</h3>
+            <div id="container-candidatos">
+                ${tabelaCandidatosHtml}
             </div>
 
             <br />
