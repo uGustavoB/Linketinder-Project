@@ -14,7 +14,7 @@ export function renderHomeEmpresa(): string {
             <p>Bem-vinda, ${usuarioLogado.dados.nome}!</p>
             <nav>
                 <ul>
-                    <li><a href="#/perfil-empresa">Visão da Empresa (Gráficos e Tabela)</a></li>
+                    <li><a href="#/perfil-empresa">Visão da Empresa</a></li>
                     <li><a href="#/login" id="btn-logout">Sair</a></li>
                 </ul>
             </nav>

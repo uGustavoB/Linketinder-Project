@@ -1,5 +1,8 @@
 import type { Competencia, Empresa, Vaga } from '../models/types.ts';
 import { adicionarVaga, listaCandidatos, listaVagas, obterUsuarioLogado } from '../services/armazenamento.ts';
+import Chart from 'chart.js/auto';
+
+let instanciaGrafico: Chart | null = null;
 
 export function renderizarPerfilEmpresa(): string {
     const usuarioLogado = obterUsuarioLogado();
@@ -111,10 +114,82 @@ export function renderizarPerfilEmpresa(): string {
                 ${tabelaCandidatosHtml}
             </div>
 
+            <hr />
+
+            <h3>Gráfico de Candidatos por Competência</h3>
+            <div style="width: 100%; max-width: 700px; margin: 0 auto;">
+                <canvas id="graficoCompetencias"></canvas>
+            </div>
+
             <br />
             <a href="#/home-empresa">Voltar para Home da Empresa</a>
         </div>
     `;
+}
+
+function inicializarGraficoCompetencias(): void {
+    const canvas = document.querySelector<HTMLCanvasElement>('#graficoCompetencias');
+    if (!canvas) return;
+
+    if (instanciaGrafico) {
+        instanciaGrafico.destroy();
+        instanciaGrafico = null;
+    }
+
+    const contagem: Record<string, number> = {};
+
+    listaCandidatos.forEach((candidato) => {
+        candidato.competencias.forEach((competencia) => {
+            const nome = competencia.nome.trim();
+            if (nome) {
+                contagem[nome] = (contagem[nome] || 0) + 1;
+            }
+        });
+    });
+
+    const labels = Object.keys(contagem);
+    const valores = Object.values(contagem);
+
+    if (labels.length === 0) {
+        return;
+    }
+
+    instanciaGrafico = new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Quantidade de Candidatos',
+                    data: valores,
+                    backgroundColor: '#007bff',
+                    borderColor: '#0056b3',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    },
+                    title: {
+                        display: true,
+                        text: 'Candidatos'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Competências'
+                    }
+                }
+            }
+        }
+    });
 }
 
 export function configurarPerfilEmpresa(): void {
@@ -126,6 +201,8 @@ export function configurarPerfilEmpresa(): void {
 
     const empresa = usuarioLogado.dados as Empresa;
     const formVaga = document.querySelector<HTMLFormElement>('#form-vaga');
+
+    inicializarGraficoCompetencias();
 
     if (!formVaga) {
         return;
