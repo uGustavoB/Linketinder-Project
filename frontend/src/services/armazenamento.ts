@@ -43,6 +43,14 @@ export function adicionarVaga(vaga: Vaga): void {
     salvarVagas();
 }
 
+export function removerVaga(id: string): void {
+    const index = listaVagas.findIndex((vaga) => vaga.id === id);
+    if (index !== -1) {
+        listaVagas.splice(index, 1);
+        salvarVagas();
+    }
+}
+
 
 export function salvarUsuarioLogado(usuario: UsuarioLogado): void {
     localStorage.setItem('usuarioLogado', JSON.stringify(usuario));

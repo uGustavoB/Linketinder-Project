@@ -1,5 +1,5 @@
 import type { Competencia, Empresa, Vaga } from '../models/types.ts';
-import { adicionarVaga, listaCandidatos, listaVagas, obterUsuarioLogado } from '../services/armazenamento.ts';
+import { adicionarVaga, listaCandidatos, listaVagas, obterUsuarioLogado, removerVaga } from '../services/armazenamento.ts';
 import Chart from 'chart.js/auto';
 
 let instanciaGrafico: Chart | null = null;
@@ -24,6 +24,7 @@ export function renderizarPerfilEmpresa(): string {
                         <th>Local</th>
                         <th>Descrição</th>
                         <th>Competências</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +34,9 @@ export function renderizarPerfilEmpresa(): string {
                             <td>${vaga.local}</td>
                             <td>${vaga.descricao}</td>
                             <td>${vaga.competencias.map(c => c.nome).join(', ')}</td>
+                            <td>
+                                <button type="button" class="btn-danger btn-deletar-vaga" data-id="${vaga.id}">Excluir</button>
+                            </td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -203,6 +207,26 @@ export function configurarPerfilEmpresa(): void {
     const formVaga = document.querySelector<HTMLFormElement>('#form-vaga');
 
     inicializarGraficoCompetencias();
+
+    const botoesDeletar = document.querySelectorAll<HTMLButtonElement>('.btn-deletar-vaga');
+    botoesDeletar.forEach((botao) => {
+        botao.addEventListener('click', () => {
+            const vagaId = botao.getAttribute('data-id');
+            if (!vagaId) return;
+
+            const confirmar = confirm('Deseja realmente excluir esta vaga?');
+            if (!confirmar) return;
+
+            removerVaga(vagaId);
+            alert('Vaga excluída com sucesso!');
+
+            const app = document.querySelector<HTMLDivElement>('#app');
+            if (app) {
+                app.innerHTML = renderizarPerfilEmpresa();
+                configurarPerfilEmpresa();
+            }
+        });
+    });
 
     if (!formVaga) {
         return;
