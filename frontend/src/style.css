@@ -110,6 +110,15 @@ legend {
     padding: 0 8px;
 }
 
+fieldset p {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+fieldset p:last-child {
+    margin-bottom: 0;
+}
+
 label {
     font-weight: bold;
     font-size: 0.9rem;

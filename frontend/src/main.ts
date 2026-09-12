@@ -5,6 +5,7 @@ import { renderHomeEmpresa, configurarHomeEmpresa } from './views/HomeEmpresa.ts
 import { renderizarCadastroPessoa, configurarCadastro } from './views/CadastroPessoa.ts';
 import { renderizarPerfilEmpresa, configurarPerfilEmpresa } from './views/PerfilEmpresa.ts';
 import { renderizarVagasCandidato } from './views/VagasCandidato.ts';
+import { renderizarMeuPerfil } from './views/MeuPerfil.ts';
 import { obterUsuarioLogado } from './services/armazenamento.ts';
 
 const app: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
@@ -46,6 +47,9 @@ function router(): void {
         case '/perfil-empresa':
             app.innerHTML = renderizarPerfilEmpresa();
             configurarPerfilEmpresa();
+            break;
+        case '/meu-perfil':
+            app.innerHTML = renderizarMeuPerfil();
             break;
         default:
             app.innerHTML = renderizarLogin();
