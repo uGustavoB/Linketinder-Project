@@ -6,6 +6,8 @@ Bem-vindo ao projeto **LinkeTinder**, um sistema inovador idealizado a partir do
 
 Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, onde é possível cadastrar e gerenciar perfis de Candidatos e de Empresas, visualizar suas qualificações e armazenar esses dados em listas na memória.
 
+> **Frontend Web**: Para a versão web interativa em Single Page Application (desenvolvida com TypeScript, Vite e Chart.js), consulte a [Documentação do Frontend](frontend/README.md).
+
 ---
 
 ## Funcionalidades
