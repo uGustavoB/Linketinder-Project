@@ -110,20 +110,20 @@ export function renderizarCadastroPessoa(): string {
 }
 
 export function configurarCadastro(): void {
-    const radioCandidato = document.querySelector<HTMLInputElement>('#tipo-candidato');
-    const radioEmpresa = document.querySelector<HTMLInputElement>('#tipo-empresa');
-    const formularioCandidato = document.querySelector<HTMLFormElement>('#form-candidato');
-    const formularioEmpresa = document.querySelector<HTMLFormElement>('#form-empresa');
-    const campoCursoFormacao = document.querySelector<HTMLInputElement>('#curso-formacao');
-    const campoInstituicaoFormacao = document.querySelector<HTMLInputElement>('#instituicao-formacao');
-    const botaoAdicionarFormacao = document.querySelector<HTMLButtonElement>('#adicionar-formacao');
-    const listaFormacoesCandidato = document.querySelector<HTMLDivElement>('#lista-formacoes-candidato');
-    const campoCompetenciaCandidato = document.querySelector<HTMLInputElement>('#competencia-candidato');
-    const campoCompetenciaEmpresa = document.querySelector<HTMLInputElement>('#competencia-empresa');
-    const botaoAdicionarCompetenciaCandidato = document.querySelector<HTMLButtonElement>('#adicionar-competencia-candidato');
-    const botaoAdicionarCompetenciaEmpresa = document.querySelector<HTMLButtonElement>('#adicionar-competencia-empresa');
-    const listaCompetenciasCandidato = document.querySelector<HTMLDivElement>('#lista-competencias-candidato');
-    const listaCompetenciasEmpresa = document.querySelector<HTMLDivElement>('#lista-competencias-empresa');
+    const radioCandidato: HTMLInputElement | null = document.querySelector<HTMLInputElement>('#tipo-candidato');
+    const radioEmpresa: HTMLInputElement | null = document.querySelector<HTMLInputElement>('#tipo-empresa');
+    const formularioCandidato: HTMLFormElement | null = document.querySelector<HTMLFormElement>('#form-candidato');
+    const formularioEmpresa: HTMLFormElement | null = document.querySelector<HTMLFormElement>('#form-empresa');
+    const campoCursoFormacao: HTMLInputElement | null = document.querySelector<HTMLInputElement>('#curso-formacao');
+    const campoInstituicaoFormacao: HTMLInputElement | null = document.querySelector<HTMLInputElement>('#instituicao-formacao');
+    const botaoAdicionarFormacao: HTMLButtonElement | null = document.querySelector<HTMLButtonElement>('#adicionar-formacao');
+    const listaFormacoesCandidato: HTMLDivElement | null = document.querySelector<HTMLDivElement>('#lista-formacoes-candidato');
+    const campoCompetenciaCandidato: HTMLInputElement | null = document.querySelector<HTMLInputElement>('#competencia-candidato');
+    const campoCompetenciaEmpresa: HTMLInputElement | null = document.querySelector<HTMLInputElement>('#competencia-empresa');
+    const botaoAdicionarCompetenciaCandidato: HTMLButtonElement | null = document.querySelector<HTMLButtonElement>('#adicionar-competencia-candidato');
+    const botaoAdicionarCompetenciaEmpresa: HTMLButtonElement | null = document.querySelector<HTMLButtonElement>('#adicionar-competencia-empresa');
+    const listaCompetenciasCandidato: HTMLDivElement | null = document.querySelector<HTMLDivElement>('#lista-competencias-candidato');
+    const listaCompetenciasEmpresa: HTMLDivElement | null = document.querySelector<HTMLDivElement>('#lista-competencias-empresa');
     const formacoesCandidato: Formacao[] = [];
     const competenciasCandidato: Competencia[] = [];
     const competenciasEmpresa: Competencia[] = [];
@@ -205,15 +205,15 @@ export function configurarCadastro(): void {
     formularioCandidato.addEventListener('submit', (evento: SubmitEvent) => {
         evento.preventDefault();
 
-        const nome = document.querySelector<HTMLInputElement>('#nome-candidato')?.value.trim() || '';
-        const email = document.querySelector<HTMLInputElement>('#email-candidato')?.value.trim() || '';
-        const senha = document.querySelector<HTMLInputElement>('#senha-candidato')?.value || '';
-        const cpf = document.querySelector<HTMLInputElement>('#cpf')?.value.trim() || '';
-        const idade = Number(document.querySelector<HTMLInputElement>('#idade')?.value) || 0;
-        const estado = document.querySelector<HTMLInputElement>('#estado-candidato')?.value.trim() || '';
-        const cep = document.querySelector<HTMLInputElement>('#cep-candidato')?.value.trim() || '';
-        const pais = document.querySelector<HTMLInputElement>('#pais-candidato')?.value.trim() || '';
-        const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-candidato')?.value.trim() || '';
+        const nome: string = document.querySelector<HTMLInputElement>('#nome-candidato')?.value.trim() || '';
+        const email: string = document.querySelector<HTMLInputElement>('#email-candidato')?.value.trim() || '';
+        const senha: string = document.querySelector<HTMLInputElement>('#senha-candidato')?.value || '';
+        const cpf: string = document.querySelector<HTMLInputElement>('#cpf')?.value.trim() || '';
+        const idade: number = Number(document.querySelector<HTMLInputElement>('#idade')?.value) || 0;
+        const estado: string = document.querySelector<HTMLInputElement>('#estado-candidato')?.value.trim() || '';
+        const cep: string = document.querySelector<HTMLInputElement>('#cep-candidato')?.value.trim() || '';
+        const pais: string = document.querySelector<HTMLInputElement>('#pais-candidato')?.value.trim() || '';
+        const descricao: string = document.querySelector<HTMLTextAreaElement>('#descricao-candidato')?.value.trim() || '';
 
         if (formacoesCandidato.length === 0) {
             alert('Adicione pelo menos uma formação acadêmica.');
@@ -249,14 +249,14 @@ export function configurarCadastro(): void {
     formularioEmpresa.addEventListener('submit', (evento: SubmitEvent) => {
         evento.preventDefault();
 
-        const nome = document.querySelector<HTMLInputElement>('#nome-empresa')?.value.trim() || '';
-        const email = document.querySelector<HTMLInputElement>('#email-empresa')?.value.trim() || '';
-        const senha = document.querySelector<HTMLInputElement>('#senha-empresa')?.value || '';
-        const cnpj = document.querySelector<HTMLInputElement>('#cnpj')?.value.trim() || '';
-        const estado = document.querySelector<HTMLInputElement>('#estado-empresa')?.value.trim() || '';
-        const cep = document.querySelector<HTMLInputElement>('#cep-empresa')?.value.trim() || '';
-        const pais = document.querySelector<HTMLInputElement>('#pais-empresa')?.value.trim() || '';
-        const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-empresa')?.value.trim() || '';
+        const nome: string = document.querySelector<HTMLInputElement>('#nome-empresa')?.value.trim() || '';
+        const email: string = document.querySelector<HTMLInputElement>('#email-empresa')?.value.trim() || '';
+        const senha: string = document.querySelector<HTMLInputElement>('#senha-empresa')?.value || '';
+        const cnpj: string = document.querySelector<HTMLInputElement>('#cnpj')?.value.trim() || '';
+        const estado: string = document.querySelector<HTMLInputElement>('#estado-empresa')?.value.trim() || '';
+        const cep: string = document.querySelector<HTMLInputElement>('#cep-empresa')?.value.trim() || '';
+        const pais: string = document.querySelector<HTMLInputElement>('#pais-empresa')?.value.trim() || '';
+        const descricao: string = document.querySelector<HTMLTextAreaElement>('#descricao-empresa')?.value.trim() || '';
 
         const novaEmpresa: Empresa = {
             id: String(Date.now()),

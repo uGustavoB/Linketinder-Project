@@ -203,24 +203,24 @@ export function configurarPerfilEmpresa(): void {
         return;
     }
 
-    const empresa = usuarioLogado.dados as Empresa;
-    const formVaga = document.querySelector<HTMLFormElement>('#form-vaga');
+    const empresa: Empresa = usuarioLogado.dados as Empresa;
+    const formVaga: HTMLFormElement | null = document.querySelector<HTMLFormElement>('#form-vaga');
 
     inicializarGraficoCompetencias();
 
-    const botoesDeletar = document.querySelectorAll<HTMLButtonElement>('.btn-deletar-vaga');
+    const botoesDeletar: NodeListOf<HTMLButtonElement> = document.querySelectorAll<HTMLButtonElement>('.btn-deletar-vaga');
     botoesDeletar.forEach((botao) => {
         botao.addEventListener('click', () => {
-            const vagaId = botao.getAttribute('data-id');
+            const vagaId: string | null = botao.getAttribute('data-id');
             if (!vagaId) return;
 
-            const confirmar = confirm('Deseja realmente excluir esta vaga?');
+            const confirmar: boolean = confirm('Deseja realmente excluir esta vaga?');
             if (!confirmar) return;
 
             removerVaga(vagaId);
             alert('Vaga excluída com sucesso!');
 
-            const app = document.querySelector<HTMLDivElement>('#app');
+            const app: HTMLDivElement | null = document.querySelector<HTMLDivElement>('#app');
             if (app) {
                 app.innerHTML = renderizarPerfilEmpresa();
                 configurarPerfilEmpresa();
@@ -235,10 +235,10 @@ export function configurarPerfilEmpresa(): void {
     formVaga.addEventListener('submit', (evento: SubmitEvent) => {
         evento.preventDefault();
 
-        const nome = document.querySelector<HTMLInputElement>('#nome-vaga')?.value.trim() || '';
-        const local = document.querySelector<HTMLInputElement>('#local-vaga')?.value.trim() || '';
-        const descricao = document.querySelector<HTMLTextAreaElement>('#descricao-vaga')?.value.trim() || '';
-        const competenciasTexto = document.querySelector<HTMLInputElement>('#competencias-vaga')?.value || '';
+        const nome: string = document.querySelector<HTMLInputElement>('#nome-vaga')?.value.trim() || '';
+        const local: string = document.querySelector<HTMLInputElement>('#local-vaga')?.value.trim() || '';
+        const descricao: string = document.querySelector<HTMLTextAreaElement>('#descricao-vaga')?.value.trim() || '';
+        const competenciasTexto: string = document.querySelector<HTMLInputElement>('#competencias-vaga')?.value || '';
 
         const competencias: Competencia[] = competenciasTexto
             .split(',')

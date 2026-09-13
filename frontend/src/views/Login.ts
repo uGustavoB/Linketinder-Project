@@ -22,7 +22,7 @@ export function renderizarLogin(): string {
 }
 
 export function configurarLogin(): void {
-    const formularioLogin = document.querySelector<HTMLFormElement>('#form-login');
+    const formularioLogin: HTMLFormElement | null = document.querySelector<HTMLFormElement>('#form-login');
 
     if (!formularioLogin) {
         return;
@@ -31,8 +31,8 @@ export function configurarLogin(): void {
     formularioLogin.addEventListener('submit', (evento: SubmitEvent) => {
         evento.preventDefault();
 
-        const email = document.querySelector<HTMLInputElement>('#email-login')?.value.trim() || '';
-        const senha = document.querySelector<HTMLInputElement>('#senha-login')?.value || '';
+        const email: string = document.querySelector<HTMLInputElement>('#email-login')?.value.trim() || '';
+        const senha: string = document.querySelector<HTMLInputElement>('#senha-login')?.value || '';
 
         const candidato = listaCandidatos.find(
             (c) => c.email.toLowerCase() === email.toLowerCase() && c.senha === senha
