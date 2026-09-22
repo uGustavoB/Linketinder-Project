@@ -46,7 +46,8 @@ specs/
 
 ## Tecnologias e Ferramentas
 
-- **DBML (Database Markup Language)**: Linguagem utilizada para desenhar e documentar de maneira ágil a estrutura relacional do banco.
+- **dbdiagram.io**: Ferramenta online utilizada para realizar a modelagem visual do banco de dados e exportar os scripts e diagramas.
+- **DBML (Database Markup Language)**: Linguagem utilizada nativamente pelo dbdiagram.io para desenhar e documentar de maneira ágil a estrutura relacional do banco.
 - **SQL**: Scripts baseados na linguagem padrão de banco de dados relacional, preparados para serem executados em SGBDs como PostgreSQL ou MySQL.
 - **Diagrama ER**: Representação visual do banco de dados para facilitar o entendimento da arquitetura pelos desenvolvedores.
 
