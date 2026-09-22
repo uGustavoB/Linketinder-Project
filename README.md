@@ -8,6 +8,8 @@ Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, o
 
 > **Frontend Web**: Para a versão web interativa em Single Page Application (desenvolvida com TypeScript, Vite e Chart.js), consulte a [Documentação do Frontend](frontend/README.md).
 
+> **Modelagem de Dados**: Para conferir a estrutura de banco de dados elaborada para a futura migração do sistema, consulte a [Documentação de Modelagem](specs/README.md).
+
 ---
 
 ## Funcionalidades
