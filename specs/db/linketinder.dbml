@@ -2,10 +2,12 @@ Table candidatos {
   id integer [primary key, increment]
   nome varchar
   sobrenome varchar
+  idade integer
   data_nascimento date
   email varchar [unique, not null]
   cpf varchar [unique, not null]
   pais varchar
+  estado varchar
   cep varchar
   descricao text
   senha varchar [not null]
