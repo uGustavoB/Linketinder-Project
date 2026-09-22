@@ -16,6 +16,8 @@ repositories {
 
 dependencies {
     implementation 'org.apache.groovy:groovy:4.0.29'
+    implementation 'org.postgresql:postgresql:42.7.3'
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
     testImplementation platform('org.spockframework:spock-bom:2.4-M4-groovy-4.0')
     testImplementation 'org.spockframework:spock-core'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
