@@ -1,0 +1,69 @@
+Table candidatos {
+  id integer [primary key, increment]
+  nome varchar
+  sobrenome varchar
+  data_nascimento date
+  email varchar [unique, not null]
+  cpf varchar [unique, not null]
+  pais varchar
+  cep varchar
+  descricao text
+  senha varchar [not null]
+  criado_em timestamp
+}
+
+Table empresas {
+  id integer [primary key, increment]
+  nome varchar
+  cnpj varchar [unique, not null]
+  email varchar [unique, not null]
+  descricao text
+  pais varchar
+  cep varchar
+  senha varchar [not null]
+  criado_em timestamp
+}
+
+Table competencias {
+  id integer [primary key, increment]
+  nome varchar [unique, not null]
+}
+
+Table candidato_competencia {
+  candidato_id integer [ref: > candidatos.id, not null]
+  competencia_id integer [ref: > competencias.id, not null]
+
+  indexes {
+    (candidato_id, competencia_id) [pk]
+  }
+}
+
+Table vagas {
+  id integer [primary key, increment]
+  empresa_id integer [ref: > empresas.id, not null]
+  nome varchar
+  descricao text
+  estado varchar
+  cidade varchar
+  criado_em timestamp
+}
+
+Table vaga_competencia {
+  vaga_id integer [ref: > vagas.id, not null]
+  competencia_id integer [ref: > competencias.id, not null]
+
+  indexes {
+    (vaga_id, competencia_id) [pk]
+  }
+}
+
+Table curtidas {
+  candidato_id integer [ref: > candidatos.id, not null]
+  vaga_id integer [ref: > vagas.id, not null]
+  candidato_curtiu_em timestamp
+  empresa_curtiu_em timestamp
+
+  indexes {
+    (candidato_id, vaga_id) [pk]
+  }
+}
