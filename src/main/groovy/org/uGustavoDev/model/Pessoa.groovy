@@ -3,12 +3,14 @@ package org.uGustavoDev.model
 import org.uGustavoDev.model.interfaces.IPessoa
 
 abstract class Pessoa implements IPessoa {
+    Integer id
     String nome
     String email
     String pais
     String estado
     String CEP
     String descricao
+    String senha
     List<String> competencias = []
 
     Pessoa(String nome, String email, String estado, String pais, String CEP, String descricao) {

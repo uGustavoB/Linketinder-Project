@@ -1,8 +1,11 @@
 package org.uGustavoDev.service
 
+import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.ui.ConsoleUI
+
+import java.time.LocalDate
 
 class LinketinderService {
     List<Candidato> candidatos = []
@@ -18,19 +21,19 @@ class LinketinderService {
     }
 
     void inicializarCandidatos() {
-        def candidato1 = new Candidato("Gustavo", "gustavo@email.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 25)
+        def candidato1 = new Candidato("Gustavo", "Batista", "gustavo@email.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", LocalDate.of(2001, 1, 1))
         candidato1.competencias = ["Java", "Spring Framework", "Python"]
 
-        def candidato2 = new Candidato("Ana Silva", "ana@email.com", "SP", "Brasil", "01000-000", "Especialista em frontend e design de interfaces.", "222.222.222-22", 30)
+        def candidato2 = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000-000", "Especialista em frontend e design de interfaces.", "222.222.222-22", LocalDate.of(1996, 5, 20))
         candidato2.competencias = ["Angular", "TypeScript"]
 
-        def candidato3 = new Candidato("Carlos Eduardo", "carlos@email.com", "RJ", "Brasil", "20000-000", "Engenheiro de dados com foco em pipelines.", "333.333.333-33", 28)
+        def candidato3 = new Candidato("Carlos", "Eduardo", "carlos@email.com", "RJ", "Brasil", "20000-000", "Engenheiro de dados com foco em pipelines.", "333.333.333-33", LocalDate.of(1998, 8, 15))
         candidato3.competencias = ["Python", "SQL"]
 
-        def candidato4 = new Candidato("Mariana Souza", "mariana@email.com", "MG", "Brasil", "30000-000", "Desenvolvedora focada em ecossistemas mobile.", "444.444.444-44", 23)
+        def candidato4 = new Candidato("Mariana", "Souza", "mariana@email.com", "MG", "Brasil", "30000-000", "Desenvolvedora focada em ecossistemas mobile.", "444.444.444-44", LocalDate.of(2003, 3, 10))
         candidato4.competencias = ["Flutter", "Dart"]
 
-        def candidato5 = new Candidato("João Pedro", "joao@email.com", "SC", "Brasil", "88000-000", "Arquiteto de software e entusiasta open-source.", "555.555.555-55", 35)
+        def candidato5 = new Candidato("João", "Pedro", "joao@email.com", "SC", "Brasil", "88000-000", "Arquiteto de software e entusiasta open-source.", "555.555.555-55", LocalDate.of(1991, 11, 30))
         candidato5.competencias = ["Java", "Docker", "AWS"]
 
         candidatos.addAll([candidato1, candidato2, candidato3, candidato4, candidato5])
@@ -57,6 +60,11 @@ class LinketinderService {
 
     void adicionarCandidato(Candidato candidato) {
         candidatos.add(candidato)
+        try {
+            CandidatoDAO.inserir(candidato)
+        } catch (Exception e) {
+            System.err.println("Não foi possível salvar o candidato no banco de dados. " + e.message)
+        }
     }
 
     void adicionarEmpresa(Empresa empresa) {
@@ -64,6 +72,15 @@ class LinketinderService {
     }
 
     void listarCandidatos() {
+        try {
+            def candidatosDoBanco = CandidatoDAO.listar()
+            if (!candidatosDoBanco.isEmpty() || candidatos.isEmpty()) {
+                candidatos = candidatosDoBanco
+            }
+        } catch (Exception e) {
+            System.err.println("Não foi possível listar os candidatos. " + e.message)
+        }
+
         if (candidatos.isEmpty()) {
             ConsoleUI.imprimirMensagem("Nenhum candidato cadastrado.")
             return

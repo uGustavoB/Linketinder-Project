@@ -1,5 +1,6 @@
 package org.uGustavoDev.ui
 
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
@@ -61,12 +62,24 @@ class ConsoleUI {
                 } else {
                     println "Opção inválida. Escolha entre $min e $max."
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
                 println "Entrada inválida. Digite um número."
             }
         }
         limparTela()
         return escolha
+    }
+
+    static LocalDate lerData(String mensagem) {
+        while (true) {
+            print mensagem
+            String entrada = scanner.nextLine()
+            try {
+                return LocalDate.parse(entrada, DATE_FORMATTER)
+            } catch (Exception ignored) {
+                println "Data inválida. Use o formato DD/MM/AAAA."
+            }
+        }
     }
 
     static int pedirOpcaoPrincipal() {
@@ -84,6 +97,7 @@ class ConsoleUI {
     static Candidato pedirDadosCandidato() {
         imprimirCabecalho("Cadastro de Candidato")
         String nome = lerTexto("Nome: ")
+        String sobrenome = lerTexto("Sobrenome: ")
         String email = lerTexto("Email: ")
         String estado = lerTexto("Estado (ex: SP): ")
         String pais = lerTexto("País: ")
@@ -91,12 +105,12 @@ class ConsoleUI {
         String descricao = lerTexto("Descrição Pessoal: ")
         String cpf = lerTexto("CPF: ")
 
-        int idade = lerEscolha("Idade: ", 14, 120)
+        LocalDate dataNasc = lerData("Data de Nascimento (DD/MM/AAAA): ")
 
         String compsStr = lerTexto("Competências (separadas por vírgula): ", true)
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        def candidato = new Candidato(nome, email, estado, pais, cep, descricao, cpf, idade)
+        def candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNasc)
         candidato.competencias = competencias
         return candidato
     }

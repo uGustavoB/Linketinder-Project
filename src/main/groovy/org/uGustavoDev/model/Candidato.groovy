@@ -1,13 +1,18 @@
 package org.uGustavoDev.model
 
-class Candidato extends Pessoa {
-    String cpf
-    Integer idade
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-    Candidato(String nome, String email, String estado, String pais, String CEP, String descricao, String cpf, Integer idade) {
+class Candidato extends Pessoa {
+    String sobrenome
+    String cpf
+    LocalDate dataNascimento
+
+    Candidato(String nome, String sobrenome, String email, String estado, String pais, String CEP, String descricao, String cpf, LocalDate dataNascimento) {
         super(nome, email, estado, pais, CEP, descricao)
+        this.sobrenome = sobrenome
         this.cpf = cpf
-        this.idade = idade
+        this.dataNascimento = dataNascimento
     }
 
     @Override
@@ -17,8 +22,9 @@ class Candidato extends Pessoa {
 
     @Override
     String toString() {
+        String exibicaoData = dataNascimento != null ? dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "Data não informada"
         return """\
-CANDIDATO: $nome ($idade anos)
+CANDIDATO: $nome $sobrenome ($exibicaoData)
 Email: $email
 Local: $estado, $pais - CEP: $CEP
 CPF: $cpf
