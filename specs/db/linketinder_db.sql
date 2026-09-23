@@ -3,7 +3,6 @@ CREATE TABLE candidatos (
                             id             SERIAL PRIMARY KEY,
                             nome           VARCHAR(100) NOT NULL,
                             sobrenome      VARCHAR(100) NOT NULL,
-                            idade          INTEGER,
                             data_nascimento DATE,
                             email          VARCHAR(255) UNIQUE NOT NULL,
                             cpf            VARCHAR(14) UNIQUE NOT NULL,
