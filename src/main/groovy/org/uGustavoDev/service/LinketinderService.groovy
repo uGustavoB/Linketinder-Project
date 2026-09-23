@@ -1,6 +1,7 @@
 package org.uGustavoDev.service
 
 import org.uGustavoDev.dao.CandidatoDAO
+import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.ui.ConsoleUI
@@ -40,19 +41,19 @@ class LinketinderService {
     }
 
     void inicializarEmpresas() {
-        def empresa1 = new Empresa("Google", "careers@google.com", "SP", "Brasil", "04538-133", "Empresa multinacional de servicos online e software.", "06.990.590/0001-23")
+        def empresa1 = new Empresa("Google", "careers@google.com", "Brasil", "04538-133", "Empresa multinacional de servicos online e software.", "06.990.590/0001-23")
         empresa1.competencias = ["Python", "Java", "Go", "Cloud"]
 
-        def empresa2 = new Empresa("Meta", "jobs@meta.com", "SP", "Brasil", "04538-133", "Conglomerado de tecnologia e midias sociais.", "13.654.497/0001-32")
+        def empresa2 = new Empresa("Meta", "jobs@meta.com", "Brasil", "04538-133", "Conglomerado de tecnologia e midias sociais.", "13.654.497/0001-32")
         empresa2.competencias = ["React", "JavaScript", "Python", "C++"]
 
-        def empresa3 = new Empresa("Nubank", "vagas@nubank.com.br", "SP", "Brasil", "05425-070", "Pioneira no segmento de servicos financeiros atuando como banco digital.", "18.236.120/0001-58")
+        def empresa3 = new Empresa("Nubank", "vagas@nubank.com.br", "Brasil", "05425-070", "Pioneira no segmento de servicos financeiros atuando como banco digital.", "18.236.120/0001-58")
         empresa3.competencias = ["Clojure", "Flutter", "Datomic"]
 
-        def empresa4 = new Empresa("Itau Unibanco", "carreiras@itau.com.br", "SP", "Brasil", "04344-902", "Maior banco privado do Brasil e da America Latina.", "60.872.504/0001-23")
+        def empresa4 = new Empresa("Itau Unibanco", "carreiras@itau.com.br", "Brasil", "04344-902", "Maior banco privado do Brasil e da America Latina.", "60.872.504/0001-23")
         empresa4.competencias = ["Java", "Spring Boot", "AWS", "Angular"]
 
-        def empresa5 = new Empresa("Mercado Livre", "talentos@mercadolivre.com", "SP", "Brasil", "06233-903", "Empresa de tecnologia que oferece solucoes de comercio eletronico.", "03.007.331/0001-41")
+        def empresa5 = new Empresa("Mercado Livre", "talentos@mercadolivre.com", "Brasil", "06233-903", "Empresa de tecnologia que oferece solucoes de comercio eletronico.", "03.007.331/0001-41")
         empresa5.competencias = ["Java", "Golang", "Python", "React"]
 
         empresas.addAll([empresa1, empresa2, empresa3, empresa4, empresa5])
@@ -69,6 +70,11 @@ class LinketinderService {
 
     void adicionarEmpresa(Empresa empresa) {
         empresas.add(empresa)
+        try {
+            EmpresaDAO.inserir(empresa)
+        } catch (Exception e) {
+            System.err.println("Não foi possível salvar a empresa no banco de dados. " + e.message)
+        }
     }
 
     void listarCandidatos() {
@@ -91,6 +97,15 @@ class LinketinderService {
     }
 
     void listarEmpresas() {
+        try {
+            def empresasDoBanco = EmpresaDAO.listar()
+            if (!empresasDoBanco.isEmpty() || empresas.isEmpty()) {
+                empresas = empresasDoBanco
+            }
+        } catch (Exception e) {
+            System.err.println("Utilizando dados em memória. " + e.message)
+        }
+
         if (empresas.isEmpty()) {
             ConsoleUI.imprimirMensagem("Nenhuma empresa cadastrada.")
             return

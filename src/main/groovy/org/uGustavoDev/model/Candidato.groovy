@@ -5,12 +5,14 @@ import java.time.format.DateTimeFormatter
 
 class Candidato extends Pessoa {
     String sobrenome
+    String estado
     String cpf
     LocalDate dataNascimento
 
     Candidato(String nome, String sobrenome, String email, String estado, String pais, String CEP, String descricao, String cpf, LocalDate dataNascimento) {
-        super(nome, email, estado, pais, CEP, descricao)
+        super(nome, email, pais, CEP, descricao)
         this.sobrenome = sobrenome
+        this.estado = estado
         this.cpf = cpf
         this.dataNascimento = dataNascimento
     }

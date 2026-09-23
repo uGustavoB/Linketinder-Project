@@ -3,8 +3,8 @@ package org.uGustavoDev.model
 class Empresa extends Pessoa {
     String cnpj
 
-    Empresa(String nome, String email, String estado, String pais, String CEP, String descricao, String cnpj) {
-        super(nome, email, estado, pais, CEP, descricao)
+    Empresa(String nome, String email, String pais, String CEP, String descricao, String cnpj) {
+        super(nome, email, pais, CEP, descricao)
         this.cnpj = cnpj
     }
 
@@ -18,7 +18,7 @@ class Empresa extends Pessoa {
         return """\
 EMPRESA: $nome
 Email: $email
-Local: $estado, $pais - CEP: $CEP
+Local: $pais - CEP: $CEP
 CNPJ: $cnpj
 Descrição: $descricao
 Competências: ${competencias.join(', ')}

@@ -119,7 +119,6 @@ class ConsoleUI {
         imprimirCabecalho("Cadastro de Empresa")
         String nome = lerTexto("Nome da Empresa: ")
         String email = lerTexto("Email Corporativo: ")
-        String estado = lerTexto("Estado (ex: SP): ")
         String pais = lerTexto("País: ")
         String cep = lerTexto("CEP: ")
         String descricao = lerTexto("Descrição da Empresa: ")
@@ -128,7 +127,7 @@ class ConsoleUI {
         String compsStr = lerTexto("Competências requeridas (separadas por vírgula): ", true)
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        def empresa = new Empresa(nome, email, estado, pais, cep, descricao, cnpj)
+        def empresa = new Empresa(nome, email, pais, cep, descricao, cnpj)
         empresa.competencias = competencias
         return empresa
     }
