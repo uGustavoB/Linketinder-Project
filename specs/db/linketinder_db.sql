@@ -40,6 +40,13 @@ CREATE TABLE candidato_competencia (
                                        PRIMARY KEY (candidato_id, competencia_id)
 );
 
+-- Empresa_competencia (N:N entre empresas e competências)
+CREATE TABLE empresa_competencia (
+                                       empresa_id   INTEGER NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
+                                       competencia_id INTEGER NOT NULL REFERENCES competencias(id) ON DELETE CASCADE,
+                                       PRIMARY KEY (empresa_id, competencia_id)
+);
+
 -- Vagas
 CREATE TABLE vagas (
                        id             SERIAL PRIMARY KEY,
@@ -71,4 +78,4 @@ CREATE TABLE curtidas (
 CREATE INDEX idx_vagas_empresa_id ON vagas(empresa_id);
 CREATE INDEX idx_candidato_competencia_competencia_id ON candidato_competencia(competencia_id);
 CREATE INDEX idx_vaga_competencia_competencia_id ON vaga_competencia(competencia_id);
-CREATE INDEX idx_curtidas_vaga_id ON curtidas(vaga_id);
+CREATE INDEX idx_curtidas_vaga_id ON curtidas(vaga_id);CREATE INDEX idx_empresa_competencia_competencia_id ON empresa_competencia(competencia_id);

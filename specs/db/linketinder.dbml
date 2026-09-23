@@ -49,6 +49,15 @@ Table vagas {
   criado_em timestamp
 }
 
+Table empresa_competencia {
+  empresa_id integer [ref: > empresas.id, not null]
+  competencia_id integer [ref: > competencias.id, not null]
+
+  indexes {
+    (empresa_id, competencia_id) [pk]
+  }
+}
+
 Table vaga_competencia {
   vaga_id integer [ref: > vagas.id, not null]
   competencia_id integer [ref: > competencias.id, not null]
