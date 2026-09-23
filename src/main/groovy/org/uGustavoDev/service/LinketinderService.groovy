@@ -123,4 +123,32 @@ class LinketinderService {
         ConsoleUI.imprimirCabecalho("Lista de Empresas")
         empresas.each { ConsoleUI.imprimirMensagem(it.toString()) }
     }
+
+    Candidato loginCandidato(String email, String senha) {
+        try {
+            Candidato candidato = CandidatoDAO.buscarPorEmail(email)
+            if (candidato != null && candidato.senha == senha) {
+                return candidato
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao tentar realizar login de candidato no banco: " + e.message)
+        }
+        
+        // Fallback para memória
+        return candidatos.find { it.email == email && it.senha == senha }
+    }
+
+    Empresa loginEmpresa(String email, String senha) {
+        try {
+            Empresa empresa = EmpresaDAO.buscarPorEmail(email)
+            if (empresa != null && empresa.senha == senha) {
+                return empresa
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao tentar realizar login de empresa no banco: " + e.message)
+        }
+        
+        // Fallback para memória
+        return empresas.find { it.email == email && it.senha == senha }
+    }
 }
