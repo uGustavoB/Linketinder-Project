@@ -32,6 +32,10 @@ class EmpresaDAO {
         )
         e.id = rs.getInt("id")
         e.senha = rs.getString("senha")
+
+        List<String> competencias = CompetenciaDAO.listarPorEmpresa(e.id)
+        e.adicionarCompetencias(competencias)
+
         return e
     }
 

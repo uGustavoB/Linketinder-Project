@@ -50,6 +50,10 @@ class CandidatoDAO {
         if (dataNascimentoSql != null) {
             c.dataNascimento = dataNascimentoSql.toLocalDate()
         }
+        
+        List<String> competencias = CompetenciaDAO.listarPorCandidato(c.id)
+        c.adicionarCompetencias(competencias)
+        
         return c
     }
 

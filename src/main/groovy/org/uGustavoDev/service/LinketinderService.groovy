@@ -1,6 +1,7 @@
 package org.uGustavoDev.service
 
 import org.uGustavoDev.dao.CandidatoDAO
+import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
@@ -63,6 +64,10 @@ class LinketinderService {
         candidatos.add(candidato)
         try {
             CandidatoDAO.inserir(candidato)
+            candidato.competencias.each { compNome ->
+                int compId = CompetenciaDAO.buscarOuInserir(compNome)
+                CompetenciaDAO.vincularAoCandidato(candidato.id, compId)
+            }
         } catch (Exception e) {
             System.err.println("Não foi possível salvar o candidato no banco de dados. " + e.message)
         }
@@ -72,6 +77,10 @@ class LinketinderService {
         empresas.add(empresa)
         try {
             EmpresaDAO.inserir(empresa)
+            empresa.competencias.each { compNome ->
+                int compId = CompetenciaDAO.buscarOuInserir(compNome)
+                CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
+            }
         } catch (Exception e) {
             System.err.println("Não foi possível salvar a empresa no banco de dados. " + e.message)
         }
