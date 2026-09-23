@@ -82,16 +82,39 @@ class ConsoleUI {
         }
     }
 
-    static int pedirOpcaoPrincipal() {
-        imprimirCabecalho("Linketinder - Menu Principal")
-        println "Escolha uma ação:"
-        println "1 - Listar Candidatos"
-        println "2 - Listar Empresas"
-        println "3 - Cadastrar Candidato"
-        println "4 - Cadastrar Empresa"
+    static int pedirOpcaoDeslogado() {
+        imprimirCabecalho("Linketinder - Bem-vindo!")
+        println "1 - Login (Candidato / Empresa)"
+        println "2 - Cadastrar Candidato"
+        println "3 - Cadastrar Empresa"
         println "0 - Sair"
 
-        return lerEscolha("Sua escolha: ", 0, 4)
+        return lerEscolha("Sua escolha: ", 0, 3)
+    }
+
+    static int pedirOpcaoCandidatoLogado(Candidato candidato) {
+        imprimirCabecalho("Linketinder - Área do Candidato")
+        println "Olá, ${candidato.nome}!"
+        println "1 - Ver meu perfil"
+        println "0 - Sair (Logout)"
+
+        return lerEscolha("Sua escolha: ", 0, 1)
+    }
+
+    static int pedirOpcaoEmpresaLogada(Empresa empresa) {
+        imprimirCabecalho("Linketinder - Área da Empresa")
+        println "Olá, ${empresa.nome}!"
+        println "1 - Ver meu perfil"
+        println "0 - Sair (Logout)"
+
+        return lerEscolha("Sua escolha: ", 0, 1)
+    }
+
+    static Map<String, String> pedirCredenciais() {
+        imprimirCabecalho("Login")
+        String email = lerTexto("Email: ")
+        String senha = lerTexto("Senha: ")
+        return [email: email, senha: senha]
     }
 
     static Candidato pedirDadosCandidato() {
@@ -99,6 +122,7 @@ class ConsoleUI {
         String nome = lerTexto("Nome: ")
         String sobrenome = lerTexto("Sobrenome: ")
         String email = lerTexto("Email: ")
+        String senha = lerTexto("Senha (mínimo 6 caracteres): ")
         String estado = lerTexto("Estado (ex: SP): ")
         String pais = lerTexto("País: ")
         String cep = lerTexto("CEP: ")
@@ -111,6 +135,7 @@ class ConsoleUI {
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
         def candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNasc)
+        candidato.senha = senha
         candidato.competencias = competencias
         return candidato
     }
@@ -119,6 +144,7 @@ class ConsoleUI {
         imprimirCabecalho("Cadastro de Empresa")
         String nome = lerTexto("Nome da Empresa: ")
         String email = lerTexto("Email Corporativo: ")
+        String senha = lerTexto("Senha (mínimo 6 caracteres): ")
         String pais = lerTexto("País: ")
         String cep = lerTexto("CEP: ")
         String descricao = lerTexto("Descrição da Empresa: ")
@@ -128,6 +154,7 @@ class ConsoleUI {
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
         def empresa = new Empresa(nome, email, pais, cep, descricao, cnpj)
+        empresa.senha = senha
         empresa.competencias = competencias
         return empresa
     }

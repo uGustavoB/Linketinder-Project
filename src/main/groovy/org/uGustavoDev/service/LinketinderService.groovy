@@ -7,8 +7,6 @@ import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.ui.ConsoleUI
 
-import java.time.LocalDate
-
 class LinketinderService {
 
     LinketinderService() {

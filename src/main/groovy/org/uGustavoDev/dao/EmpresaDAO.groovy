@@ -97,6 +97,25 @@ class EmpresaDAO {
         return null
     }
 
+    static Empresa buscarPorEmail(String email) {
+        String sql = "SELECT * FROM empresas WHERE email = ?"
+        
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, email)
+            ResultSet rs = stmt.executeQuery()
+            
+            if (rs.next()) {
+                return extrairEmpresa(rs)
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar empresa por email: ${e.message}", e)
+        }
+        
+        return null
+    }
+
     static void atualizar(Empresa empresa) {
         String sql = """
             UPDATE empresas 
