@@ -12,27 +12,49 @@ class LinketinderService {
     LinketinderService() {
     }
 
-    void adicionarCandidato(Candidato candidato) {
+    boolean adicionarCandidato(Candidato candidato) {
+        if (CandidatoDAO.buscarPorEmail(candidato.email) != null) {
+            System.err.println("Erro: Já existe um candidato cadastrado com o email '${candidato.email}'.")
+            return false
+        }
+        if (CandidatoDAO.buscarPorCpf(candidato.cpf) != null) {
+            System.err.println("Erro: Já existe um candidato cadastrado com o CPF '${candidato.cpf}'.")
+            return false
+        }
+
         try {
             CandidatoDAO.inserir(candidato)
             candidato.competencias.each { compNome ->
                 int compId = CompetenciaDAO.buscarOuInserir(compNome)
                 CompetenciaDAO.vincularAoCandidato(candidato.id, compId)
             }
+            return true
         } catch (Exception e) {
             System.err.println("Não foi possível salvar o candidato no banco de dados. " + e.message)
+            return false
         }
     }
 
-    void adicionarEmpresa(Empresa empresa) {
+    boolean adicionarEmpresa(Empresa empresa) {
+        if (EmpresaDAO.buscarPorEmail(empresa.email) != null) {
+            System.err.println("Erro: Já existe uma empresa cadastrada com o email '${empresa.email}'.")
+            return false
+        }
+        if (EmpresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
+            System.err.println("Erro: Já existe uma empresa cadastrada com o CNPJ '${empresa.cnpj}'.")
+            return false
+        }
+
         try {
             EmpresaDAO.inserir(empresa)
             empresa.competencias.each { compNome ->
                 int compId = CompetenciaDAO.buscarOuInserir(compNome)
                 CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
+            return true
         } catch (Exception e) {
             System.err.println("Não foi possível salvar a empresa no banco de dados. " + e.message)
+            return false
         }
     }
 

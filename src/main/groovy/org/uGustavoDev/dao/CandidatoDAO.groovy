@@ -134,6 +134,25 @@ class CandidatoDAO {
         return null
     }
 
+    static Candidato buscarPorCpf(String cpf) {
+        String sql = "SELECT * FROM candidatos WHERE cpf = ?"
+
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cpf)
+            ResultSet rs = stmt.executeQuery()
+
+            if (rs.next()) {
+                return extrairCandidato(rs)
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar candidato por CPF: ${e.message}", e)
+        }
+
+        return null
+    }
+
     static void atualizar(Candidato candidato) {
         String sql = """
             UPDATE candidatos 
