@@ -96,9 +96,11 @@ class ConsoleUI {
         imprimirCabecalho("Linketinder - Área do Candidato")
         println "Olá, ${candidato.nome}!"
         println "1 - Ver meu perfil"
+        println "2 - Editar meu perfil"
+        println "3 - Deletar minha conta"
         println "0 - Sair (Logout)"
 
-        return lerEscolha("Sua escolha: ", 0, 1)
+        return lerEscolha("Sua escolha: ", 0, 3)
     }
 
     static int pedirOpcaoEmpresaLogada(Empresa empresa) {

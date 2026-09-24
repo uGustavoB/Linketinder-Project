@@ -111,4 +111,29 @@ class LinketinderService {
         }
         return null
     }
+
+    boolean atualizarCandidato(Candidato candidato) {
+        try {
+            CandidatoDAO.atualizar(candidato)
+            CompetenciaDAO.removerVinculosCandidato(candidato.id)
+            candidato.competencias.each { compNome ->
+                int compId = CompetenciaDAO.buscarOuInserir(compNome)
+                CompetenciaDAO.vincularAoCandidato(candidato.id, compId)
+            }
+            return true
+        } catch (Exception e) {
+            System.err.println("Não foi possível atualizar o candidato no banco de dados. " + e.message)
+            return false
+        }
+    }
+
+    boolean deletarCandidato(int id) {
+        try {
+            CandidatoDAO.deletar(id)
+            return true
+        } catch (Exception e) {
+            System.err.println("Não foi possível deletar o candidato do banco de dados. " + e.message)
+            return false
+        }
+    }
 }

@@ -84,6 +84,17 @@ class CompetenciaDAO {
         return competencias
     }
 
+    static void removerVinculosCandidato(int candidatoId) {
+        String sql = "DELETE FROM candidato_competencia WHERE candidato_id = ?"
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, candidatoId)
+            stmt.executeUpdate()
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao remover vínculos de competência do candidato: ${e.message}", e)
+        }
+    }
+
     static void vincularAEmpresa(int empresaId, int competenciaId) {
         String sql = "INSERT INTO empresa_competencia (empresa_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         

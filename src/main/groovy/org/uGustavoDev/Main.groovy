@@ -23,6 +23,23 @@ static void main(String[] args) {
                     ConsoleUI.imprimirMensagem(candidatoLogado.toString())
                     ConsoleUI.aguardarContinuacao()
                     break
+                case 2:
+                    ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
+                    def candidatoEditado = ConsoleUI.pedirDadosCandidato()
+                    candidatoEditado.id = candidatoLogado.id
+                    if (service.atualizarCandidato(candidatoEditado)) {
+                        candidatoLogado = candidatoEditado
+                        ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
+                    }
+                    ConsoleUI.aguardarContinuacao()
+                    break
+                case 3:
+                    if (service.deletarCandidato(candidatoLogado.id)) {
+                        candidatoLogado = null
+                        ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
+                    }
+                    ConsoleUI.aguardarContinuacao()
+                    break
                 case 0:
                     candidatoLogado = null
                     ConsoleUI.imprimirMensagem("Logout efetuado.")
