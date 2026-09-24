@@ -19,25 +19,30 @@ static void main(String[] args) {
             int opcao = ConsoleUI.pedirOpcaoCandidatoLogado(candidatoLogado)
             switch (opcao) {
                 case 1:
-                    ConsoleUI.imprimirCabecalho("Meu Perfil (Candidato)")
-                    ConsoleUI.imprimirMensagem(candidatoLogado.toString())
-                    ConsoleUI.aguardarContinuacao()
+                    int opcaoPerfil = ConsoleUI.pedirOpcaoMenuPerfil()
+                    if (opcaoPerfil == 1) {
+                        ConsoleUI.imprimirCabecalho("Meu Perfil (Candidato)")
+                        ConsoleUI.imprimirMensagem(candidatoLogado.toString())
+                        ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoPerfil == 2) {
+                        ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
+                        def candidatoEditado = ConsoleUI.pedirDadosCandidato()
+                        candidatoEditado.id = candidatoLogado.id
+                        if (service.atualizarCandidato(candidatoEditado)) {
+                            candidatoLogado = candidatoEditado
+                            ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
+                        }
+                        ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoPerfil == 3) {
+                        if (service.deletarCandidato(candidatoLogado.id)) {
+                            candidatoLogado = null
+                            ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
+                        }
+                        ConsoleUI.aguardarContinuacao()
+                    }
                     break
                 case 2:
-                    ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
-                    def candidatoEditado = ConsoleUI.pedirDadosCandidato()
-                    candidatoEditado.id = candidatoLogado.id
-                    if (service.atualizarCandidato(candidatoEditado)) {
-                        candidatoLogado = candidatoEditado
-                        ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
-                    }
-                    ConsoleUI.aguardarContinuacao()
-                    break
-                case 3:
-                    if (service.deletarCandidato(candidatoLogado.id)) {
-                        candidatoLogado = null
-                        ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
-                    }
+                    ConsoleUI.imprimirMensagem("Módulo de Vagas para Candidatos (Em Breve)")
                     ConsoleUI.aguardarContinuacao()
                     break
                 case 0:
@@ -49,26 +54,37 @@ static void main(String[] args) {
             int opcao = ConsoleUI.pedirOpcaoEmpresaLogada(empresaLogada)
             switch (opcao) {
                 case 1:
-                    ConsoleUI.imprimirCabecalho("Meu Perfil (Empresa)")
-                    ConsoleUI.imprimirMensagem(empresaLogada.toString())
-                    ConsoleUI.aguardarContinuacao()
+                    int opcaoPerfil = ConsoleUI.pedirOpcaoMenuPerfil()
+                    if (opcaoPerfil == 1) {
+                        ConsoleUI.imprimirCabecalho("Meu Perfil (Empresa)")
+                        ConsoleUI.imprimirMensagem(empresaLogada.toString())
+                        ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoPerfil == 2) {
+                        ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
+                        def empresaEditada = ConsoleUI.pedirDadosEmpresa()
+                        empresaEditada.id = empresaLogada.id
+                        if (service.atualizarEmpresa(empresaEditada)) {
+                            empresaLogada = empresaEditada
+                            ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
+                        }
+                        ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoPerfil == 3) {
+                        if (service.deletarEmpresa(empresaLogada.id)) {
+                            empresaLogada = null
+                            ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
+                        }
+                        ConsoleUI.aguardarContinuacao()
+                    }
                     break
                 case 2:
-                    ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
-                    def empresaEditada = ConsoleUI.pedirDadosEmpresa()
-                    empresaEditada.id = empresaLogada.id
-                    if (service.atualizarEmpresa(empresaEditada)) {
-                        empresaLogada = empresaEditada
-                        ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
+                    int opcaoVagas = ConsoleUI.pedirOpcaoMenuVagasEmpresa()
+                    if (opcaoVagas == 1) {
+                        def novaVaga = ConsoleUI.pedirDadosVaga(empresaLogada.id)
+                        if (service.adicionarVaga(novaVaga)) {
+                            ConsoleUI.imprimirMensagem("\nVaga criada com sucesso!")
+                        }
+                        ConsoleUI.aguardarContinuacao()
                     }
-                    ConsoleUI.aguardarContinuacao()
-                    break
-                case 3:
-                    if (service.deletarEmpresa(empresaLogada.id)) {
-                        empresaLogada = null
-                        ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
-                    }
-                    ConsoleUI.aguardarContinuacao()
                     break
                 case 0:
                     empresaLogada = null

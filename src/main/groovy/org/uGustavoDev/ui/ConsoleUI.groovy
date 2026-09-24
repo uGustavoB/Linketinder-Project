@@ -1,5 +1,7 @@
 package org.uGustavoDev.ui
 
+import org.uGustavoDev.model.Vaga
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.uGustavoDev.model.Candidato
@@ -95,23 +97,39 @@ class ConsoleUI {
     static int pedirOpcaoCandidatoLogado(Candidato candidato) {
         imprimirCabecalho("Linketinder - Área do Candidato")
         println "Olá, ${candidato.nome}!"
-        println "1 - Ver meu perfil"
-        println "2 - Editar meu perfil"
-        println "3 - Deletar minha conta"
+        println "1 - Meu Perfil"
+        println "2 - Vagas (Em Breve)"
         println "0 - Sair (Logout)"
 
-        return lerEscolha("Sua escolha: ", 0, 3)
+        return lerEscolha("Sua escolha: ", 0, 2)
     }
 
     static int pedirOpcaoEmpresaLogada(Empresa empresa) {
         imprimirCabecalho("Linketinder - Área da Empresa")
         println "Olá, ${empresa.nome}!"
+        println "1 - Meu Perfil"
+        println "2 - Vagas"
+        println "0 - Sair (Logout)"
+
+        return lerEscolha("Sua escolha: ", 0, 2)
+    }
+
+    static int pedirOpcaoMenuPerfil() {
+        imprimirCabecalho("Menu de Perfil")
         println "1 - Ver meu perfil"
         println "2 - Editar meu perfil"
         println "3 - Deletar minha conta"
-        println "0 - Sair (Logout)"
+        println "0 - Voltar"
 
         return lerEscolha("Sua escolha: ", 0, 3)
+    }
+
+    static int pedirOpcaoMenuVagasEmpresa() {
+        imprimirCabecalho("Menu de Vagas")
+        println "1 - Criar nova vaga"
+        println "0 - Voltar"
+
+        return lerEscolha("Sua escolha: ", 0, 1)
     }
 
     static Map<String, String> pedirCredenciais() {
@@ -161,5 +179,20 @@ class ConsoleUI {
         empresa.senha = senha
         empresa.competencias = competencias
         return empresa
+    }
+
+    static Vaga pedirDadosVaga(int empresaId) {
+        imprimirCabecalho("Criar Nova Vaga")
+        String nome = lerTexto("Título da Vaga: ")
+        String descricao = lerTexto("Descrição da Vaga: ")
+        String cidade = lerTexto("Cidade: ")
+        String estado = lerTexto("Estado (ex: SP): ")
+        
+        String compsStr = lerTexto("Competências exigidas (separadas por vírgula): ", true)
+        List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
+
+        def vaga = new Vaga(empresaId, nome, descricao, estado, cidade)
+        vaga.competencias = competencias
+        return vaga
     }
 }
