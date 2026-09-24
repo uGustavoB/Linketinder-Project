@@ -4,19 +4,20 @@
 
 Bem-vindo ao projeto **LinkeTinder**, um sistema inovador idealizado a partir do insight do grande empresário Dr. Antônio Paçoca. O objetivo desta plataforma é revolucionar o processo de recrutamento, unindo a praticidade de "match" do Tinder com o mapeamento e validação de competências técnicas do LinkedIn.
 
-Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, onde é possível cadastrar e gerenciar perfis de Candidatos e de Empresas, visualizar suas qualificações e armazenar esses dados em listas na memória.
+Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, onde é possível cadastrar e gerenciar perfis de Candidatos e de Empresas, visualizar suas qualificações e gerenciar vagas. Inicialmente estruturado em memória, o projeto **evoluiu na Trilha 2** para se integrar a um banco de dados relacional (PostgreSQL) através do uso de **JDBC** e o padrão **DAO**.
 
 > **Frontend Web**: Para a versão web interativa em Single Page Application (desenvolvida com TypeScript, Vite e Chart.js), consulte a [Documentação do Frontend](frontend/README.md).
 
-> **Modelagem de Dados**: Para conferir a estrutura de banco de dados elaborada para a futura migração do sistema, consulte a [Documentação de Modelagem](specs/README.md).
+> **Modelagem de Dados**: O banco de dados foi construído com o auxílio da ferramenta **dbdiagram.io**, contando com tabelas de Candidatos, Empresas, Vagas e Competências. O diagrama DER (.pdf) e scripts de inserção podem ser conferidos na [Documentação de Modelagem](specs/README.md).
 
 ---
 
 ## Funcionalidades
 
 - **Cadastro de Candidatos e Empresas**: Adicione novos perfis com informações detalhadas, capturando inclusive a lista das competências técnicas de cada um.
-- **Listagem Estruturada**: Visualize os candidatos e as empresas de forma bastante amigável no terminal, através de formato de tabela elegante (sem emojis ou caracteres que quebrem terminais nativos).
-- **Armazenamento em Memória**: Os dados são gerenciados em listas na memória, inicializados com dados pré-cadastrados e atualizados a cada novo cadastro.
+- **Gerenciamento de Vagas**: Empresas podem cadastrar, listar, atualizar e deletar suas vagas abertas, vinculando as competências exigidas.
+- **Integração com Banco de Dados**: A aplicação conecta-se de forma nativa e robusta a um SGBD usando `java.sql` (JDBC).
+- **Listagem Estruturada**: Visualize candidatos, vagas e empresas de forma bastante amigável no terminal.
 
 ---
 
