@@ -43,7 +43,7 @@ class VagaService {
     }
 
     void atualizarVagaDaEmpresa(int empresaId, int vagaId, Vaga vagaEditada) {
-        def vagaExistente = buscarVagaPorId(vagaId)
+        Vaga vagaExistente = buscarVagaPorId(vagaId)
         if (vagaExistente == null) {
             throw new IllegalArgumentException("Vaga não encontrada.")
         }
@@ -56,7 +56,7 @@ class VagaService {
     }
 
     void deletarVagaDaEmpresa(int empresaId, int vagaId) {
-        def vagaExistente = buscarVagaPorId(vagaId)
+        Vaga vagaExistente = buscarVagaPorId(vagaId)
         if (vagaExistente == null) {
             throw new IllegalArgumentException("Vaga não encontrada.")
         }

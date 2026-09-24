@@ -159,7 +159,7 @@ class ConsoleUI {
         String compsStr = lerTexto("Competências (separadas por vírgula): ", true)
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        def candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNasc)
+        Candidato candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNasc)
         candidato.senha = senha
         candidato.competencias = competencias
         return candidato
@@ -178,7 +178,7 @@ class ConsoleUI {
         String compsStr = lerTexto("Competências requeridas (separadas por vírgula): ", true)
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        def empresa = new Empresa(nome, email, pais, cep, descricao, cnpj)
+        Empresa empresa = new Empresa(nome, email, pais, cep, descricao, cnpj)
         empresa.senha = senha
         empresa.competencias = competencias
         return empresa
@@ -194,7 +194,7 @@ class ConsoleUI {
         String compsStr = lerTexto("Competências exigidas (separadas por vírgula): ", true)
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        def vaga = new Vaga(empresaId, nome, descricao, estado, cidade)
+        Vaga vaga = new Vaga(empresaId, nome, descricao, estado, cidade)
         vaga.competencias = competencias
         return vaga
     }
