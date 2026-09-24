@@ -10,8 +10,7 @@ CREATE TABLE candidatos (
                             estado         VARCHAR(100),
                             cep            VARCHAR(10),
                             descricao      TEXT,
-                            senha          VARCHAR(255) NOT NULL CHECK (char_length(senha) >= 6),
-                            criado_em      TIMESTAMP NOT NULL DEFAULT now()
+                            senha          VARCHAR(255) NOT NULL CHECK (char_length(senha) >= 6)
 );
 
 -- Tabela de empresas
@@ -23,8 +22,7 @@ CREATE TABLE empresas (
                           descricao      TEXT,
                           pais           VARCHAR(100),
                           cep            VARCHAR(10),
-                          senha          VARCHAR(255) NOT NULL CHECK (char_length(senha) >= 6),
-                          criado_em      TIMESTAMP NOT NULL DEFAULT now()
+                          senha          VARCHAR(255) NOT NULL CHECK (char_length(senha) >= 6)
 );
 
 -- Competências
@@ -54,8 +52,7 @@ CREATE TABLE vagas (
                        nome           VARCHAR(150) NOT NULL,
                        descricao      TEXT,
                        estado         VARCHAR(100),
-                       cidade         VARCHAR(100),
-                       criado_em      TIMESTAMP NOT NULL DEFAULT now()
+                       cidade         VARCHAR(100)
 );
 
 -- Vaga_competencia (N:N entre vagas e competências)

@@ -18,7 +18,6 @@ class VagaDAO {
         stmt.setString(3, vaga.descricao)
         stmt.setString(4, vaga.estado)
         stmt.setString(5, vaga.cidade)
-        stmt.setTimestamp(6, Timestamp.valueOf(vaga.criadoEm))
     }
 
     private static Vaga extrairVaga(ResultSet rs) throws SQLException {
@@ -31,11 +30,6 @@ class VagaDAO {
         )
         v.id = rs.getInt("id")
         
-        Timestamp criadoEmSql = rs.getTimestamp("criado_em")
-        if (criadoEmSql != null) {
-            v.criadoEm = criadoEmSql.toLocalDateTime()
-        }
-        
         List<String> competencias = CompetenciaDAO.listarPorVaga(v.id)
         v.adicionarCompetencias(competencias)
         
@@ -44,8 +38,8 @@ class VagaDAO {
 
     static void inserir(Vaga vaga) {
         String sql = """
-            INSERT INTO vagas (empresa_id, nome, descricao, estado, cidade, criado_em)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO vagas (empresa_id, nome, descricao, estado, cidade)
+            VALUES (?, ?, ?, ?, ?)
         """
         
         try (Connection conn = ConexaoFactory.getConnection();
@@ -124,7 +118,7 @@ class VagaDAO {
     static void atualizar(Vaga vaga) {
         String sql = """
             UPDATE vagas 
-            SET empresa_id = ?, nome = ?, descricao = ?, estado = ?, cidade = ?, criado_em = ?
+            SET empresa_id = ?, nome = ?, descricao = ?, estado = ?, cidade = ?
             WHERE id = ?
         """
         
@@ -132,7 +126,7 @@ class VagaDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
              
             preencherStatement(stmt, vaga)
-            stmt.setInt(7, vaga.id)
+            stmt.setInt(6, vaga.id)
             
             stmt.executeUpdate()
         } catch (SQLException e) {

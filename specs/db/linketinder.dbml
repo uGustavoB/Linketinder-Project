@@ -10,7 +10,6 @@ Table candidatos {
   cep varchar
   descricao text
   senha varchar [not null]
-  criado_em timestamp
 }
 
 Table empresas {
@@ -22,7 +21,6 @@ Table empresas {
   pais varchar
   cep varchar
   senha varchar [not null]
-  criado_em timestamp
 }
 
 Table competencias {
@@ -46,7 +44,6 @@ Table vagas {
   descricao text
   estado varchar
   cidade varchar
-  criado_em timestamp
 }
 
 Table empresa_competencia {

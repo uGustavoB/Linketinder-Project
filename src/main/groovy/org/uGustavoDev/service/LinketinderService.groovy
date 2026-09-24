@@ -221,7 +221,6 @@ class LinketinderService {
             def vagaExistente = VagaDAO.buscarPorId(vagaId)
             if (vagaExistente != null && vagaExistente.empresaId == empresaId) {
                 vagaEditada.id = vagaId
-                vagaEditada.criadoEm = vagaExistente.criadoEm
                 return atualizarVaga(vagaEditada)
             }
             return false

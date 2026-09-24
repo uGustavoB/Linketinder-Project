@@ -10,7 +10,6 @@ class Vaga {
     String descricao
     String estado
     String cidade
-    LocalDateTime criadoEm
     List<String> competencias = []
 
     Vaga(Integer empresaId, String nome, String descricao, String estado, String cidade) {
@@ -19,7 +18,6 @@ class Vaga {
         this.descricao = descricao
         this.estado = estado
         this.cidade = cidade
-        this.criadoEm = LocalDateTime.now()
     }
 
     void adicionarCompetencias(List<String> novasCompetencias) {
@@ -28,11 +26,9 @@ class Vaga {
 
     @Override
     String toString() {
-        String dataCriacao = criadoEm != null ? criadoEm.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "Data não informada"
         return """\
-VAGA [${id}]: ${nome}
+VAGA [#${id}]: ${nome}
 Local: ${cidade}, ${estado}
-Criada em: ${dataCriacao}
 Descrição: ${descricao}
 Competências exigidas: ${competencias.isEmpty() ? 'Nenhuma' : competencias.join(', ')}
 ----------------------------------------"""
