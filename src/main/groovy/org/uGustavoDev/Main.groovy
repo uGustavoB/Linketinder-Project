@@ -53,6 +53,23 @@ static void main(String[] args) {
                     ConsoleUI.imprimirMensagem(empresaLogada.toString())
                     ConsoleUI.aguardarContinuacao()
                     break
+                case 2:
+                    ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
+                    def empresaEditada = ConsoleUI.pedirDadosEmpresa()
+                    empresaEditada.id = empresaLogada.id
+                    if (service.atualizarEmpresa(empresaEditada)) {
+                        empresaLogada = empresaEditada
+                        ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
+                    }
+                    ConsoleUI.aguardarContinuacao()
+                    break
+                case 3:
+                    if (service.deletarEmpresa(empresaLogada.id)) {
+                        empresaLogada = null
+                        ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
+                    }
+                    ConsoleUI.aguardarContinuacao()
+                    break
                 case 0:
                     empresaLogada = null
                     ConsoleUI.imprimirMensagem("Logout efetuado.")

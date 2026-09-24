@@ -136,4 +136,29 @@ class LinketinderService {
             return false
         }
     }
+
+    boolean atualizarEmpresa(Empresa empresa) {
+        try {
+            EmpresaDAO.atualizar(empresa)
+            CompetenciaDAO.removerVinculosEmpresa(empresa.id)
+            empresa.competencias.each { compNome ->
+                int compId = CompetenciaDAO.buscarOuInserir(compNome)
+                CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
+            }
+            return true
+        } catch (Exception e) {
+            System.err.println("Não foi possível atualizar a empresa no banco de dados. " + e.message)
+            return false
+        }
+    }
+
+    boolean deletarEmpresa(int id) {
+        try {
+            EmpresaDAO.deletar(id)
+            return true
+        } catch (Exception e) {
+            System.err.println("Não foi possível deletar a empresa do banco de dados. " + e.message)
+            return false
+        }
+    }
 }

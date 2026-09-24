@@ -133,4 +133,15 @@ class CompetenciaDAO {
         
         return competencias
     }
+
+    static void removerVinculosEmpresa(int empresaId) {
+        String sql = "DELETE FROM empresa_competencia WHERE empresa_id = ?"
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empresaId)
+            stmt.executeUpdate()
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao remover vínculos de competência da empresa: ${e.message}", e)
+        }
+    }
 }
