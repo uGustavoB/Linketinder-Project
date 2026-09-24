@@ -3,50 +3,34 @@ package org.uGustavoDev.service
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.VagaDAO
 import org.uGustavoDev.model.Vaga
-import org.uGustavoDev.ui.ConsoleUI
 
 class VagaService {
 
-    boolean adicionarVaga(Vaga vaga) {
+    void adicionarVaga(Vaga vaga) {
         try {
             VagaDAO.inserir(vaga)
             vaga.competencias.each { compNome ->
                 int compId = CompetenciaDAO.buscarOuInserir(compNome)
                 CompetenciaDAO.vincularAVaga(vaga.id, compId)
             }
-            return true
         } catch (Exception e) {
-            System.err.println("Não foi possível salvar a vaga no banco de dados. " + e.message)
-            return false
+            throw new RuntimeException("Não foi possível salvar a vaga no banco de dados.", e)
         }
     }
 
-    void listarVagas() {
+    List<Vaga> listarVagas() {
         try {
-            def vagasDoBanco = VagaDAO.listar()
-            if (vagasDoBanco.isEmpty()) {
-                ConsoleUI.imprimirMensagem("Nenhuma vaga cadastrada.")
-                return
-            }
-
-            ConsoleUI.imprimirCabecalho("Lista de Vagas")
-            vagasDoBanco.each { ConsoleUI.imprimirMensagem(it.toString()) }
+            return VagaDAO.listar()
         } catch (Exception e) {
-            System.err.println("Não foi possível listar as vagas do banco de dados. " + e.message)
+            throw new RuntimeException("Não foi possível listar as vagas do banco de dados.", e)
         }
     }
 
-    void listarVagasDaEmpresa(int empresaId) {
+    List<Vaga> listarVagasDaEmpresa(int empresaId) {
         try {
-            def vagasDaEmpresa = VagaDAO.listarPorEmpresa(empresaId)
-            if (vagasDaEmpresa.isEmpty()) {
-                ConsoleUI.imprimirMensagem("Você ainda não criou nenhuma vaga.")
-                return
-            }
-            ConsoleUI.imprimirCabecalho("Minhas Vagas")
-            vagasDaEmpresa.each { ConsoleUI.imprimirMensagem(it.toString()) }
+            return VagaDAO.listarPorEmpresa(empresaId)
         } catch (Exception e) {
-            System.err.println("Não foi possível listar as vagas da empresa. " + e.message)
+            throw new RuntimeException("Não foi possível listar as vagas da empresa.", e)
         }
     }
 
@@ -54,39 +38,36 @@ class VagaService {
         try {
             return VagaDAO.buscarPorId(id)
         } catch (Exception e) {
-            System.err.println("Não foi possível buscar a vaga no banco de dados. " + e.message)
-            return null
+            throw new RuntimeException("Não foi possível buscar a vaga no banco de dados.", e)
         }
     }
 
-    boolean atualizarVagaDaEmpresa(int empresaId, int vagaId, Vaga vagaEditada) {
-        try {
-            def vagaExistente = VagaDAO.buscarPorId(vagaId)
-            if (vagaExistente != null && vagaExistente.empresaId == empresaId) {
-                vagaEditada.id = vagaId
-                return atualizarVaga(vagaEditada)
-            }
-            return false
-        } catch (Exception e) {
-            System.err.println("Erro ao validar atualização da vaga: " + e.message)
-            return false
+    void atualizarVagaDaEmpresa(int empresaId, int vagaId, Vaga vagaEditada) {
+        def vagaExistente = buscarVagaPorId(vagaId)
+        if (vagaExistente == null) {
+            throw new IllegalArgumentException("Vaga não encontrada.")
         }
+        if (vagaExistente.empresaId != empresaId) {
+            throw new IllegalArgumentException("Esta vaga não pertence à sua empresa.")
+        }
+        
+        vagaEditada.id = vagaId
+        atualizarVaga(vagaEditada)
     }
 
-    boolean deletarVagaDaEmpresa(int empresaId, int vagaId) {
-        try {
-            def vagaExistente = VagaDAO.buscarPorId(vagaId)
-            if (vagaExistente != null && vagaExistente.empresaId == empresaId) {
-                return deletarVaga(vagaId)
-            }
-            return false
-        } catch (Exception e) {
-            System.err.println("Erro ao validar deleção da vaga: " + e.message)
-            return false
+    void deletarVagaDaEmpresa(int empresaId, int vagaId) {
+        def vagaExistente = buscarVagaPorId(vagaId)
+        if (vagaExistente == null) {
+            throw new IllegalArgumentException("Vaga não encontrada.")
         }
+        if (vagaExistente.empresaId != empresaId) {
+            throw new IllegalArgumentException("Esta vaga não pertence à sua empresa.")
+        }
+
+        deletarVaga(vagaId)
     }
 
-    boolean atualizarVaga(Vaga vaga) {
+    void atualizarVaga(Vaga vaga) {
         try {
             VagaDAO.atualizar(vaga)
             CompetenciaDAO.removerVinculosVaga(vaga.id)
@@ -94,20 +75,16 @@ class VagaService {
                 int compId = CompetenciaDAO.buscarOuInserir(compNome)
                 CompetenciaDAO.vincularAVaga(vaga.id, compId)
             }
-            return true
         } catch (Exception e) {
-            System.err.println("Não foi possível atualizar a vaga no banco de dados. " + e.message)
-            return false
+            throw new RuntimeException("Não foi possível atualizar a vaga no banco de dados.", e)
         }
     }
 
-    boolean deletarVaga(int id) {
+    void deletarVaga(int id) {
         try {
             VagaDAO.deletar(id)
-            return true
         } catch (Exception e) {
-            System.err.println("Não foi possível deletar a vaga do banco de dados. " + e.message)
-            return false
+            throw new RuntimeException("Não foi possível deletar a vaga do banco de dados.", e)
         }
     }
 }

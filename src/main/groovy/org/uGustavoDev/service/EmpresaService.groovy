@@ -3,18 +3,15 @@ package org.uGustavoDev.service
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.model.Empresa
-import org.uGustavoDev.ui.ConsoleUI
 
 class EmpresaService {
 
-    boolean adicionarEmpresa(Empresa empresa) {
+    void adicionarEmpresa(Empresa empresa) {
         if (EmpresaDAO.buscarPorEmail(empresa.email) != null) {
-            System.err.println("Erro: Já existe uma empresa cadastrada com o email '${empresa.email}'.")
-            return false
+            throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${empresa.email}'.")
         }
         if (EmpresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
-            System.err.println("Erro: Já existe uma empresa cadastrada com o CNPJ '${empresa.cnpj}'.")
-            return false
+            throw new IllegalArgumentException("Já existe uma empresa cadastrada com o CNPJ '${empresa.cnpj}'.")
         }
 
         try {
@@ -23,25 +20,16 @@ class EmpresaService {
                 int compId = CompetenciaDAO.buscarOuInserir(compNome)
                 CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
-            return true
         } catch (Exception e) {
-            System.err.println("Não foi possível salvar a empresa no banco de dados. " + e.message)
-            return false
+            throw new RuntimeException("Não foi possível salvar a empresa no banco de dados.", e)
         }
     }
 
-    void listarEmpresas() {
+    List<Empresa> listarEmpresas() {
         try {
-            def empresasDoBanco = EmpresaDAO.listar()
-            if (empresasDoBanco.isEmpty()) {
-                ConsoleUI.imprimirMensagem("Nenhuma empresa cadastrada.")
-                return
-            }
-
-            ConsoleUI.imprimirCabecalho("Lista de Empresas")
-            empresasDoBanco.each { ConsoleUI.imprimirMensagem(it.toString()) }
+            return EmpresaDAO.listar()
         } catch (Exception e) {
-            System.err.println("Não foi possível listar as empresas do banco de dados. " + e.message)
+            throw new RuntimeException("Não foi possível listar as empresas do banco de dados.", e)
         }
     }
 
@@ -51,13 +39,13 @@ class EmpresaService {
             if (empresa != null && empresa.senha == senha) {
                 return empresa
             }
+            return null
         } catch (Exception e) {
-            System.err.println("Erro ao tentar realizar login de empresa no banco: " + e.message)
+            throw new RuntimeException("Erro ao tentar realizar login de empresa no banco.", e)
         }
-        return null
     }
 
-    boolean atualizarEmpresa(Empresa empresa) {
+    void atualizarEmpresa(Empresa empresa) {
         try {
             EmpresaDAO.atualizar(empresa)
             CompetenciaDAO.removerVinculosEmpresa(empresa.id)
@@ -65,20 +53,16 @@ class EmpresaService {
                 int compId = CompetenciaDAO.buscarOuInserir(compNome)
                 CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
-            return true
         } catch (Exception e) {
-            System.err.println("Não foi possível atualizar a empresa no banco de dados. " + e.message)
-            return false
+            throw new RuntimeException("Não foi possível atualizar a empresa no banco de dados.", e)
         }
     }
 
-    boolean deletarEmpresa(int id) {
+    void deletarEmpresa(int id) {
         try {
             EmpresaDAO.deletar(id)
-            return true
         } catch (Exception e) {
-            System.err.println("Não foi possível deletar a empresa do banco de dados. " + e.message)
-            return false
+            throw new RuntimeException("Não foi possível deletar a empresa do banco de dados.", e)
         }
     }
 }
