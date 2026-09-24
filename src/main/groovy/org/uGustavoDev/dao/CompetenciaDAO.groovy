@@ -144,4 +144,18 @@ class CompetenciaDAO {
             throw new RuntimeException("Erro ao remover vínculos de competência da empresa: ${e.message}", e)
         }
     }
+
+    static void vincularAVaga(int vagaId, int competenciaId) {
+        String sql = "INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
+        
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setInt(1, vagaId)
+            stmt.setInt(2, competenciaId)
+            stmt.executeUpdate()
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao vincular competência à vaga: ${e.message}", e)
+        }
+    }
 }
