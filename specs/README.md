@@ -25,8 +25,15 @@ specs/
     ├── linketinder.dbml           # Estrutura do banco de dados na linguagem DBML (Database Markup Language)
     ├── linketinder_db.sql         # Script SQL para criação das tabelas e restrições (DDL)
     ├── linketinder_populate.sql   # Script SQL com massa de dados fictícios para testes (DML)
-    └── Linketinder.pdf            # Diagrama Entidade-Relacionamento (DER) gerado
+    ├── Linketinder.pdf            # Diagrama Entidade-Relacionamento (DER) exportado
+    └── Linketinder.png            # Imagem do Diagrama Entidade-Relacionamento (DER)
 ```
+
+---
+
+## Diagrama Entidade-Relacionamento (DER)
+
+![Diagrama Entidade-Relacionamento](db/Linketinder.png)
 
 ---
 
