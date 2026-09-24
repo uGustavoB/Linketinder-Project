@@ -2,11 +2,16 @@ package org.uGustavoDev
 
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
-import org.uGustavoDev.service.LinketinderService
+import org.uGustavoDev.service.CandidatoService
+import org.uGustavoDev.service.EmpresaService
+import org.uGustavoDev.service.VagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    LinketinderService service = new LinketinderService()
+    CandidatoService candidatoService = new CandidatoService()
+    EmpresaService empresaService = new EmpresaService()
+    VagaService vagaService = new VagaService()
+    
     boolean executando = true
 
     Candidato candidatoLogado = null
@@ -28,13 +33,13 @@ static void main(String[] args) {
                         ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
                         def candidatoEditado = ConsoleUI.pedirDadosCandidato()
                         candidatoEditado.id = candidatoLogado.id
-                        if (service.atualizarCandidato(candidatoEditado)) {
+                        if (candidatoService.atualizarCandidato(candidatoEditado)) {
                             candidatoLogado = candidatoEditado
                             ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
                         }
                         ConsoleUI.aguardarContinuacao()
                     } else if (opcaoPerfil == 3) {
-                        if (service.deletarCandidato(candidatoLogado.id)) {
+                        if (candidatoService.deletarCandidato(candidatoLogado.id)) {
                             candidatoLogado = null
                             ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
                         }
@@ -63,13 +68,13 @@ static void main(String[] args) {
                         ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
                         def empresaEditada = ConsoleUI.pedirDadosEmpresa()
                         empresaEditada.id = empresaLogada.id
-                        if (service.atualizarEmpresa(empresaEditada)) {
+                        if (empresaService.atualizarEmpresa(empresaEditada)) {
                             empresaLogada = empresaEditada
                             ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
                         }
                         ConsoleUI.aguardarContinuacao()
                     } else if (opcaoPerfil == 3) {
-                        if (service.deletarEmpresa(empresaLogada.id)) {
+                        if (empresaService.deletarEmpresa(empresaLogada.id)) {
                             empresaLogada = null
                             ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
                         }
@@ -80,18 +85,18 @@ static void main(String[] args) {
                     int opcaoVagas = ConsoleUI.pedirOpcaoMenuVagasEmpresa()
                     if (opcaoVagas == 1) {
                         def novaVaga = ConsoleUI.pedirDadosVaga(empresaLogada.id)
-                        if (service.adicionarVaga(novaVaga)) {
+                        if (vagaService.adicionarVaga(novaVaga)) {
                             ConsoleUI.imprimirMensagem("\nVaga criada com sucesso!")
                         }
                         ConsoleUI.aguardarContinuacao()
                     } else if (opcaoVagas == 2) {
-                        service.listarVagasDaEmpresa(empresaLogada.id)
+                        vagaService.listarVagasDaEmpresa(empresaLogada.id)
                         ConsoleUI.aguardarContinuacao()
                     } else if (opcaoVagas == 3) {
                         int vagaId = ConsoleUI.lerEscolha("ID da vaga para editar: ", 1, Integer.MAX_VALUE)
                         ConsoleUI.imprimirMensagem("Por favor, informe os novos dados para a vaga:")
                         def vagaEditada = ConsoleUI.pedirDadosVaga(empresaLogada.id)
-                        if (service.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, vagaEditada)) {
+                        if (vagaService.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, vagaEditada)) {
                             ConsoleUI.imprimirMensagem("\nVaga atualizada com sucesso!")
                         } else {
                             ConsoleUI.imprimirMensagem("Vaga não encontrada, não pertence à sua empresa, ou erro na atualização.")
@@ -99,7 +104,7 @@ static void main(String[] args) {
                         ConsoleUI.aguardarContinuacao()
                     } else if (opcaoVagas == 4) {
                         int vagaId = ConsoleUI.lerEscolha("ID da vaga para deletar: ", 1, Integer.MAX_VALUE)
-                        if (service.deletarVagaDaEmpresa(empresaLogada.id, vagaId)) {
+                        if (vagaService.deletarVagaDaEmpresa(empresaLogada.id, vagaId)) {
                             ConsoleUI.imprimirMensagem("\nVaga deletada com sucesso.")
                         } else {
                             ConsoleUI.imprimirMensagem("Vaga não encontrada, não pertence à sua empresa, ou erro na deleção.")
@@ -120,14 +125,14 @@ static void main(String[] args) {
                     int tipoLogin = ConsoleUI.lerEscolha("Fazer login como:\n1 - Candidato\n2 - Empresa\n0 - Voltar\nSua escolha: ", 0, 2)
                     if (tipoLogin == 1) {
                         def creds = ConsoleUI.pedirCredenciais()
-                        candidatoLogado = service.loginCandidato(creds.email, creds.senha)
+                        candidatoLogado = candidatoService.loginCandidato(creds.email, creds.senha)
                         if (candidatoLogado == null) {
                             ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
                             ConsoleUI.aguardarContinuacao()
                         }
                     } else if (tipoLogin == 2) {
                         def creds = ConsoleUI.pedirCredenciais()
-                        empresaLogada = service.loginEmpresa(creds.email, creds.senha)
+                        empresaLogada = empresaService.loginEmpresa(creds.email, creds.senha)
                         if (empresaLogada == null) {
                             ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
                             ConsoleUI.aguardarContinuacao()
@@ -136,14 +141,14 @@ static void main(String[] args) {
                     break
                 case 2:
                     def novoCandidato = ConsoleUI.pedirDadosCandidato()
-                    if (service.adicionarCandidato(novoCandidato)) {
+                    if (candidatoService.adicionarCandidato(novoCandidato)) {
                         ConsoleUI.imprimirMensagem("\nCandidato cadastrado com sucesso!")
                     }
                     ConsoleUI.aguardarContinuacao()
                     break
                 case 3:
                     def novaEmpresa = ConsoleUI.pedirDadosEmpresa()
-                    if (service.adicionarEmpresa(novaEmpresa)) {
+                    if (empresaService.adicionarEmpresa(novaEmpresa)) {
                         ConsoleUI.imprimirMensagem("\nEmpresa cadastrada com sucesso!")
                     }
                     ConsoleUI.aguardarContinuacao()
