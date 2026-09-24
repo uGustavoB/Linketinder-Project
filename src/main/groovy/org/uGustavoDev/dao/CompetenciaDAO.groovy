@@ -158,4 +158,40 @@ class CompetenciaDAO {
             throw new RuntimeException("Erro ao vincular competência à vaga: ${e.message}", e)
         }
     }
+
+    static List<String> listarPorVaga(int vagaId) {
+        List<String> competencias = []
+        String sql = """
+            SELECT c.nome 
+            FROM competencias c
+            JOIN vaga_competencia vc ON c.id = vc.competencia_id
+            WHERE vc.vaga_id = ?
+        """
+        
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setInt(1, vagaId)
+            ResultSet rs = stmt.executeQuery()
+            
+            while (rs.next()) {
+                competencias.add(rs.getString("nome"))
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar competências da vaga: ${e.message}", e)
+        }
+        
+        return competencias
+    }
+
+    static void removerVinculosVaga(int vagaId) {
+        String sql = "DELETE FROM vaga_competencia WHERE vaga_id = ?"
+        try (Connection conn = ConexaoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, vagaId)
+            stmt.executeUpdate()
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao remover vínculos de competência da vaga: ${e.message}", e)
+        }
+    }
 }

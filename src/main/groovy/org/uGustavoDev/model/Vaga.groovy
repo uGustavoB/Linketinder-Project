@@ -1,6 +1,7 @@
 package org.uGustavoDev.model
 
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Vaga {
     Integer id
@@ -27,6 +28,13 @@ class Vaga {
 
     @Override
     String toString() {
-        return "Vaga[id=${id}, empresaId=${empresaId}, nome='${nome}', descricao='${descricao}', estado='${estado}', cidade='${cidade}', criadoEm=${criadoEm}, competencias=${competencias}]"
+        String dataCriacao = criadoEm != null ? criadoEm.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "Data não informada"
+        return """\
+VAGA [${id}]: ${nome}
+Local: ${cidade}, ${estado}
+Criada em: ${dataCriacao}
+Descrição: ${descricao}
+Competências exigidas: ${competencias.isEmpty() ? 'Nenhuma' : competencias.join(', ')}
+----------------------------------------"""
     }
 }

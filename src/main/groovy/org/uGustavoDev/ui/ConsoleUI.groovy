@@ -127,9 +127,12 @@ class ConsoleUI {
     static int pedirOpcaoMenuVagasEmpresa() {
         imprimirCabecalho("Menu de Vagas")
         println "1 - Criar nova vaga"
+        println "2 - Listar minhas vagas"
+        println "3 - Editar uma vaga"
+        println "4 - Deletar uma vaga"
         println "0 - Voltar"
 
-        return lerEscolha("Sua escolha: ", 0, 1)
+        return lerEscolha("Sua escolha: ", 0, 4)
     }
 
     static Map<String, String> pedirCredenciais() {

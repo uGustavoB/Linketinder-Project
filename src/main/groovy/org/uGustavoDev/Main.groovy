@@ -84,6 +84,27 @@ static void main(String[] args) {
                             ConsoleUI.imprimirMensagem("\nVaga criada com sucesso!")
                         }
                         ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoVagas == 2) {
+                        service.listarVagasDaEmpresa(empresaLogada.id)
+                        ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoVagas == 3) {
+                        int vagaId = ConsoleUI.lerEscolha("ID da vaga para editar: ", 1, Integer.MAX_VALUE)
+                        ConsoleUI.imprimirMensagem("Por favor, informe os novos dados para a vaga:")
+                        def vagaEditada = ConsoleUI.pedirDadosVaga(empresaLogada.id)
+                        if (service.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, vagaEditada)) {
+                            ConsoleUI.imprimirMensagem("\nVaga atualizada com sucesso!")
+                        } else {
+                            ConsoleUI.imprimirMensagem("Vaga não encontrada, não pertence à sua empresa, ou erro na atualização.")
+                        }
+                        ConsoleUI.aguardarContinuacao()
+                    } else if (opcaoVagas == 4) {
+                        int vagaId = ConsoleUI.lerEscolha("ID da vaga para deletar: ", 1, Integer.MAX_VALUE)
+                        if (service.deletarVagaDaEmpresa(empresaLogada.id, vagaId)) {
+                            ConsoleUI.imprimirMensagem("\nVaga deletada com sucesso.")
+                        } else {
+                            ConsoleUI.imprimirMensagem("Vaga não encontrada, não pertence à sua empresa, ou erro na deleção.")
+                        }
+                        ConsoleUI.aguardarContinuacao()
                     }
                     break
                 case 0:
