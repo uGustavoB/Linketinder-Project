@@ -1,37 +1,40 @@
 package org.uGustavoDev.model
 
 import spock.lang.Specification
+import java.time.LocalDate
 
 class CandidatoSpec extends Specification {
-    def "deve instanciar um novo candidato corretamente"() {
+    void "deve instanciar um novo candidato corretamente"() {
         given: "os dados do candidato"
         String nome = "Gustavo"
+        String sobrenome = "Silva"
         String email = "gustavo@example.com"
         String estado = "PB"
         String pais = "Brasil"
         String cep = "58000-000"
         String descricao = "Desenvolvedor buscando aplicar skills em projetos reais."
         String cpf = "111.111.111-11"
-        int idade = 21
+        LocalDate dataNascimento = LocalDate.of(2005, 1, 1)
 
         when: "o candidato é instanciado"
-        Candidato candidato = new Candidato(nome, email, estado, pais, cep, descricao, cpf, idade)
+        Candidato candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNascimento)
 
         then: "os atributos do candidato devem ser corretamente atribuídos"
         candidato.nome == nome
+        candidato.sobrenome == sobrenome
         candidato.email == email
         candidato.estado == estado
         candidato.pais == pais
         candidato.CEP == cep
         candidato.descricao == descricao
         candidato.cpf == cpf
-        candidato.idade == idade
+        candidato.dataNascimento == dataNascimento
         candidato.competencias.isEmpty()
     }
 
-    def "deve permitir adicionar e atualizar a lista de competências"() {
+    void "deve permitir adicionar e atualizar a lista de competências"() {
         given: "um candidato e uma lista de competências"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
+        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
         List<String> competencias = ["Java", "Python"]
 
         when: "as competências são adicionadas ao candidato"
@@ -42,9 +45,9 @@ class CandidatoSpec extends Specification {
         candidato.competencias == competencias
     }
 
-    def "deve permitir adicionar uma única competência"() {
+    void "deve permitir adicionar uma única competência"() {
         given: "um candidato"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
+        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
 
         when: "uma competência é adicionada ao candidato"
         candidato.adicionarCompetencia("JavaScript")
@@ -54,9 +57,9 @@ class CandidatoSpec extends Specification {
         candidato.competencias == ["JavaScript"]
     }
 
-    def "deve permitir remover uma competência"() {
+    void "deve permitir remover uma competência"() {
         given: "um candidato e uma lista de competências"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
+        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
         List<String> competencias = ["Java", "Python"]
 
         when: "as competências são adicionadas e uma é removida"
@@ -68,17 +71,17 @@ class CandidatoSpec extends Specification {
         !candidato.competencias.contains("Python")
     }
 
-    def "deve retornar o CPF ao chamar obterDocumento()"() {
+    void "deve retornar o CPF ao chamar obterDocumento()"() {
         given: "um candidato com CPF"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
+        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
 
         expect: "obterDocumento() retorna o CPF correto"
         candidato.obterDocumento() == "111.111.111-11"
     }
 
-    def "nao deve falhar ao tentar remover uma competência inexistente"() {
+    void "nao deve falhar ao tentar remover uma competência inexistente"() {
         given: "um candidato com algumas competências"
-        Candidato candidato = new Candidato("Gustavo", "gustavo@example.com", "PB", "Brasil", "58000-000", "Desenvolvedor buscando aplicar skills em projetos reais.", "111.111.111-11", 21)
+        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
         candidato.adicionarCompetencia("Java")
 
         when: "tentamos remover uma competência que nao esta na lista"
