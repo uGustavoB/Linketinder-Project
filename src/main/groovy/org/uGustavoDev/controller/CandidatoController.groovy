@@ -2,13 +2,17 @@ package org.uGustavoDev.controller
 
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.service.CandidatoService
+import org.uGustavoDev.service.VagaService
+import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.ui.ConsoleUI
 
 class CandidatoController {
     private final CandidatoService service
+    private final VagaService vagaService
 
-    CandidatoController(CandidatoService service) {
+    CandidatoController(CandidatoService service, VagaService vagaService) {
         this.service = service
+        this.vagaService = vagaService
     }
 
     Candidato login(String email, String senha) {
@@ -61,4 +65,20 @@ class CandidatoController {
         }
         return candidatoLogado
     }
+
+    void menuVagas() {
+        try {
+            List<Vaga> vagas = vagaService.listarVagas()
+            if (vagas.isEmpty()) {
+                ConsoleUI.imprimirMensagem("Nenhuma vaga cadastrada no momento.")
+            } else {
+                ConsoleUI.imprimirCabecalho("Lista de Vagas Disponíveis")
+                vagas.each { ConsoleUI.imprimirMensagem(it.toString()) }
+            }
+        } catch (Exception e) {
+            ConsoleUI.imprimirMensagem("Falha ao listar vagas: " + e.message)
+        }
+        ConsoleUI.aguardarContinuacao()
+    }
 }
+

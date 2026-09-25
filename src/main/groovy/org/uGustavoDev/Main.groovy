@@ -14,7 +14,7 @@ static void main(String[] args) {
     EmpresaService empresaService = new EmpresaService()
     VagaService vagaService = new VagaService()
     
-    CandidatoController candidatoController = new CandidatoController(candidatoService)
+    CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
     EmpresaController empresaController = new EmpresaController(empresaService, vagaService)
 
     boolean executando = true
@@ -31,8 +31,7 @@ static void main(String[] args) {
                     candidatoLogado = candidatoController.menuPerfil(candidatoLogado)
                     break
                 case 2:
-                    ConsoleUI.imprimirMensagem("Módulo de Vagas para Candidatos (Em Breve)")
-                    ConsoleUI.aguardarContinuacao()
+                    candidatoController.menuVagas()
                     break
                 case 0:
                     candidatoLogado = null

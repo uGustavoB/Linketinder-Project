@@ -98,7 +98,7 @@ class ConsoleUI {
         imprimirCabecalho("Linketinder - Área do Candidato")
         println "Olá, ${candidato.nome}!"
         println "1 - Meu Perfil"
-        println "2 - Vagas (Em Breve)"
+        println "2 - Explorar Vagas"
         println "0 - Sair (Logout)"
 
         return lerEscolha("Sua escolha: ", 0, 2)
