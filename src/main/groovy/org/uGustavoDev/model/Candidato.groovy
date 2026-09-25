@@ -17,6 +17,16 @@ class Candidato extends Pessoa {
         this.dataNascimento = dataNascimento
     }
 
+
+    String toAnonymousString() {
+        return """\
+CANDIDATO ANÔNIMO [#${id}]
+Local: ${estado}, ${pais}
+Descrição: ${descricao}
+Competências: ${competencias.isEmpty() ? "Nenhuma" : competencias.join(", ")}
+----------------------------------------"""
+    }
+
     @Override
     String obterDocumento() {
         return this.cpf

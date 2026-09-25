@@ -15,7 +15,7 @@ static void main(String[] args) {
     VagaService vagaService = new VagaService()
     
     CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
-    EmpresaController empresaController = new EmpresaController(empresaService, vagaService)
+    EmpresaController empresaController = new EmpresaController(empresaService, vagaService, candidatoService)
 
     boolean executando = true
     Candidato candidatoLogado = null
@@ -46,6 +46,9 @@ static void main(String[] args) {
                     break
                 case 2:
                     empresaController.menuVagas(empresaLogada)
+                    break
+                case 3:
+                    empresaController.menuExplorarCandidatos()
                     break
                 case 0:
                     empresaLogada = null

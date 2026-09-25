@@ -4,15 +4,19 @@ import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.EmpresaService
 import org.uGustavoDev.service.VagaService
+import org.uGustavoDev.service.CandidatoService
+import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.ui.ConsoleUI
 
 class EmpresaController {
     private final EmpresaService empresaService
     private final VagaService vagaService
+    private final CandidatoService candidatoService
 
-    EmpresaController(EmpresaService empresaService, VagaService vagaService) {
+    EmpresaController(EmpresaService empresaService, VagaService vagaService, CandidatoService candidatoService) {
         this.empresaService = empresaService
         this.vagaService = vagaService
+        this.candidatoService = candidatoService
     }
 
     Empresa login(String email, String senha) {
@@ -111,5 +115,20 @@ class EmpresaController {
             }
             ConsoleUI.aguardarContinuacao()
         }
+    }
+
+    void menuExplorarCandidatos() {
+        try {
+            List<Candidato> candidatos = candidatoService.listarCandidatos()
+            if (candidatos.isEmpty()) {
+                ConsoleUI.imprimirMensagem("Nenhum candidato cadastrado no momento.")
+            } else {
+                ConsoleUI.imprimirCabecalho("Lista de Candidatos Disponíveis")
+                candidatos.each { ConsoleUI.imprimirMensagem(it.toAnonymousString()) }
+            }
+        } catch (Exception e) {
+            ConsoleUI.imprimirMensagem("Falha ao listar candidatos: " + e.message)
+        }
+        ConsoleUI.aguardarContinuacao()
     }
 }
