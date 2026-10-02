@@ -1,4 +1,4 @@
-import type {Candidato, Empresa, UsuarioLogado, Vaga} from '../models/types.ts';
+import type { Candidato, Empresa, UsuarioLogado, Vaga } from '../models/types.ts';
 
 function carregarDoLocalStorage<T>(chave: string): T[] {
     const dados = localStorage.getItem(chave);
@@ -15,6 +15,20 @@ function carregarDoLocalStorage<T>(chave: string): T[] {
 export const listaCandidatos: Candidato[] = carregarDoLocalStorage<Candidato>('candidatos');
 export const listaEmpresas: Empresa[] = carregarDoLocalStorage<Empresa>('empresas');
 export const listaVagas: Vaga[] = carregarDoLocalStorage<Vaga>('vagas');
+
+export function inicializarArmazenamento(): void {
+    if (!localStorage.getItem('candidatos')) {
+        localStorage.setItem('candidatos', JSON.stringify([]));
+    }
+
+    if (!localStorage.getItem('empresas')) {
+        localStorage.setItem('empresas', JSON.stringify([]));
+    }
+
+    if (!localStorage.getItem('vagas')) {
+        localStorage.setItem('vagas', JSON.stringify([]));
+    }
+}
 
 function salvarCandidatos(): void {
     localStorage.setItem('candidatos', JSON.stringify(listaCandidatos));
@@ -51,7 +65,6 @@ export function removerVaga(id: string): void {
     }
 }
 
-
 export function salvarUsuarioLogado(usuario: UsuarioLogado): void {
     localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
 }
@@ -69,5 +82,12 @@ export function obterUsuarioLogado(): UsuarioLogado | null {
 }
 
 export function removerUsuarioLogado(): void {
+    localStorage.removeItem('usuarioLogado');
+}
+
+export function limparArmazenamento(): void {
+    localStorage.removeItem('candidatos');
+    localStorage.removeItem('empresas');
+    localStorage.removeItem('vagas');
     localStorage.removeItem('usuarioLogado');
 }

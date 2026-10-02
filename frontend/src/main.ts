@@ -6,7 +6,9 @@ import { renderizarCadastroPessoa, configurarCadastro } from './views/CadastroPe
 import { renderizarPerfilEmpresa, configurarPerfilEmpresa } from './views/PerfilEmpresa.ts';
 import { renderizarVagasCandidato } from './views/VagasCandidato.ts';
 import { renderizarMeuPerfil } from './views/MeuPerfil.ts';
-import { obterUsuarioLogado } from './services/armazenamento.ts';
+import { obterUsuarioLogado, inicializarArmazenamento } from './services/armazenamento.ts';
+
+inicializarArmazenamento();
 
 const app: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 
