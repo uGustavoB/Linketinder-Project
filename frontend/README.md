@@ -29,8 +29,10 @@ Esta aplicação gerencia dados e sessões via `localStorage`, mantendo regras e
   - **Gráfico de Barras por Competência (Chart.js)**: Gráfico interativo e responsivo que consolida e quantifica a distribuição das competências técnicas entre os candidatos cadastrados.
   - **Meu Perfil**: Visualização detalhada dos dados corporativos e competências exigidas pela organização.
 
-- **Armazenamento e Persistência**:
-  - Persistência contínua de usuários, vagas e sessão ativa no `localStorage`.
+- **Armazenamento e Persistência no LocalStorage**:
+  - Persistência contínua de candidatos (`candidatos`), empresas (`empresas`), vagas (`vagas`) e sessão ativa (`usuarioLogado`) no `localStorage` do navegador.
+  - Sincronização automática em tempo real: novos cadastros, inclusões/exclusões de vagas e dados de login persistem entre recarregamentos de página (F5) e fechamentos de aba.
+  - Inicialização limpa e sob demanda: o sistema inicializa as coleções como listas vazias caso não existam no navegador, sendo populadas dinamicamente pelas interações do usuário.
 
 ---
 
@@ -108,12 +110,36 @@ frontend/
 | **descricao** | `string` | Missão e descrição da empresa |
 | **competencias** | `Competencia[]` | Tecnologias e competências de interesse |
 
+### Vaga (`Vaga`)
+| Propriedade | Tipo | Descrição |
+| :--- | :--- | :--- |
+| **id** | `string` | Identificador único da vaga |
+| **empresaId** | `string` | Identificador da empresa criadora |
+| **nome** | `string` | Cargo ou título da vaga |
+| **local** | `string` | Localidade ou modelo de trabalho (ex: Remoto, Híbrido) |
+| **descricao** | `string` | Detalhes sobre as atividades da vaga |
+| **competencias** | `Competencia[]` | Habilidades técnicas exigidas para a vaga |
+
+---
+
+## Estrutura do LocalStorage
+
+Toda a persistência local da aplicação é centralizada e isolada no serviço `armazenamento.ts`. Os dados são gravados em formato JSON sob as seguintes chaves:
+
+| Chave | Tipo Armazenado | Descrição |
+| :--- | :--- | :--- |
+| `candidatos` | `Candidato[]` | Lista com todos os candidatos registrados através do formulário de cadastro. |
+| `empresas` | `Empresa[]` | Lista com todas as empresas registradas através do formulário de cadastro. |
+| `vagas` | `Vaga[]` | Lista com todas as vagas cadastradas pelas empresas autenticadas. |
+| `usuarioLogado` | `UsuarioLogado` | Objeto contendo o tipo de perfil ativo (`candidato` ou `empresa`) e os dados da sessão atual. |
+
 ---
 
 ## Tecnologias
 
 - **TypeScript** (Tipagem estática e segurança na arquitetura de código)
 - **Vite** (Bundler ultrarrápido para desenvolvimento frontend moderno)
+- **LocalStorage / Web Storage API** (Persistência nativa do navegador para candidatos, empresas, vagas e sessão ativa)
 - **Chart.js** (Biblioteca para plotagem e renderização do gráfico de barras de competências)
 - **HTML5 & CSS3** (Estruturação semântica e estilização responsiva)
 
