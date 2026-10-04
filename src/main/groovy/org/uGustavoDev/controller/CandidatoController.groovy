@@ -36,34 +36,53 @@ class CandidatoController {
     }
 
     Candidato menuPerfil(Candidato candidatoLogado) {
-        int opcaoPerfil = ConsoleUI.pedirOpcaoMenuPerfil()
-        if (opcaoPerfil == 1) {
-            ConsoleUI.imprimirCabecalho("Meu Perfil (Candidato)")
-            ConsoleUI.imprimirMensagem(candidatoLogado.toString())
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoPerfil == 2) {
-            ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
-            Candidato candidatoEditado = ConsoleUI.pedirDadosCandidato()
-            candidatoEditado.id = candidatoLogado.id
-            try {
-                service.atualizarCandidato(candidatoEditado)
-                candidatoLogado = candidatoEditado
-                ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
-            } catch (Exception e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoPerfil == 3) {
-            try {
-                service.deletarCandidato(candidatoLogado.id)
-                candidatoLogado = null
-                ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
-            } catch (Exception e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
+        int opcao = ConsoleUI.pedirOpcaoMenuPerfil()
+        switch (opcao) {
+            case 1:
+                visualizarPerfil(candidatoLogado)
+                break
+            case 2:
+                return editarPerfil(candidatoLogado)
+            case 3:
+                return deletarConta(candidatoLogado)
+                break
         }
         return candidatoLogado
+    }
+
+    private void visualizarPerfil(Candidato candidato) {
+        ConsoleUI.imprimirCabecalho("Perfil do Candidato")
+        ConsoleUI.imprimirMensagem(candidato.toString())
+        ConsoleUI.aguardarContinuacao()
+    }
+
+    private Candidato editarPerfil(Candidato candidato) {
+        ConsoleUI.imprimirMensagem("Informe os novos dados do candidato:")
+        Candidato candidatoEditado = ConsoleUI.pedirDadosCandidato()
+        candidatoEditado.id = candidato.id
+        try {
+            service.atualizarCandidato(candidatoEditado)
+            ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
+            return candidatoEditado
+        } catch (Exception e) {
+            ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
+            return candidato
+        } finally {
+            ConsoleUI.aguardarContinuacao()
+        }
+    }
+
+    private Candidato deletarConta(Candidato candidato) {
+        try {
+            service.deletarCandidato(candidato.id)
+            ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
+            return null
+        } catch (Exception e) {
+            ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
+            return candidato
+        } finally {
+            ConsoleUI.aguardarContinuacao()
+        }
     }
 
     void menuVagas() {
