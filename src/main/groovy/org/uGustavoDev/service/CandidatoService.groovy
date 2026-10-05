@@ -2,6 +2,7 @@ package org.uGustavoDev.service
 
 import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.dao.CompetenciaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 
 class CandidatoService {
@@ -25,16 +26,16 @@ class CandidatoService {
         try {
             candidatoDAO.inserir(candidato)
             vincularCompetenciasAoUsuario(candidato.id, candidato.competencias)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível salvar o candidato no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível salvar o candidato no banco de dados.", e)
         }
     }
 
     List<Candidato> listarCandidatos() {
         try {
             return candidatoDAO.listar()
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível listar os candidatos do banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível listar os candidatos do banco de dados.", e)
         }
     }
 
@@ -45,8 +46,8 @@ class CandidatoService {
                 return candidato
             }
             return null
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao tentar realizar login de candidato no banco.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Erro ao tentar realizar login de candidato no banco.", e)
         }
     }
 
@@ -55,16 +56,16 @@ class CandidatoService {
             candidatoDAO.atualizar(candidato)
             competenciaDAO.removerVinculosCandidato(candidato.id)
             vincularCompetenciasAoUsuario(candidato.id, candidato.competencias)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível atualizar o candidato no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível atualizar o candidato no banco de dados.", e)
         }
     }
 
     void deletarCandidato(int id) {
         try {
             candidatoDAO.deletar(id)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível deletar o candidato do banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível deletar o candidato do banco de dados.", e)
         }
     }
 

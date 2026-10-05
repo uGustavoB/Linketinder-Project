@@ -1,5 +1,6 @@
 package org.uGustavoDev.controller
 
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
@@ -21,12 +22,7 @@ class EmpresaController {
     }
 
     Empresa login(String email, String senha) {
-        try {
-            return empresaService.loginEmpresa(email, senha)
-        } catch (Exception e) {
-            ConsoleUI.imprimirMensagem("Erro ao logar: " + e.message)
-            return null
-        }
+        return empresaService.loginEmpresa(email, senha)
     }
 
     void cadastrarEmpresa() {
@@ -34,7 +30,7 @@ class EmpresaController {
         try {
             empresaService.adicionarEmpresa(novaEmpresa)
             ConsoleUI.imprimirMensagem("\nEmpresa cadastrada com sucesso!")
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao cadastrar: " + e.message)
         }
         ConsoleUI.aguardarContinuacao()
@@ -54,7 +50,7 @@ class EmpresaController {
                 empresaService.atualizarEmpresa(empresaEditada)
                 empresaLogada = empresaEditada
                 ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
-            } catch (Exception e) {
+            } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
             }
             ConsoleUI.aguardarContinuacao()
@@ -63,7 +59,7 @@ class EmpresaController {
                 empresaService.deletarEmpresa(empresaLogada.id)
                 empresaLogada = null
                 ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
-            } catch (Exception e) {
+            } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
             }
             ConsoleUI.aguardarContinuacao()
@@ -78,7 +74,7 @@ class EmpresaController {
             try {
                 vagaService.adicionarVaga(novaVaga)
                 ConsoleUI.imprimirMensagem("\nVaga criada com sucesso!")
-            } catch (Exception e) {
+            } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("\nFalha ao criar vaga: " + e.message)
             }
             ConsoleUI.aguardarContinuacao()
@@ -91,7 +87,7 @@ class EmpresaController {
                     ConsoleUI.imprimirCabecalho("Minhas Vagas")
                     vagas.each { ConsoleUI.imprimirMensagem(it.toString()) }
                 }
-            } catch (Exception e) {
+            } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("Falha ao listar vagas: " + e.message)
             }
             ConsoleUI.aguardarContinuacao()
@@ -102,7 +98,7 @@ class EmpresaController {
             try {
                 vagaService.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, vagaEditada)
                 ConsoleUI.imprimirMensagem("\nVaga atualizada com sucesso!")
-            } catch (Exception e) {
+            } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("Erro: " + e.message)
             }
             ConsoleUI.aguardarContinuacao()
@@ -111,7 +107,7 @@ class EmpresaController {
             try {
                 vagaService.deletarVagaDaEmpresa(empresaLogada.id, vagaId)
                 ConsoleUI.imprimirMensagem("\nVaga deletada com sucesso.")
-            } catch (Exception e) {
+            } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("Erro: " + e.message)
             }
             ConsoleUI.aguardarContinuacao()
@@ -127,7 +123,7 @@ class EmpresaController {
                 ConsoleUI.imprimirCabecalho("Lista de Candidatos Disponíveis")
                 candidatos.each { ConsoleUI.imprimirMensagem(it.toAnonymousString()) }
             }
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("Falha ao listar candidatos: " + e.message)
         }
         ConsoleUI.aguardarContinuacao()

@@ -2,6 +2,7 @@ package org.uGustavoDev.services
 
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.VagaService
 import spock.lang.Specification
@@ -163,8 +164,8 @@ class VagaServiceSpec extends Specification {
         vagaService.adicionarVaga(novaVaga)
 
         then: "a falha grossa vira uma RuntimeException polida"
-        1 * mockVagaDAO.inserir(_) >> { throw new Exception("Tabela nao existe") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockVagaDAO.inserir(_) >> { throw new DatabaseOperationException("Tabela nao existe") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
     }
 
 }

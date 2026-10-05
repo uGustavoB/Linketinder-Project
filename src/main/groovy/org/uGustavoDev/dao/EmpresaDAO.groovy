@@ -8,7 +8,13 @@ import java.sql.SQLException
 
 class EmpresaDAO {
 
-    private static void preencherStatement(PreparedStatement stmt, Empresa empresa) throws SQLException {
+    private final CompetenciaDAO competenciaDAO
+
+    EmpresaDAO(CompetenciaDAO competenciaDAO) {
+        this.competenciaDAO = competenciaDAO
+    }
+
+    private void preencherStatement(PreparedStatement stmt, Empresa empresa) throws SQLException {
         stmt.setString(1, empresa.nome)
         stmt.setString(2, empresa.cnpj)
         stmt.setString(3, empresa.email)
@@ -18,7 +24,7 @@ class EmpresaDAO {
         stmt.setString(7, empresa.senha ?: "123456")
     }
 
-    private static Empresa extrairEmpresa(ResultSet rs) throws SQLException {
+    private Empresa extrairEmpresa(ResultSet rs) throws SQLException {
         Empresa e = new Empresa(
                 rs.getString("nome"),
                 rs.getString("email"),
@@ -30,7 +36,7 @@ class EmpresaDAO {
         e.id = rs.getInt("id")
         e.senha = rs.getString("senha")
 
-        List<String> competencias = CompetenciaDAO.listarPorEmpresa(e.id)
+        List<String> competencias = competenciaDAO.listarPorEmpresa(e.id)
         e.adicionarCompetencias(competencias)
 
         return e

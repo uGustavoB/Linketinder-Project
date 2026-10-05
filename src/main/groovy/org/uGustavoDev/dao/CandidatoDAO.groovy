@@ -9,7 +9,13 @@ import java.sql.Types
 
 class CandidatoDAO {
 
-    private static void preencherStatement(PreparedStatement stmt, Candidato candidato) throws SQLException {
+    private final CompetenciaDAO competenciaDAO
+
+    CandidatoDAO(CompetenciaDAO competenciaDAO) {
+        this.competenciaDAO = competenciaDAO
+    }
+
+    private void preencherStatement(PreparedStatement stmt, Candidato candidato) throws SQLException {
         stmt.setString(1, candidato.nome)
         stmt.setString(2, candidato.sobrenome)
         if (candidato.dataNascimento != null) {
@@ -27,7 +33,7 @@ class CandidatoDAO {
         stmt.setString(10, candidato.senha ?: "123456")
     }
 
-    private static Candidato extrairCandidato(ResultSet rs) throws SQLException {
+    private Candidato extrairCandidato(ResultSet rs) throws SQLException {
         Candidato c = new Candidato(
                 rs.getString("nome"),
                 rs.getString("sobrenome"),
@@ -47,7 +53,7 @@ class CandidatoDAO {
             c.dataNascimento = dataNascimentoSql.toLocalDate()
         }
 
-        List<String> competencias = CompetenciaDAO.listarPorCandidato(c.id)
+        List<String> competencias = competenciaDAO.listarPorCandidato(c.id)
         c.adicionarCompetencias(competencias)
 
         return c

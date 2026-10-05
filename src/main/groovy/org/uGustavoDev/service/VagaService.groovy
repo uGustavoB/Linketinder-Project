@@ -2,6 +2,7 @@ package org.uGustavoDev.service
 
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 
 class VagaService {
@@ -18,32 +19,32 @@ class VagaService {
         try {
             vagaDAO.inserir(vaga)
             vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível salvar a vaga no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível salvar a vaga no banco de dados.", e)
         }
     }
 
     List<Vaga> listarVagas() {
         try {
             return vagaDAO.listar()
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível listar as vagas do banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível listar as vagas do banco de dados.", e)
         }
     }
 
     List<Vaga> listarVagasDaEmpresa(int empresaId) {
         try {
             return vagaDAO.listarPorEmpresa(empresaId)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível listar as vagas da empresa.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível listar as vagas da empresa.", e)
         }
     }
 
     Vaga buscarVagaPorId(int id) {
         try {
             return vagaDAO.buscarPorId(id)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível buscar a vaga no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível buscar a vaga no banco de dados.", e)
         }
     }
 
@@ -77,16 +78,16 @@ class VagaService {
             vagaDAO.atualizar(vaga)
             competenciaDAO.removerVinculosVaga(vaga.id)
             vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível atualizar a vaga no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível atualizar a vaga no banco de dados.", e)
         }
     }
 
     void deletarVaga(int id) {
         try {
             vagaDAO.deletar(id)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível deletar a vaga do banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível deletar a vaga do banco de dados.", e)
         }
     }
 

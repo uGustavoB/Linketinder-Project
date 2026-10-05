@@ -2,6 +2,7 @@ package org.uGustavoDev.services
 
 import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.dao.CompetenciaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.service.CandidatoService
 import spock.lang.Specification
@@ -82,8 +83,8 @@ class CandidatoServiceSpec extends Specification {
         then: "o erro SQL ou de Conexao e capturado e transformado na excecao de servico correta"
         1 * mockCandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
         1 * mockCandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> null
-        1 * mockCandidatoDAO.inserir(novoCandidato) >> { throw new Exception("Falha de conexao") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockCandidatoDAO.inserir(novoCandidato) >> { throw new DatabaseOperationException("Falha de conexao") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
         erro.message == "Não foi possível salvar o candidato no banco de dados."
     }
 

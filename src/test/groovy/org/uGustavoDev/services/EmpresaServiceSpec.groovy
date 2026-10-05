@@ -2,6 +2,7 @@ package org.uGustavoDev.services
 
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.EmpresaService
 import spock.lang.Specification
@@ -78,8 +79,8 @@ class EmpresaServiceSpec extends Specification {
         then: "o erro SQL ou de Conexao e capturado e transformado na excecao de servico correta"
         1 * mockEmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
         1 * mockEmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> null
-        1 * mockEmpresaDAO.inserir(novaEmpresa) >> { throw new Exception("Falha de conexao") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockEmpresaDAO.inserir(novaEmpresa) >> { throw new DatabaseOperationException("Falha de conexao") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
         erro.message == "Não foi possível salvar a empresa no banco de dados."
     }
 
@@ -163,8 +164,8 @@ class EmpresaServiceSpec extends Specification {
         empresaService.listarEmpresas()
 
         then: "o erro nao vaza exposto, mas sim sob uma exception prevista do service"
-        1 * mockEmpresaDAO.listar() >> { throw new Exception("Timeout do banco") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockEmpresaDAO.listar() >> { throw new DatabaseOperationException("Timeout do banco") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
     }
 
 }

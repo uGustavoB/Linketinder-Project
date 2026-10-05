@@ -6,6 +6,7 @@ import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.CandidatoService
@@ -14,10 +15,10 @@ import org.uGustavoDev.service.VagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    CandidatoDAO candidatoDAO = new CandidatoDAO()
     CompetenciaDAO competenciaDAO = new CompetenciaDAO()
-    EmpresaDAO empresaDAO = new EmpresaDAO()
-    VagaDAO vagaDAO = new VagaDAO()
+    CandidatoDAO candidatoDAO = new CandidatoDAO(competenciaDAO)
+    EmpresaDAO empresaDAO = new EmpresaDAO(competenciaDAO)
+    VagaDAO vagaDAO = new VagaDAO(competenciaDAO)
 
     CandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO)
     EmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO)
@@ -98,11 +99,16 @@ static void main(String[] args) {
 
 private static def tentarLogin(def controller) {
     Map<String, String> creds = ConsoleUI.pedirCredenciais()
-    def usuario = controller.login(creds.email, creds.senha)
-
-    if (usuario == null) {
-        ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
+    try {
+        def usuario = controller.login(creds.email, creds.senha)
+        if (usuario == null) {
+            ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
+            ConsoleUI.aguardarContinuacao()
+        }
+        return usuario
+    } catch (DatabaseOperationException e) {
+        ConsoleUI.imprimirMensagem("Sistema temporariamente indisponível: " + e.message)
         ConsoleUI.aguardarContinuacao()
+        return null
     }
-    return usuario
 }

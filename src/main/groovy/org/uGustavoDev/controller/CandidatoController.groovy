@@ -1,5 +1,6 @@
 package org.uGustavoDev.controller
 
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.CandidatoService
@@ -17,12 +18,7 @@ class CandidatoController {
     }
 
     Candidato login(String email, String senha) {
-        try {
-            return service.loginCandidato(email, senha)
-        } catch (Exception e) {
-            ConsoleUI.imprimirMensagem("Erro ao logar: " + e.message)
-            return null
-        }
+        return service.loginCandidato(email, senha)
     }
 
     void cadastrarCandidato() {
@@ -30,7 +26,7 @@ class CandidatoController {
         try {
             service.adicionarCandidato(novoCandidato)
             ConsoleUI.imprimirMensagem("\nCandidato cadastrado com sucesso!")
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao cadastrar: " + e.message)
         }
         ConsoleUI.aguardarContinuacao()
@@ -46,7 +42,6 @@ class CandidatoController {
                 return editarPerfil(candidatoLogado)
             case 3:
                 return deletarConta(candidatoLogado)
-                break
         }
         return candidatoLogado
     }
@@ -65,7 +60,7 @@ class CandidatoController {
             service.atualizarCandidato(candidatoEditado)
             ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
             return candidatoEditado
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
             return candidato
         } finally {
@@ -78,7 +73,7 @@ class CandidatoController {
             service.deletarCandidato(candidato.id)
             ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
             return null
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
             return candidato
         } finally {
@@ -95,7 +90,7 @@ class CandidatoController {
                 ConsoleUI.imprimirCabecalho("Lista de Vagas Disponíveis")
                 vagas.each { ConsoleUI.imprimirMensagem(it.toString()) }
             }
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("Falha ao listar vagas: " + e.message)
         }
         ConsoleUI.aguardarContinuacao()

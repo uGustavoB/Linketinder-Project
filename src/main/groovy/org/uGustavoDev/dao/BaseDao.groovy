@@ -1,9 +1,11 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.factory.ConexaoFactory
 
 import java.sql.Connection
 import java.sql.PreparedStatement
+import java.sql.SQLException
 
 class BaseDao {
 
@@ -11,8 +13,8 @@ class BaseDao {
         try (Connection conexao = ConexaoFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             closure.delegate = stmt
             return closure(stmt)
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao executar SQL: " + e.message, e)
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Erro ao executar SQL: " + e.message, e)
         }
     }
 

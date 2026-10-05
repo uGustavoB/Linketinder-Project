@@ -10,7 +10,16 @@ class Candidato extends Pessoa {
     String cpf
     LocalDate dataNascimento
 
-    Candidato(String nome, String sobrenome, String email, String estado, String pais, String CEP, String descricao, String cpf, LocalDate dataNascimento) {
+    Candidato(
+            String nome,
+            String sobrenome,
+            String email,
+            String estado,
+            String pais,
+            String CEP,
+            String descricao,
+            String cpf,
+            LocalDate dataNascimento) {
         super(nome, email, pais, CEP, descricao)
         this.sobrenome = sobrenome
         this.estado = estado
@@ -34,7 +43,8 @@ Competências: ${competencias.isEmpty() ? "Nenhuma" : competencias.join(", ")}
 
     @Override
     String toString() {
-        String exibicaoData = dataNascimento != null ? dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "Data não informada"
+        String exibicaoData = dataNascimento != null ?
+                dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "Data não informada"
         return """\
 CANDIDATO: $nome $sobrenome ($exibicaoData)
 Email: $email
