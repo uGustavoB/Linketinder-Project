@@ -10,11 +10,14 @@ import java.time.LocalDate
 class CandidatoServiceSpec extends Specification {
     
     CandidatoService candidatoService
+    CandidatoDAO mockCandidatoDAO
+    CompetenciaDAO mockCompetenciaDAO
 
     void setup() {
-        candidatoService = new CandidatoService()
-        GroovyMock(CandidatoDAO, global: true)
-        GroovyMock(CompetenciaDAO, global: true)
+        mockCandidatoDAO = Mock(CandidatoDAO)
+        mockCompetenciaDAO = Mock(CompetenciaDAO)
+
+        candidatoService = new CandidatoService(mockCandidatoDAO, mockCompetenciaDAO)
     }
 
     void "deve salvar candidato e vincular competencias quando dados sao validos e nao existem no banco"() {
@@ -28,13 +31,13 @@ class CandidatoServiceSpec extends Specification {
         candidatoService.adicionarCandidato(novoCandidato)
 
         then: "verifica as validacoes passando e as insercoes ocorrendo corretamente no banco"
-        1 * CandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
-        1 * CandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> null
-        1 * CandidatoDAO.inserir(novoCandidato)
-        1 * CompetenciaDAO.buscarOuInserir("Groovy") >> 10
-        1 * CompetenciaDAO.vincularAoCandidato(1, 10)
-        1 * CompetenciaDAO.buscarOuInserir("Spock") >> 20
-        1 * CompetenciaDAO.vincularAoCandidato(1, 20)
+        1 * mockCandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
+        1 * mockCandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> null
+        1 * mockCandidatoDAO.inserir(novoCandidato)
+        1 * mockCompetenciaDAO.buscarOuInserir("Groovy") >> 10
+        1 * mockCompetenciaDAO.vincularAoCandidato(1, 10)
+        1 * mockCompetenciaDAO.buscarOuInserir("Spock") >> 20
+        1 * mockCompetenciaDAO.vincularAoCandidato(1, 20)
     }
 
     void "deve bloquear a criacao de candidato quando o email ja estiver em uso"() {
@@ -46,8 +49,8 @@ class CandidatoServiceSpec extends Specification {
         candidatoService.adicionarCandidato(novoCandidato)
 
         then: "uma excecao de validacao e lancada e nenhuma insercao e feita"
-        1 * CandidatoDAO.buscarPorEmail(novoCandidato.email) >> candidatoExistente
-        0 * CandidatoDAO.inserir(_)
+        1 * mockCandidatoDAO.buscarPorEmail(novoCandidato.email) >> candidatoExistente
+        0 * mockCandidatoDAO.inserir(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
         erro.message.contains("email 'usado@email.com'")
     }
@@ -61,9 +64,9 @@ class CandidatoServiceSpec extends Specification {
         candidatoService.adicionarCandidato(novoCandidato)
 
         then: "uma excecao e lancada avisando sobre o conflito do CPF"
-        1 * CandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
-        1 * CandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> candidatoExistente
-        0 * CandidatoDAO.inserir(_)
+        1 * mockCandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
+        1 * mockCandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> candidatoExistente
+        0 * mockCandidatoDAO.inserir(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
         erro.message.contains("CPF '999'")
     }
@@ -76,9 +79,9 @@ class CandidatoServiceSpec extends Specification {
         candidatoService.adicionarCandidato(novoCandidato)
 
         then: "o erro SQL ou de Conexao e capturado e transformado na excecao de servico correta"
-        1 * CandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
-        1 * CandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> null
-        1 * CandidatoDAO.inserir(novoCandidato) >> { throw new Exception("Falha de conexao") }
+        1 * mockCandidatoDAO.buscarPorEmail(novoCandidato.email) >> null
+        1 * mockCandidatoDAO.buscarPorCpf(novoCandidato.cpf) >> null
+        1 * mockCandidatoDAO.inserir(novoCandidato) >> { throw new Exception("Falha de conexao") }
         RuntimeException erro = thrown(RuntimeException)
         erro.message == "Não foi possível salvar o candidato no banco de dados."
     }
@@ -93,7 +96,7 @@ class CandidatoServiceSpec extends Specification {
         List<Candidato> retorno = candidatoService.listarCandidatos()
 
         then: "recebemos a lista integral repassada pelo DAO"
-        1 * CandidatoDAO.listar() >> listaSimulada
+        1 * mockCandidatoDAO.listar() >> listaSimulada
         retorno.size() == 2
         retorno.contains(c1)
         retorno.contains(c2)
@@ -108,7 +111,7 @@ class CandidatoServiceSpec extends Specification {
         Candidato logado = candidatoService.loginCandidato("ana@email.com", "senhaSegura123")
 
         then: "o login ocorre perfeitamente e devolve a entidade"
-        1 * CandidatoDAO.buscarPorEmail("ana@email.com") >> c1
+        1 * mockCandidatoDAO.buscarPorEmail("ana@email.com") >> c1
         logado == c1
     }
 
@@ -121,7 +124,7 @@ class CandidatoServiceSpec extends Specification {
         Candidato logado = candidatoService.loginCandidato("ana@email.com", "senhaErrada")
 
         then: "o sistema bloqueia retornando um objeto nulo"
-        1 * CandidatoDAO.buscarPorEmail("ana@email.com") >> c1
+        1 * mockCandidatoDAO.buscarPorEmail("ana@email.com") >> c1
         logado == null
     }
 
@@ -130,7 +133,7 @@ class CandidatoServiceSpec extends Specification {
         Candidato logado = candidatoService.loginCandidato("fantasma@email.com", "senha123")
 
         then: "nenhum usuario e encontrado"
-        1 * CandidatoDAO.buscarPorEmail("fantasma@email.com") >> null
+        1 * mockCandidatoDAO.buscarPorEmail("fantasma@email.com") >> null
         logado == null
     }
 
@@ -144,10 +147,10 @@ class CandidatoServiceSpec extends Specification {
         candidatoService.atualizarCandidato(c1)
 
         then: "as antigas competencias sao limpas e a nova e registrada adequadamente"
-        1 * CandidatoDAO.atualizar(c1)
-        1 * CompetenciaDAO.removerVinculosCandidato(5)
-        1 * CompetenciaDAO.buscarOuInserir("Rust") >> 99
-        1 * CompetenciaDAO.vincularAoCandidato(5, 99)
+        1 * mockCandidatoDAO.atualizar(c1)
+        1 * mockCompetenciaDAO.removerVinculosCandidato(5)
+        1 * mockCompetenciaDAO.buscarOuInserir("Rust") >> 99
+        1 * mockCompetenciaDAO.vincularAoCandidato(5, 99)
     }
 
     void "deve repassar a instrucao de delecao de candidato de forma transparente para o dao"() {
@@ -155,6 +158,6 @@ class CandidatoServiceSpec extends Specification {
         candidatoService.deletarCandidato(10)
 
         then: "a exclusao ocorre corretamente sem lancar excecoes imprevistas"
-        1 * CandidatoDAO.deletar(10)
+        1 * mockCandidatoDAO.deletar(10)
     }
 }

@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 
+import java.time.format.DateTimeParseException
+
 class ConsoleUI {
     private static final Scanner scanner = new Scanner(System.in)
     private static final String DATE_PATTERN = "dd/MM/yyyy"
@@ -78,7 +80,7 @@ class ConsoleUI {
             String entrada = scanner.nextLine()
             try {
                 return LocalDate.parse(entrada, DATE_FORMATTER)
-            } catch (Exception ignored) {
+            } catch (DateTimeParseException ignored) {
                 println "Data inválida. Use o formato DD/MM/AAAA."
             }
         }
