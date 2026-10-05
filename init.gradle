@@ -1,0 +1,7 @@
+allprojects {
+    tasks.withType(CodeNarc) {
+        reports {
+            text.required = true
+        }
+    }
+}
