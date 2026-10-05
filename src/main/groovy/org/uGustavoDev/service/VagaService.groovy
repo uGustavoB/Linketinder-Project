@@ -5,6 +5,7 @@ import org.uGustavoDev.dao.VagaDAO
 import org.uGustavoDev.model.Vaga
 
 class VagaService {
+
     private final VagaDAO vagaDAO
     private final CompetenciaDAO competenciaDAO
 
@@ -54,7 +55,7 @@ class VagaService {
         if (vagaExistente.empresaId != empresaId) {
             throw new IllegalArgumentException("Esta vaga não pertence à sua empresa.")
         }
-        
+
         vagaEditada.id = vagaId
         atualizarVaga(vagaEditada)
     }
@@ -95,4 +96,5 @@ class VagaService {
             competenciaDAO.vincularAVaga(vagaId, compId)
         }
     }
+
 }

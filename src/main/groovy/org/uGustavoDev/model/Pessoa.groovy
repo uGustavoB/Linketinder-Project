@@ -3,6 +3,7 @@ package org.uGustavoDev.model
 import org.uGustavoDev.model.interfaces.IPessoa
 
 abstract class Pessoa implements IPessoa {
+
     Integer id
     String nome
     String email
@@ -31,4 +32,5 @@ abstract class Pessoa implements IPessoa {
     void removerCompetencia(String competencia) {
         this.competencias.remove(competencia)
     }
+
 }

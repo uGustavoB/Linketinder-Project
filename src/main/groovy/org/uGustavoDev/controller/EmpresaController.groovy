@@ -1,14 +1,15 @@
 package org.uGustavoDev.controller
 
+import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
+import org.uGustavoDev.service.CandidatoService
 import org.uGustavoDev.service.EmpresaService
 import org.uGustavoDev.service.VagaService
-import org.uGustavoDev.service.CandidatoService
-import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.ui.ConsoleUI
 
 class EmpresaController {
+
     private final EmpresaService empresaService
     private final VagaService vagaService
     private final CandidatoService candidatoService
@@ -131,4 +132,5 @@ class EmpresaController {
         }
         ConsoleUI.aguardarContinuacao()
     }
+
 }

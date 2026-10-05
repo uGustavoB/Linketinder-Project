@@ -22,7 +22,7 @@ static void main(String[] args) {
     CandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO)
     EmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO)
     VagaService vagaService = new VagaService(vagaDAO, competenciaDAO)
-    
+
     CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
     EmpresaController empresaController = new EmpresaController(empresaService, vagaService, candidatoService)
 

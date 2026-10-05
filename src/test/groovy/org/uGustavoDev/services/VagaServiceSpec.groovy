@@ -105,7 +105,7 @@ class VagaServiceSpec extends Specification {
         given: "uma vaga legitima da empresa 1"
         Vaga vagaLegitima = new Vaga(1, "Vaga Original", "Desc", "SP", "SP")
         vagaLegitima.id = 50
-        
+
         Vaga edicaoPermitida = new Vaga(1, "Nova Vaga", "Nova Desc", "SP", "Campinas")
         edicaoPermitida.competencias = ["Go"]
 
@@ -158,7 +158,7 @@ class VagaServiceSpec extends Specification {
     void "deve envelopar erro misterioso de banco de dados e repassar como runtime exception"() {
         given: "uma falha grave de infra"
         Vaga novaVaga = new Vaga(1, "X", "Y", "Z", "W")
-        
+
         when: "ocorre interacao com o servico"
         vagaService.adicionarVaga(novaVaga)
 
@@ -166,4 +166,5 @@ class VagaServiceSpec extends Specification {
         1 * mockVagaDAO.inserir(_) >> { throw new Exception("Tabela nao existe") }
         RuntimeException erro = thrown(RuntimeException)
     }
+
 }

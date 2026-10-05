@@ -5,6 +5,7 @@ import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.model.Candidato
 
 class CandidatoService {
+
     private final CandidatoDAO candidatoDAO
     private final CompetenciaDAO competenciaDAO
 
@@ -73,4 +74,5 @@ class CandidatoService {
             competenciaDAO.vincularAoCandidato(usuarioId, compId)
         }
     }
+
 }

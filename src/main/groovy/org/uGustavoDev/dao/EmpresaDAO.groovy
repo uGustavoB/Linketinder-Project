@@ -38,7 +38,7 @@ class EmpresaDAO {
 
     void inserir(Empresa empresa) {
         String sql = """
-            INSERT INTO empresas (nome, cnpj, email, descricao, pais, cep, senha) 
+            INSERT INTO empresas (nome, cnpj, email, descricao, pais, cep, senha)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """
 
@@ -91,7 +91,6 @@ class EmpresaDAO {
 
             return null
         }
-
     }
 
     Empresa buscarPorCnpj(String cnpj) {
@@ -111,7 +110,7 @@ class EmpresaDAO {
 
     void atualizar(Empresa empresa) {
         String sql = """
-            UPDATE empresas 
+            UPDATE empresas
             SET nome = ?, cnpj = ?, email = ?, descricao = ?, pais = ?, cep = ?, senha = ?
             WHERE id = ?
         """
@@ -132,4 +131,5 @@ class EmpresaDAO {
             stmt.executeUpdate()
         }
     }
+
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class Candidato extends Pessoa {
+
     String sobrenome
     String estado
     String cpf
@@ -16,7 +17,6 @@ class Candidato extends Pessoa {
         this.cpf = cpf
         this.dataNascimento = dataNascimento
     }
-
 
     String toAnonymousString() {
         return """\
@@ -44,4 +44,5 @@ Descrição: $descricao
 Competências: ${competencias.join(', ')}
 ----------------------------------------"""
     }
+
 }

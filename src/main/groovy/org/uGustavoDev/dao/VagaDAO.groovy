@@ -57,7 +57,6 @@ class VagaDAO {
 
             return vagas
         }
-
     }
 
     Vaga buscarPorId(int id) {
@@ -92,7 +91,7 @@ class VagaDAO {
 
     void atualizar(Vaga vaga) {
         String sql = """
-            UPDATE vagas 
+            UPDATE vagas
             SET empresa_id = ?, nome = ?, descricao = ?, estado = ?, cidade = ?
             WHERE id = ?
         """
@@ -113,4 +112,5 @@ class VagaDAO {
             stmt.executeUpdate()
         }
     }
+
 }

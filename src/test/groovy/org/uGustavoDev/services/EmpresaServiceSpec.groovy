@@ -7,6 +7,7 @@ import org.uGustavoDev.service.EmpresaService
 import spock.lang.Specification
 
 class EmpresaServiceSpec extends Specification {
+
     EmpresaDAO mockEmpresaDAO
     CompetenciaDAO mockCompetenciaDAO
     EmpresaService empresaService
@@ -165,4 +166,5 @@ class EmpresaServiceSpec extends Specification {
         1 * mockEmpresaDAO.listar() >> { throw new Exception("Timeout do banco") }
         RuntimeException erro = thrown(RuntimeException)
     }
+
 }

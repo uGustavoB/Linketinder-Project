@@ -2,9 +2,13 @@ package org.uGustavoDev.dao
 
 import org.uGustavoDev.model.Candidato
 
-import java.sql.*
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Types
 
 class CandidatoDAO {
+
     private static void preencherStatement(PreparedStatement stmt, Candidato candidato) throws SQLException {
         stmt.setString(1, candidato.nome)
         stmt.setString(2, candidato.sobrenome)
@@ -42,16 +46,16 @@ class CandidatoDAO {
         if (dataNascimentoSql != null) {
             c.dataNascimento = dataNascimentoSql.toLocalDate()
         }
-        
+
         List<String> competencias = CompetenciaDAO.listarPorCandidato(c.id)
         c.adicionarCompetencias(competencias)
-        
+
         return c
     }
 
     void inserir(Candidato candidato) {
         String sql = """
-            INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, cpf, pais, estado, cep, descricao, senha) 
+            INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, cpf, pais, estado, cep, descricao, senha)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
@@ -113,7 +117,6 @@ class CandidatoDAO {
 
             if (rs.next()) {
                 return extrairCandidato(rs)
-
             }
             return null
         }
@@ -121,7 +124,7 @@ class CandidatoDAO {
 
     void atualizar(Candidato candidato) {
         String sql = """
-            UPDATE candidatos 
+            UPDATE candidatos
             SET nome = ?, sobrenome = ?, data_nascimento = ?, email = ?, cpf = ?, pais = ?, estado = ?, cep = ?, descricao = ?, senha = ?
             WHERE id = ?
         """
@@ -140,4 +143,5 @@ class CandidatoDAO {
             stmt.executeUpdate()
         }
     }
+
 }

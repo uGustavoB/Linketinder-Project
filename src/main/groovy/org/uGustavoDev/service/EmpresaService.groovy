@@ -5,6 +5,7 @@ import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.model.Empresa
 
 class EmpresaService {
+
     private final EmpresaDAO empresaDAO
     private final CompetenciaDAO competenciaDAO
 
@@ -72,4 +73,5 @@ class EmpresaService {
             throw new RuntimeException("Não foi possível deletar a empresa do banco de dados.", e)
         }
     }
+
 }

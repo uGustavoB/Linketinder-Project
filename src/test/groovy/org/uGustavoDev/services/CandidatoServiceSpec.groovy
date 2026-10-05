@@ -5,10 +5,11 @@ import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.service.CandidatoService
 import spock.lang.Specification
+
 import java.time.LocalDate
 
 class CandidatoServiceSpec extends Specification {
-    
+
     CandidatoService candidatoService
     CandidatoDAO mockCandidatoDAO
     CompetenciaDAO mockCompetenciaDAO
@@ -160,4 +161,5 @@ class CandidatoServiceSpec extends Specification {
         then: "a exclusao ocorre corretamente sem lancar excecoes imprevistas"
         1 * mockCandidatoDAO.deletar(10)
     }
+
 }

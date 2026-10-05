@@ -1,9 +1,7 @@
 package org.uGustavoDev.model
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 class Vaga {
+
     Integer id
     Integer empresaId
     String nome
@@ -33,4 +31,5 @@ Descrição: ${descricao}
 Competências exigidas: ${competencias.isEmpty() ? 'Nenhuma' : competencias.join(', ')}
 ----------------------------------------"""
     }
+
 }
