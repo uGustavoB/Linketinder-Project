@@ -1,15 +1,8 @@
 package org.uGustavoDev.dao
 
 import org.uGustavoDev.model.Candidato
-import org.uGustavoDev.factory.ConexaoFactory
 
-import java.sql.Connection
-import java.sql.Date
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
-import java.sql.Types
+import java.sql.*
 
 class CandidatoDAO {
 
@@ -63,18 +56,9 @@ class CandidatoDAO {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        BaseDao.executarSQL(sql) { stmt ->
             preencherStatement(stmt, candidato)
             stmt.executeUpdate()
-
-            ResultSet rs = stmt.getGeneratedKeys()
-            if (rs.next()) {
-                candidato.id = rs.getInt(1)
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir candidato: ${e.message}", e)
         }
     }
 
@@ -82,75 +66,58 @@ class CandidatoDAO {
         List<Candidato> candidatos = []
         String sql = "SELECT * FROM candidatos"
 
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
+        return BaseDao.executarSQL(sql) { stmt ->
+            ResultSet rs = stmt.executeQuery()
             while (rs.next()) {
                 candidatos.add(extrairCandidato(rs))
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar candidatos: ${e.message}", e)
+            return candidatos
         }
-
-        return candidatos
     }
 
     static Candidato buscarPorId(int id) {
         String sql = "SELECT * FROM candidatos WHERE id = ?"
 
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        return BaseDao.executarSQL(sql) { stmt ->
             stmt.setInt(1, id)
             ResultSet rs = stmt.executeQuery()
 
             if (rs.next()) {
                 return extrairCandidato(rs)
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar candidato: ${e.message}", e)
-        }
 
-        return null
+            return null
+        }
     }
 
     static Candidato buscarPorEmail(String email) {
         String sql = "SELECT * FROM candidatos WHERE email = ?"
 
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        return BaseDao.executarSQL(sql) { stmt ->
             stmt.setString(1, email)
             ResultSet rs = stmt.executeQuery()
 
             if (rs.next()) {
                 return extrairCandidato(rs)
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar candidato por email: ${e.message}", e)
-        }
 
-        return null
+            return null
+        }
     }
 
     static Candidato buscarPorCpf(String cpf) {
         String sql = "SELECT * FROM candidatos WHERE cpf = ?"
 
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        return BaseDao.executarSQL(sql) { stmt ->
             stmt.setString(1, cpf)
             ResultSet rs = stmt.executeQuery()
 
             if (rs.next()) {
                 return extrairCandidato(rs)
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar candidato por CPF: ${e.message}", e)
-        }
 
-        return null
+            }
+            return null
+        }
     }
 
     static void atualizar(Candidato candidato) {
@@ -160,28 +127,18 @@ class CandidatoDAO {
             WHERE id = ?
         """
 
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        BaseDao.executarSQL(sql) { stmt ->
             preencherStatement(stmt, candidato)
             stmt.setInt(11, candidato.id)
-
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar candidato: ${e.message}", e)
         }
     }
 
     static void deletar(int id) {
         String sql = "DELETE FROM candidatos WHERE id = ?"
-
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        BaseDao.executarSQL(sql) { stmt ->
             stmt.setInt(1, id)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar candidato: ${e.message}", e)
         }
     }
 }

@@ -1,45 +1,38 @@
 package org.uGustavoDev.dao
 
-import org.uGustavoDev.factory.ConexaoFactory
 
-import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.sql.Statement
 
 class CompetenciaDAO {
+
+    private static void preencherStatement(PreparedStatement stmt, String nome) throws SQLException {
+        stmt.setString(1, nome.trim())
+    }
 
     static int buscarOuInserir(String nome) {
         String sqlBusca = "SELECT id FROM competencias WHERE nome = ?"
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmtBusca = conn.prepareStatement(sqlBusca)) {
-            
-            stmtBusca.setString(1, nome.trim())
+        BaseDao.executarSQL(sqlBusca) { PreparedStatement stmtBusca ->
+            preencherStatement(stmtBusca, nome)
             ResultSet rs = stmtBusca.executeQuery()
-            
+
             if (rs.next()) {
                 return rs.getInt("id")
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar competência: ${e.message}", e)
         }
 
         String sqlInsert = "INSERT INTO competencias (nome) VALUES (?)"
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmtInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
-             
-            stmtInsert.setString(1, nome.trim())
+        BaseDao.executarSQL(sqlInsert) { PreparedStatement stmtInsert ->
+            preencherStatement(stmtInsert, nome)
             stmtInsert.executeUpdate()
-            
             ResultSet rs = stmtInsert.getGeneratedKeys()
+
             if (rs.next()) {
                 return rs.getInt(1)
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir competência: ${e.message}", e)
         }
         
         throw new RuntimeException("Não foi possível obter o ID da competência recém-inserida.")
@@ -48,19 +41,16 @@ class CompetenciaDAO {
     static void vincularAoCandidato(int candidatoId, int competenciaId) {
         String sql = "INSERT INTO candidato_competencia (candidato_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
             stmt.setInt(2, competenciaId)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao vincular competência ao candidato: ${e.message}", e)
         }
     }
     
     static List<String> listarPorCandidato(int candidatoId) {
         List<String> competencias = []
+
         String sql = """
             SELECT c.nome 
             FROM competencias c
@@ -68,17 +58,13 @@ class CompetenciaDAO {
             WHERE cc.candidato_id = ?
         """
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
             ResultSet rs = stmt.executeQuery()
-            
+
             while (rs.next()) {
                 competencias.add(rs.getString("nome"))
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar competências do candidato: ${e.message}", e)
         }
         
         return competencias
@@ -86,26 +72,19 @@ class CompetenciaDAO {
 
     static void removerVinculosCandidato(int candidatoId) {
         String sql = "DELETE FROM candidato_competencia WHERE candidato_id = ?"
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao remover vínculos de competência do candidato: ${e.message}", e)
         }
     }
 
     static void vincularAEmpresa(int empresaId, int competenciaId) {
         String sql = "INSERT INTO empresa_competencia (empresa_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             stmt.setInt(2, competenciaId)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao vincular competência à empresa: ${e.message}", e)
         }
     }
 
@@ -118,17 +97,13 @@ class CompetenciaDAO {
             WHERE ec.empresa_id = ?
         """
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             ResultSet rs = stmt.executeQuery()
             
             while (rs.next()) {
                 competencias.add(rs.getString("nome"))
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar competências da empresa: ${e.message}", e)
         }
         
         return competencias
@@ -136,26 +111,20 @@ class CompetenciaDAO {
 
     static void removerVinculosEmpresa(int empresaId) {
         String sql = "DELETE FROM empresa_competencia WHERE empresa_id = ?"
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao remover vínculos de competência da empresa: ${e.message}", e)
         }
     }
 
     static void vincularAVaga(int vagaId, int competenciaId) {
         String sql = "INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, vagaId)
             stmt.setInt(2, competenciaId)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao vincular competência à vaga: ${e.message}", e)
         }
     }
 
@@ -168,17 +137,13 @@ class CompetenciaDAO {
             WHERE vc.vaga_id = ?
         """
         
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, vagaId)
             ResultSet rs = stmt.executeQuery()
-            
+
             while (rs.next()) {
                 competencias.add(rs.getString("nome"))
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar competências da vaga: ${e.message}", e)
         }
         
         return competencias
@@ -186,12 +151,10 @@ class CompetenciaDAO {
 
     static void removerVinculosVaga(int vagaId) {
         String sql = "DELETE FROM vaga_competencia WHERE vaga_id = ?"
-        try (Connection conn = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, vagaId)
             stmt.executeUpdate()
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao remover vínculos de competência da vaga: ${e.message}", e)
         }
     }
 }

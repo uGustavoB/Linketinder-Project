@@ -60,20 +60,16 @@ static void main(String[] args) {
             switch (opcao) {
                 case 1:
                     int tipoLogin = ConsoleUI.lerEscolha("Fazer login como:\n1 - Candidato\n2 - Empresa\n0 - Voltar\nSua escolha: ", 0, 2)
-                    if (tipoLogin == 1) {
-                        Map<String, String> creds = ConsoleUI.pedirCredenciais()
-                        candidatoLogado = candidatoController.login(creds.email, creds.senha)
-                        if (candidatoLogado == null) {
-                            ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
-                            ConsoleUI.aguardarContinuacao()
-                        }
-                    } else if (tipoLogin == 2) {
-                        Map<String, String> creds = ConsoleUI.pedirCredenciais()
-                        empresaLogada = empresaController.login(creds.email, creds.senha)
-                        if (empresaLogada == null) {
-                            ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
-                            ConsoleUI.aguardarContinuacao()
-                        }
+
+                    switch (tipoLogin) {
+                        case 1:
+                            candidatoLogado = tentarLogin(candidatoController) as Candidato
+                            break
+                        case 2:
+                            empresaLogada = tentarLogin(empresaController) as Empresa
+                            break
+                        case 0:
+                            break
                     }
                     break
                 case 2:
@@ -89,4 +85,15 @@ static void main(String[] args) {
             }
         }
     }
+}
+
+private static def tentarLogin(def controller) {
+    Map<String, String> creds = ConsoleUI.pedirCredenciais()
+    def usuario = controller.login(creds.email, creds.senha)
+
+    if (usuario == null) {
+        ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
+        ConsoleUI.aguardarContinuacao()
+    }
+    return usuario
 }

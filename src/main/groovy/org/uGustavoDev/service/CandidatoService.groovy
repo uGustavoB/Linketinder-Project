@@ -5,7 +5,6 @@ import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.model.Candidato
 
 class CandidatoService {
-
     void adicionarCandidato(Candidato candidato) {
         if (CandidatoDAO.buscarPorEmail(candidato.email) != null) {
             throw new IllegalArgumentException("Já existe um candidato cadastrado com o email '${candidato.email}'.")
@@ -16,10 +15,7 @@ class CandidatoService {
 
         try {
             CandidatoDAO.inserir(candidato)
-            candidato.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAoCandidato(candidato.id, compId)
-            }
+            vincularCompetenciasAoUsuario(candidato.id, candidato.competencias)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível salvar o candidato no banco de dados.", e)
         }
@@ -49,10 +45,7 @@ class CandidatoService {
         try {
             CandidatoDAO.atualizar(candidato)
             CompetenciaDAO.removerVinculosCandidato(candidato.id)
-            candidato.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAoCandidato(candidato.id, compId)
-            }
+            vincularCompetenciasAoUsuario(candidato.id, candidato.competencias)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível atualizar o candidato no banco de dados.", e)
         }
@@ -63,6 +56,13 @@ class CandidatoService {
             CandidatoDAO.deletar(id)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível deletar o candidato do banco de dados.", e)
+        }
+    }
+
+    private void vincularCompetenciasAoUsuario(int usuarioId, List<String> competencias) {
+        competencias.each { compNome ->
+            int compId = CompetenciaDAO.buscarOuInserir(compNome)
+            CompetenciaDAO.vincularAoCandidato(usuarioId, compId)
         }
     }
 }
