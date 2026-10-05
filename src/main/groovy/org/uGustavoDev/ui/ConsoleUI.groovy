@@ -1,13 +1,15 @@
 package org.uGustavoDev.ui
 
+import org.uGustavoDev.model.Candidato
+import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import org.uGustavoDev.model.Candidato
-import org.uGustavoDev.model.Empresa
+import java.time.format.DateTimeParseException
 
 class ConsoleUI {
+
     private static final Scanner scanner = new Scanner(System.in)
     private static final String DATE_PATTERN = "dd/MM/yyyy"
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN)
@@ -78,7 +80,7 @@ class ConsoleUI {
             String entrada = scanner.nextLine()
             try {
                 return LocalDate.parse(entrada, DATE_FORMATTER)
-            } catch (Exception ignored) {
+            } catch (DateTimeParseException ignored) {
                 println "Data inválida. Use o formato DD/MM/AAAA."
             }
         }
@@ -140,7 +142,7 @@ class ConsoleUI {
         imprimirCabecalho("Login")
         String email = lerTexto("Email: ")
         String senha = lerTexto("Senha: ")
-        return [email: email, senha: senha]
+        return [email:email, senha:senha]
     }
 
     static Candidato pedirDadosCandidato() {
@@ -191,7 +193,7 @@ class ConsoleUI {
         String descricao = lerTexto("Descrição da Vaga: ")
         String cidade = lerTexto("Cidade: ")
         String estado = lerTexto("Estado (ex: SP): ")
-        
+
         String compsStr = lerTexto("Competências exigidas (separadas por vírgula): ", true)
         List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
@@ -199,4 +201,5 @@ class ConsoleUI {
         vaga.competencias = competencias
         return vaga
     }
+
 }

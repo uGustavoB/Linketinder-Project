@@ -1,12 +1,14 @@
 package org.uGustavoDev.controller
 
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
+import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.CandidatoService
 import org.uGustavoDev.service.VagaService
-import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.ui.ConsoleUI
 
 class CandidatoController {
+
     private final CandidatoService service
     private final VagaService vagaService
 
@@ -16,12 +18,7 @@ class CandidatoController {
     }
 
     Candidato login(String email, String senha) {
-        try {
-            return service.loginCandidato(email, senha)
-        } catch (Exception e) {
-            ConsoleUI.imprimirMensagem("Erro ao logar: " + e.message)
-            return null
-        }
+        return service.loginCandidato(email, senha)
     }
 
     void cadastrarCandidato() {
@@ -29,41 +26,59 @@ class CandidatoController {
         try {
             service.adicionarCandidato(novoCandidato)
             ConsoleUI.imprimirMensagem("\nCandidato cadastrado com sucesso!")
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao cadastrar: " + e.message)
         }
         ConsoleUI.aguardarContinuacao()
     }
 
     Candidato menuPerfil(Candidato candidatoLogado) {
-        int opcaoPerfil = ConsoleUI.pedirOpcaoMenuPerfil()
-        if (opcaoPerfil == 1) {
-            ConsoleUI.imprimirCabecalho("Meu Perfil (Candidato)")
-            ConsoleUI.imprimirMensagem(candidatoLogado.toString())
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoPerfil == 2) {
-            ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
-            Candidato candidatoEditado = ConsoleUI.pedirDadosCandidato()
-            candidatoEditado.id = candidatoLogado.id
-            try {
-                service.atualizarCandidato(candidatoEditado)
-                candidatoLogado = candidatoEditado
-                ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
-            } catch (Exception e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoPerfil == 3) {
-            try {
-                service.deletarCandidato(candidatoLogado.id)
-                candidatoLogado = null
-                ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
-            } catch (Exception e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
+        int opcao = ConsoleUI.pedirOpcaoMenuPerfil()
+        switch (opcao) {
+            case 1:
+                visualizarPerfil(candidatoLogado)
+                break
+            case 2:
+                return editarPerfil(candidatoLogado)
+            case 3:
+                return deletarConta(candidatoLogado)
         }
         return candidatoLogado
+    }
+
+    private void visualizarPerfil(Candidato candidato) {
+        ConsoleUI.imprimirCabecalho("Perfil do Candidato")
+        ConsoleUI.imprimirMensagem(candidato.toString())
+        ConsoleUI.aguardarContinuacao()
+    }
+
+    private Candidato editarPerfil(Candidato candidato) {
+        ConsoleUI.imprimirMensagem("Informe os novos dados do candidato:")
+        Candidato candidatoEditado = ConsoleUI.pedirDadosCandidato()
+        candidatoEditado.id = candidato.id
+        try {
+            service.atualizarCandidato(candidatoEditado)
+            ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
+            return candidatoEditado
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
+            ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
+            return candidato
+        } finally {
+            ConsoleUI.aguardarContinuacao()
+        }
+    }
+
+    private Candidato deletarConta(Candidato candidato) {
+        try {
+            service.deletarCandidato(candidato.id)
+            ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
+            return null
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
+            ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
+            return candidato
+        } finally {
+            ConsoleUI.aguardarContinuacao()
+        }
     }
 
     void menuVagas() {
@@ -75,10 +90,11 @@ class CandidatoController {
                 ConsoleUI.imprimirCabecalho("Lista de Vagas Disponíveis")
                 vagas.each { ConsoleUI.imprimirMensagem(it.toString()) }
             }
-        } catch (Exception e) {
+        } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("Falha ao listar vagas: " + e.message)
         }
         ConsoleUI.aguardarContinuacao()
     }
+
 }
 

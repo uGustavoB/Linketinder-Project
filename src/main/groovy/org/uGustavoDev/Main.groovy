@@ -2,6 +2,11 @@ package org.uGustavoDev
 
 import org.uGustavoDev.controller.CandidatoController
 import org.uGustavoDev.controller.EmpresaController
+import org.uGustavoDev.dao.CandidatoDAO
+import org.uGustavoDev.dao.CompetenciaDAO
+import org.uGustavoDev.dao.EmpresaDAO
+import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.CandidatoService
@@ -10,10 +15,15 @@ import org.uGustavoDev.service.VagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    CandidatoService candidatoService = new CandidatoService()
-    EmpresaService empresaService = new EmpresaService()
-    VagaService vagaService = new VagaService()
-    
+    CompetenciaDAO competenciaDAO = new CompetenciaDAO()
+    CandidatoDAO candidatoDAO = new CandidatoDAO(competenciaDAO)
+    EmpresaDAO empresaDAO = new EmpresaDAO(competenciaDAO)
+    VagaDAO vagaDAO = new VagaDAO(competenciaDAO)
+
+    CandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO)
+    EmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO)
+    VagaService vagaService = new VagaService(vagaDAO, competenciaDAO)
+
     CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
     EmpresaController empresaController = new EmpresaController(empresaService, vagaService, candidatoService)
 
@@ -60,20 +70,16 @@ static void main(String[] args) {
             switch (opcao) {
                 case 1:
                     int tipoLogin = ConsoleUI.lerEscolha("Fazer login como:\n1 - Candidato\n2 - Empresa\n0 - Voltar\nSua escolha: ", 0, 2)
-                    if (tipoLogin == 1) {
-                        Map<String, String> creds = ConsoleUI.pedirCredenciais()
-                        candidatoLogado = candidatoController.login(creds.email, creds.senha)
-                        if (candidatoLogado == null) {
-                            ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
-                            ConsoleUI.aguardarContinuacao()
-                        }
-                    } else if (tipoLogin == 2) {
-                        Map<String, String> creds = ConsoleUI.pedirCredenciais()
-                        empresaLogada = empresaController.login(creds.email, creds.senha)
-                        if (empresaLogada == null) {
-                            ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
-                            ConsoleUI.aguardarContinuacao()
-                        }
+
+                    switch (tipoLogin) {
+                        case 1:
+                            candidatoLogado = tentarLogin(candidatoController) as Candidato
+                            break
+                        case 2:
+                            empresaLogada = tentarLogin(empresaController) as Empresa
+                            break
+                        case 0:
+                            break
                     }
                     break
                 case 2:
@@ -88,5 +94,21 @@ static void main(String[] args) {
                     break
             }
         }
+    }
+}
+
+private static def tentarLogin(def controller) {
+    Map<String, String> creds = ConsoleUI.pedirCredenciais()
+    try {
+        def usuario = controller.login(creds.email, creds.senha)
+        if (usuario == null) {
+            ConsoleUI.imprimirMensagem("Email ou senha incorretos.")
+            ConsoleUI.aguardarContinuacao()
+        }
+        return usuario
+    } catch (DatabaseOperationException e) {
+        ConsoleUI.imprimirMensagem("Sistema temporariamente indisponível: " + e.message)
+        ConsoleUI.aguardarContinuacao()
+        return null
     }
 }

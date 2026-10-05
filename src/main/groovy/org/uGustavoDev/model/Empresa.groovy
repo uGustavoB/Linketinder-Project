@@ -1,6 +1,7 @@
 package org.uGustavoDev.model
 
 class Empresa extends Pessoa {
+
     String cnpj
 
     Empresa(String nome, String email, String pais, String CEP, String descricao, String cnpj) {
@@ -24,4 +25,5 @@ Descrição: $descricao
 Competências: ${competencias.join(', ')}
 ----------------------------------------"""
     }
+
 }

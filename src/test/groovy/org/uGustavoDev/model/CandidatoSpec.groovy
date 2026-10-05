@@ -1,9 +1,11 @@
 package org.uGustavoDev.model
 
 import spock.lang.Specification
+
 import java.time.LocalDate
 
 class CandidatoSpec extends Specification {
+
     void "deve instanciar um novo candidato corretamente"() {
         given: "os dados do candidato"
         String nome = "Gustavo"
@@ -91,4 +93,5 @@ class CandidatoSpec extends Specification {
         candidato.competencias.size() == 1
         candidato.competencias.contains("Java")
     }
+
 }

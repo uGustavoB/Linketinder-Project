@@ -2,18 +2,21 @@ package org.uGustavoDev.services
 
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.EmpresaService
 import spock.lang.Specification
 
 class EmpresaServiceSpec extends Specification {
 
+    EmpresaDAO mockEmpresaDAO
+    CompetenciaDAO mockCompetenciaDAO
     EmpresaService empresaService
 
     void setup() {
-        empresaService = new EmpresaService()
-        GroovyMock(EmpresaDAO, global: true)
-        GroovyMock(CompetenciaDAO, global: true)
+        mockEmpresaDAO = Mock(EmpresaDAO)
+        mockCompetenciaDAO = Mock(CompetenciaDAO)
+        empresaService = new EmpresaService(mockEmpresaDAO, mockCompetenciaDAO)
     }
 
     void "deve salvar empresa e vincular competencias quando dados sao validos e nao existem no banco"() {
@@ -26,13 +29,13 @@ class EmpresaServiceSpec extends Specification {
         empresaService.adicionarEmpresa(novaEmpresa)
 
         then: "verifica as validacoes passando e as insercoes ocorrendo corretamente no banco"
-        1 * EmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
-        1 * EmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> null
-        1 * EmpresaDAO.inserir(novaEmpresa)
-        1 * CompetenciaDAO.buscarOuInserir("Java") >> 10
-        1 * CompetenciaDAO.vincularAEmpresa(1, 10)
-        1 * CompetenciaDAO.buscarOuInserir("Python") >> 20
-        1 * CompetenciaDAO.vincularAEmpresa(1, 20)
+        1 * mockEmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
+        1 * mockEmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> null
+        1 * mockEmpresaDAO.inserir(novaEmpresa)
+        1 * mockCompetenciaDAO.buscarOuInserir("Java") >> 10
+        1 * mockCompetenciaDAO.vincularAEmpresa(1, 10)
+        1 * mockCompetenciaDAO.buscarOuInserir("Python") >> 20
+        1 * mockCompetenciaDAO.vincularAEmpresa(1, 20)
     }
 
     void "deve bloquear a criacao de empresa quando o email ja estiver em uso"() {
@@ -44,8 +47,8 @@ class EmpresaServiceSpec extends Specification {
         empresaService.adicionarEmpresa(novaEmpresa)
 
         then: "uma excecao de validacao e lancada e nenhuma insercao e feita"
-        1 * EmpresaDAO.buscarPorEmail(novaEmpresa.email) >> empresaExistente
-        0 * EmpresaDAO.inserir(_)
+        1 * mockEmpresaDAO.buscarPorEmail(novaEmpresa.email) >> empresaExistente
+        0 * mockEmpresaDAO.inserir(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
         erro.message.contains("email 'usado@google.com'")
     }
@@ -59,9 +62,9 @@ class EmpresaServiceSpec extends Specification {
         empresaService.adicionarEmpresa(novaEmpresa)
 
         then: "uma excecao e lancada avisando sobre o conflito do CNPJ"
-        1 * EmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
-        1 * EmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> empresaExistente
-        0 * EmpresaDAO.inserir(_)
+        1 * mockEmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
+        1 * mockEmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> empresaExistente
+        0 * mockEmpresaDAO.inserir(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
         erro.message.contains("CNPJ '99.999.999/0001-99'")
     }
@@ -74,10 +77,10 @@ class EmpresaServiceSpec extends Specification {
         empresaService.adicionarEmpresa(novaEmpresa)
 
         then: "o erro SQL ou de Conexao e capturado e transformado na excecao de servico correta"
-        1 * EmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
-        1 * EmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> null
-        1 * EmpresaDAO.inserir(novaEmpresa) >> { throw new Exception("Falha de conexao") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockEmpresaDAO.buscarPorEmail(novaEmpresa.email) >> null
+        1 * mockEmpresaDAO.buscarPorCnpj(novaEmpresa.cnpj) >> null
+        1 * mockEmpresaDAO.inserir(novaEmpresa) >> { throw new DatabaseOperationException("Falha de conexao") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
         erro.message == "Não foi possível salvar a empresa no banco de dados."
     }
 
@@ -91,7 +94,7 @@ class EmpresaServiceSpec extends Specification {
         List<Empresa> retorno = empresaService.listarEmpresas()
 
         then: "recebemos a lista integral repassada pelo DAO"
-        1 * EmpresaDAO.listar() >> listaSimulada
+        1 * mockEmpresaDAO.listar() >> listaSimulada
         retorno.size() == 2
         retorno.contains(e1)
         retorno.contains(e2)
@@ -106,7 +109,7 @@ class EmpresaServiceSpec extends Specification {
         Empresa logada = empresaService.loginEmpresa("google@google.com", "senhaSegura123")
 
         then: "o login ocorre perfeitamente e devolve a entidade"
-        1 * EmpresaDAO.buscarPorEmail("google@google.com") >> e1
+        1 * mockEmpresaDAO.buscarPorEmail("google@google.com") >> e1
         logada == e1
     }
 
@@ -119,7 +122,7 @@ class EmpresaServiceSpec extends Specification {
         Empresa logada = empresaService.loginEmpresa("google@google.com", "senhaErrada")
 
         then: "o sistema bloqueia retornando um objeto nulo"
-        1 * EmpresaDAO.buscarPorEmail("google@google.com") >> e1
+        1 * mockEmpresaDAO.buscarPorEmail("google@google.com") >> e1
         logada == null
     }
 
@@ -128,7 +131,7 @@ class EmpresaServiceSpec extends Specification {
         Empresa logada = empresaService.loginEmpresa("fantasma@empresa.com", "senha123")
 
         then: "nenhum usuario e encontrado"
-        1 * EmpresaDAO.buscarPorEmail("fantasma@empresa.com") >> null
+        1 * mockEmpresaDAO.buscarPorEmail("fantasma@empresa.com") >> null
         logada == null
     }
 
@@ -142,10 +145,10 @@ class EmpresaServiceSpec extends Specification {
         empresaService.atualizarEmpresa(e1)
 
         then: "as antigas competencias sao limpas e a nova e registrada adequadamente"
-        1 * EmpresaDAO.atualizar(e1)
-        1 * CompetenciaDAO.removerVinculosEmpresa(5)
-        1 * CompetenciaDAO.buscarOuInserir("Rust") >> 99
-        1 * CompetenciaDAO.vincularAEmpresa(5, 99)
+        1 * mockEmpresaDAO.atualizar(e1)
+        1 * mockCompetenciaDAO.removerVinculosEmpresa(5)
+        1 * mockCompetenciaDAO.buscarOuInserir("Rust") >> 99
+        1 * mockCompetenciaDAO.vincularAEmpresa(5, 99)
     }
 
     void "deve repassar a instrucao de delecao de empresa de forma transparente para o dao"() {
@@ -153,7 +156,7 @@ class EmpresaServiceSpec extends Specification {
         empresaService.deletarEmpresa(10)
 
         then: "a exclusao ocorre corretamente sem lancar excecoes imprevistas"
-        1 * EmpresaDAO.deletar(10)
+        1 * mockEmpresaDAO.deletar(10)
     }
 
     void "deve enrolar exceptions da operacao listar dentro de runtime exceptions controladas"() {
@@ -161,7 +164,8 @@ class EmpresaServiceSpec extends Specification {
         empresaService.listarEmpresas()
 
         then: "o erro nao vaza exposto, mas sim sob uma exception prevista do service"
-        1 * EmpresaDAO.listar() >> { throw new Exception("Timeout do banco") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockEmpresaDAO.listar() >> { throw new DatabaseOperationException("Timeout do banco") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
     }
+
 }

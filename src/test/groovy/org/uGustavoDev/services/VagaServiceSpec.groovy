@@ -2,6 +2,7 @@ package org.uGustavoDev.services
 
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.VagaService
 import spock.lang.Specification
@@ -9,11 +10,13 @@ import spock.lang.Specification
 class VagaServiceSpec extends Specification {
 
     VagaService vagaService
+    VagaDAO mockVagaDAO
+    CompetenciaDAO mockCompetenciaDAO
 
     void setup() {
-        vagaService = new VagaService()
-        GroovyMock(VagaDAO, global: true)
-        GroovyMock(CompetenciaDAO, global: true)
+        mockVagaDAO = Mock(VagaDAO)
+        mockCompetenciaDAO = Mock(CompetenciaDAO)
+        vagaService = new VagaService(mockVagaDAO, mockCompetenciaDAO)
     }
 
     void "deve adicionar uma vaga e registrar suas competencias no banco de dados"() {
@@ -26,11 +29,11 @@ class VagaServiceSpec extends Specification {
         vagaService.adicionarVaga(novaVaga)
 
         then: "o DAO eh acionado corretamente para persistir a vaga e seus vinculos"
-        1 * VagaDAO.inserir(novaVaga)
-        1 * CompetenciaDAO.buscarOuInserir("Groovy") >> 10
-        1 * CompetenciaDAO.vincularAVaga(100, 10)
-        1 * CompetenciaDAO.buscarOuInserir("SQL") >> 20
-        1 * CompetenciaDAO.vincularAVaga(100, 20)
+        1 * mockVagaDAO.inserir(novaVaga)
+        1 * mockCompetenciaDAO.buscarOuInserir("Groovy") >> 10
+        1 * mockCompetenciaDAO.vincularAVaga(100, 10)
+        1 * mockCompetenciaDAO.buscarOuInserir("SQL") >> 20
+        1 * mockCompetenciaDAO.vincularAVaga(100, 20)
     }
 
     void "deve retornar a lista global de todas as vagas cadastradas"() {
@@ -43,7 +46,7 @@ class VagaServiceSpec extends Specification {
         List<Vaga> retorno = vagaService.listarVagas()
 
         then: "todas as vagas sao trazidas fielmente"
-        1 * VagaDAO.listar() >> listaGlobal
+        1 * mockVagaDAO.listar() >> listaGlobal
         retorno.size() == 2
     }
 
@@ -56,7 +59,7 @@ class VagaServiceSpec extends Specification {
         List<Vaga> retorno = vagaService.listarVagasDaEmpresa(5)
 
         then: "o DAO recebe o filtro por id da empresa"
-        1 * VagaDAO.listarPorEmpresa(5) >> vagasEmpresa
+        1 * mockVagaDAO.listarPorEmpresa(5) >> vagasEmpresa
         retorno.size() == 1
     }
 
@@ -68,7 +71,7 @@ class VagaServiceSpec extends Specification {
         Vaga retorno = vagaService.buscarVagaPorId(10)
 
         then: "a vaga correspondente e retornada"
-        1 * VagaDAO.buscarPorId(10) >> v1
+        1 * mockVagaDAO.buscarPorId(10) >> v1
         retorno == v1
     }
 
@@ -80,8 +83,8 @@ class VagaServiceSpec extends Specification {
         vagaService.atualizarVagaDaEmpresa(1, 999, vagaEditada)
 
         then: "o banco retorna nulo e a operacao e barrada imediatamente"
-        1 * VagaDAO.buscarPorId(999) >> null
-        0 * VagaDAO.atualizar(_)
+        1 * mockVagaDAO.buscarPorId(999) >> null
+        0 * mockVagaDAO.atualizar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
     }
 
@@ -94,8 +97,8 @@ class VagaServiceSpec extends Specification {
         vagaService.atualizarVagaDaEmpresa(1, 10, tentativaDeEdicao)
 
         then: "a regra de negocio impede e estampa o erro"
-        1 * VagaDAO.buscarPorId(10) >> vagaDoConcorrente
-        0 * VagaDAO.atualizar(_)
+        1 * mockVagaDAO.buscarPorId(10) >> vagaDoConcorrente
+        0 * mockVagaDAO.atualizar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
     }
 
@@ -103,7 +106,7 @@ class VagaServiceSpec extends Specification {
         given: "uma vaga legitima da empresa 1"
         Vaga vagaLegitima = new Vaga(1, "Vaga Original", "Desc", "SP", "SP")
         vagaLegitima.id = 50
-        
+
         Vaga edicaoPermitida = new Vaga(1, "Nova Vaga", "Nova Desc", "SP", "Campinas")
         edicaoPermitida.competencias = ["Go"]
 
@@ -111,11 +114,11 @@ class VagaServiceSpec extends Specification {
         vagaService.atualizarVagaDaEmpresa(1, 50, edicaoPermitida)
 
         then: "os dados sao passados ao DAO para regravacao juntamente as competencias"
-        1 * VagaDAO.buscarPorId(50) >> vagaLegitima
-        1 * VagaDAO.atualizar(edicaoPermitida)
-        1 * CompetenciaDAO.removerVinculosVaga(50)
-        1 * CompetenciaDAO.buscarOuInserir("Go") >> 5
-        1 * CompetenciaDAO.vincularAVaga(50, 5)
+        1 * mockVagaDAO.buscarPorId(50) >> vagaLegitima
+        1 * mockVagaDAO.atualizar(edicaoPermitida)
+        1 * mockCompetenciaDAO.removerVinculosVaga(50)
+        1 * mockCompetenciaDAO.buscarOuInserir("Go") >> 5
+        1 * mockCompetenciaDAO.vincularAVaga(50, 5)
     }
 
     void "deve bloquear delecao de vaga se a mesma nao existir"() {
@@ -123,8 +126,8 @@ class VagaServiceSpec extends Specification {
         vagaService.deletarVagaDaEmpresa(1, 999)
 
         then: "receber block imediato"
-        1 * VagaDAO.buscarPorId(999) >> null
-        0 * VagaDAO.deletar(_)
+        1 * mockVagaDAO.buscarPorId(999) >> null
+        0 * mockVagaDAO.deletar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
     }
 
@@ -136,8 +139,8 @@ class VagaServiceSpec extends Specification {
         vagaService.deletarVagaDaEmpresa(1, 10)
 
         then: "o perigo e interceptado e ninguem se machuca"
-        1 * VagaDAO.buscarPorId(10) >> vagaConcorrente
-        0 * VagaDAO.deletar(_)
+        1 * mockVagaDAO.buscarPorId(10) >> vagaConcorrente
+        0 * mockVagaDAO.deletar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
     }
 
@@ -149,19 +152,20 @@ class VagaServiceSpec extends Specification {
         vagaService.deletarVagaDaEmpresa(1, 10)
 
         then: "a vontade e respeitada e o id e repassado pro banco"
-        1 * VagaDAO.buscarPorId(10) >> vagaLegitima
-        1 * VagaDAO.deletar(10)
+        1 * mockVagaDAO.buscarPorId(10) >> vagaLegitima
+        1 * mockVagaDAO.deletar(10)
     }
 
     void "deve envelopar erro misterioso de banco de dados e repassar como runtime exception"() {
         given: "uma falha grave de infra"
         Vaga novaVaga = new Vaga(1, "X", "Y", "Z", "W")
-        
+
         when: "ocorre interacao com o servico"
         vagaService.adicionarVaga(novaVaga)
 
         then: "a falha grossa vira uma RuntimeException polida"
-        1 * VagaDAO.inserir(_) >> { throw new Exception("Tabela nao existe") }
-        RuntimeException erro = thrown(RuntimeException)
+        1 * mockVagaDAO.inserir(_) >> { throw new DatabaseOperationException("Tabela nao existe") }
+        DatabaseOperationException erro = thrown(DatabaseOperationException)
     }
+
 }

@@ -2,67 +2,77 @@ package org.uGustavoDev.service
 
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
 
 class EmpresaService {
 
+    private final EmpresaDAO empresaDAO
+    private final CompetenciaDAO competenciaDAO
+
+    EmpresaService(EmpresaDAO empresaDAO, CompetenciaDAO competenciaDAO) {
+        this.empresaDAO = empresaDAO
+        this.competenciaDAO = competenciaDAO
+    }
+
     void adicionarEmpresa(Empresa empresa) {
-        if (EmpresaDAO.buscarPorEmail(empresa.email) != null) {
+        if (empresaDAO.buscarPorEmail(empresa.email) != null) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${empresa.email}'.")
         }
-        if (EmpresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
+        if (empresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com o CNPJ '${empresa.cnpj}'.")
         }
 
         try {
-            EmpresaDAO.inserir(empresa)
+            empresaDAO.inserir(empresa)
             empresa.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
+                int compId = competenciaDAO.buscarOuInserir(compNome)
+                competenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível salvar a empresa no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível salvar a empresa no banco de dados.", e)
         }
     }
 
     List<Empresa> listarEmpresas() {
         try {
-            return EmpresaDAO.listar()
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível listar as empresas do banco de dados.", e)
+            return empresaDAO.listar()
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível listar as empresas do banco de dados.", e)
         }
     }
 
     Empresa loginEmpresa(String email, String senha) {
         try {
-            Empresa empresa = EmpresaDAO.buscarPorEmail(email)
+            Empresa empresa = empresaDAO.buscarPorEmail(email)
             if (empresa != null && empresa.senha == senha) {
                 return empresa
             }
             return null
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao tentar realizar login de empresa no banco.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Erro ao tentar realizar login de empresa no banco.", e)
         }
     }
 
     void atualizarEmpresa(Empresa empresa) {
         try {
-            EmpresaDAO.atualizar(empresa)
-            CompetenciaDAO.removerVinculosEmpresa(empresa.id)
+            empresaDAO.atualizar(empresa)
+            competenciaDAO.removerVinculosEmpresa(empresa.id)
             empresa.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
+                int compId = competenciaDAO.buscarOuInserir(compNome)
+                competenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível atualizar a empresa no banco de dados.", e)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível atualizar a empresa no banco de dados.", e)
         }
     }
 
     void deletarEmpresa(int id) {
         try {
-            EmpresaDAO.deletar(id)
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possível deletar a empresa do banco de dados.", e)
+            empresaDAO.deletar(id)
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Não foi possível deletar a empresa do banco de dados.", e)
         }
     }
+
 }

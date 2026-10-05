@@ -3,6 +3,7 @@ package org.uGustavoDev.model
 import spock.lang.Specification
 
 class EmpresaSpec extends Specification {
+
     void "deve instanciar uma nova empresa corretamente"() {
         given: "os dados da empresa"
         String nome = "Google"
@@ -84,4 +85,5 @@ class EmpresaSpec extends Specification {
         empresa.competencias.size() == 1
         empresa.competencias.contains("Java")
     }
+
 }
