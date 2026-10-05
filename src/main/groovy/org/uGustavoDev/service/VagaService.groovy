@@ -1,16 +1,16 @@
 package org.uGustavoDev.service
 
-import org.uGustavoDev.dao.CompetenciaDAO
-import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 
 class VagaService {
 
-    private final VagaDAO vagaDAO
-    private final CompetenciaDAO competenciaDAO
+    private final IVagaDAO vagaDAO
+    private final ICompetenciaDAO competenciaDAO
 
-    VagaService(VagaDAO vagaDAO, CompetenciaDAO competenciaDAO) {
+    VagaService(IVagaDAO vagaDAO, ICompetenciaDAO competenciaDAO) {
         this.vagaDAO = vagaDAO
         this.competenciaDAO = competenciaDAO
     }

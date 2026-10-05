@@ -1,5 +1,6 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.dao.interfaces.ICandidatoDAO
 import org.uGustavoDev.model.Candidato
 
 import java.sql.PreparedStatement
@@ -7,7 +8,7 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Types
 
-class CandidatoDAO {
+class CandidatoDAO implements ICandidatoDAO {
 
     private final CompetenciaDAO competenciaDAO
 
@@ -59,6 +60,7 @@ class CandidatoDAO {
         return c
     }
 
+    @Override
     void inserir(Candidato candidato) {
         String sql = """
             INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, cpf, pais, estado, cep, descricao, senha)
@@ -71,6 +73,7 @@ class CandidatoDAO {
         }
     }
 
+    @Override
     List<Candidato> listar() {
         List<Candidato> candidatos = []
         String sql = "SELECT * FROM candidatos"
@@ -84,6 +87,7 @@ class CandidatoDAO {
         }
     }
 
+    @Override
     Candidato buscarPorId(int id) {
         String sql = "SELECT * FROM candidatos WHERE id = ?"
 
@@ -99,6 +103,7 @@ class CandidatoDAO {
         }
     }
 
+    @Override
     Candidato buscarPorEmail(String email) {
         String sql = "SELECT * FROM candidatos WHERE email = ?"
 
@@ -114,6 +119,7 @@ class CandidatoDAO {
         }
     }
 
+    @Override
     Candidato buscarPorCpf(String cpf) {
         String sql = "SELECT * FROM candidatos WHERE cpf = ?"
 
@@ -128,6 +134,7 @@ class CandidatoDAO {
         }
     }
 
+    @Override
     void atualizar(Candidato candidato) {
         String sql = """
             UPDATE candidatos
@@ -142,6 +149,7 @@ class CandidatoDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         String sql = "DELETE FROM candidatos WHERE id = ?"
         BaseDao.executarSQL(sql) { stmt ->

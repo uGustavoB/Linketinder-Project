@@ -1,7 +1,7 @@
 package org.uGustavoDev.services
 
-import org.uGustavoDev.dao.CandidatoDAO
-import org.uGustavoDev.dao.CompetenciaDAO
+import org.uGustavoDev.dao.interfaces.ICandidatoDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.service.CandidatoService
@@ -12,12 +12,12 @@ import java.time.LocalDate
 class CandidatoServiceSpec extends Specification {
 
     CandidatoService candidatoService
-    CandidatoDAO mockCandidatoDAO
-    CompetenciaDAO mockCompetenciaDAO
+    ICandidatoDAO mockCandidatoDAO
+    ICompetenciaDAO mockCompetenciaDAO
 
     void setup() {
-        mockCandidatoDAO = Mock(CandidatoDAO)
-        mockCompetenciaDAO = Mock(CompetenciaDAO)
+        mockCandidatoDAO = Mock(ICandidatoDAO)
+        mockCompetenciaDAO = Mock(ICompetenciaDAO)
 
         candidatoService = new CandidatoService(mockCandidatoDAO, mockCompetenciaDAO)
     }

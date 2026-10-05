@@ -1,7 +1,7 @@
 package org.uGustavoDev.services
 
-import org.uGustavoDev.dao.CompetenciaDAO
-import org.uGustavoDev.dao.EmpresaDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.EmpresaService
@@ -9,13 +9,13 @@ import spock.lang.Specification
 
 class EmpresaServiceSpec extends Specification {
 
-    EmpresaDAO mockEmpresaDAO
-    CompetenciaDAO mockCompetenciaDAO
+    IEmpresaDAO mockEmpresaDAO
+    ICompetenciaDAO mockCompetenciaDAO
     EmpresaService empresaService
 
     void setup() {
-        mockEmpresaDAO = Mock(EmpresaDAO)
-        mockCompetenciaDAO = Mock(CompetenciaDAO)
+        mockEmpresaDAO = Mock(IEmpresaDAO)
+        mockCompetenciaDAO = Mock(ICompetenciaDAO)
         empresaService = new EmpresaService(mockEmpresaDAO, mockCompetenciaDAO)
     }
 

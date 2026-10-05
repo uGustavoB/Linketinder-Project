@@ -1,12 +1,13 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.model.Empresa
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class EmpresaDAO {
+class EmpresaDAO implements IEmpresaDAO {
 
     private final CompetenciaDAO competenciaDAO
 
@@ -42,6 +43,7 @@ class EmpresaDAO {
         return e
     }
 
+    @Override
     void inserir(Empresa empresa) {
         String sql = """
             INSERT INTO empresas (nome, cnpj, email, descricao, pais, cep, senha)
@@ -54,6 +56,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     List<Empresa> listar() {
         List<Empresa> empresas = []
         String sql = "SELECT * FROM empresas"
@@ -69,6 +72,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     Empresa buscarPorId(int id) {
         String sql = "SELECT * FROM empresas WHERE id = ?"
 
@@ -84,6 +88,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     Empresa buscarPorEmail(String email) {
         String sql = "SELECT * FROM empresas WHERE email = ?"
 
@@ -99,6 +104,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     Empresa buscarPorCnpj(String cnpj) {
         String sql = "SELECT * FROM empresas WHERE cnpj = ?"
 
@@ -114,6 +120,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     void atualizar(Empresa empresa) {
         String sql = """
             UPDATE empresas
@@ -129,6 +136,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         String sql = "DELETE FROM empresas WHERE id = ?"
 

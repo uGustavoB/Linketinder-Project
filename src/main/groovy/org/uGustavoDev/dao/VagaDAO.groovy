@@ -1,12 +1,13 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.model.Vaga
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class VagaDAO {
+class VagaDAO implements IVagaDAO {
 
     private final CompetenciaDAO competenciaDAO
 
@@ -38,6 +39,7 @@ class VagaDAO {
         return v
     }
 
+    @Override
     void inserir(Vaga vaga) {
         String sql = """
             INSERT INTO vagas (empresa_id, nome, descricao, estado, cidade)
@@ -50,6 +52,7 @@ class VagaDAO {
         }
     }
 
+    @Override
     List<Vaga> listar() {
         List<Vaga> vagas = []
         String sql = "SELECT * FROM vagas"
@@ -65,6 +68,7 @@ class VagaDAO {
         }
     }
 
+    @Override
     Vaga buscarPorId(int id) {
         String sql = "SELECT * FROM vagas WHERE id = ?"
 
@@ -80,6 +84,7 @@ class VagaDAO {
         }
     }
 
+    @Override
     List<Vaga> listarPorEmpresa(int empresaId) {
         List<Vaga> vagas = []
         String sql = "SELECT * FROM vagas WHERE empresa_id = ?"
@@ -95,6 +100,7 @@ class VagaDAO {
         }
     }
 
+    @Override
     void atualizar(Vaga vaga) {
         String sql = """
             UPDATE vagas
@@ -110,6 +116,7 @@ class VagaDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         String sql = "DELETE FROM vagas WHERE id = ?"
 

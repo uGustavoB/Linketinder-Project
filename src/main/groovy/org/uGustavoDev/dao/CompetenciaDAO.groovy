@@ -1,15 +1,18 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class CompetenciaDAO {
+class CompetenciaDAO implements ICompetenciaDAO {
 
     private static void preencherStatement(PreparedStatement stmt, String nome) throws SQLException {
         stmt.setString(1, nome.trim())
     }
 
+    @Override
     int buscarOuInserir(String nome) {
         String sqlBusca = "SELECT id FROM competencias WHERE nome = ?"
 
@@ -37,6 +40,7 @@ class CompetenciaDAO {
         throw new RuntimeException("Não foi possível obter o ID da competência recém-inserida.")
     }
 
+    @Override
     void vincularAoCandidato(int candidatoId, int competenciaId) {
         String sql = "INSERT INTO candidato_competencia (candidato_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
 
@@ -47,6 +51,7 @@ class CompetenciaDAO {
         }
     }
 
+    @Override
     List<String> listarPorCandidato(int candidatoId) {
         List<String> competencias = []
 
@@ -69,6 +74,7 @@ class CompetenciaDAO {
         return competencias
     }
 
+    @Override
     void removerVinculosCandidato(int candidatoId) {
         String sql = "DELETE FROM candidato_competencia WHERE candidato_id = ?"
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -77,6 +83,7 @@ class CompetenciaDAO {
         }
     }
 
+    @Override
     void vincularAEmpresa(int empresaId, int competenciaId) {
         String sql = "INSERT INTO empresa_competencia (empresa_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
 
@@ -87,6 +94,7 @@ class CompetenciaDAO {
         }
     }
 
+    @Override
     List<String> listarPorEmpresa(int empresaId) {
         List<String> competencias = []
         String sql = """
@@ -108,6 +116,7 @@ class CompetenciaDAO {
         return competencias
     }
 
+    @Override
     void removerVinculosEmpresa(int empresaId) {
         String sql = "DELETE FROM empresa_competencia WHERE empresa_id = ?"
 
@@ -117,6 +126,7 @@ class CompetenciaDAO {
         }
     }
 
+    @Override
     void vincularAVaga(int vagaId, int competenciaId) {
         String sql = "INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
 
@@ -127,6 +137,7 @@ class CompetenciaDAO {
         }
     }
 
+    @Override
     List<String> listarPorVaga(int vagaId) {
         List<String> competencias = []
         String sql = """
@@ -148,6 +159,7 @@ class CompetenciaDAO {
         return competencias
     }
 
+    @Override
     void removerVinculosVaga(int vagaId) {
         String sql = "DELETE FROM vaga_competencia WHERE vaga_id = ?"
 

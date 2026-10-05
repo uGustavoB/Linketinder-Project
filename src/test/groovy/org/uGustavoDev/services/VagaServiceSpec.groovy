@@ -1,7 +1,7 @@
 package org.uGustavoDev.services
 
-import org.uGustavoDev.dao.CompetenciaDAO
-import org.uGustavoDev.dao.VagaDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.VagaService
@@ -10,12 +10,12 @@ import spock.lang.Specification
 class VagaServiceSpec extends Specification {
 
     VagaService vagaService
-    VagaDAO mockVagaDAO
-    CompetenciaDAO mockCompetenciaDAO
+    IVagaDAO mockVagaDAO
+    ICompetenciaDAO mockCompetenciaDAO
 
     void setup() {
-        mockVagaDAO = Mock(VagaDAO)
-        mockCompetenciaDAO = Mock(CompetenciaDAO)
+        mockVagaDAO = Mock(IVagaDAO)
+        mockCompetenciaDAO = Mock(ICompetenciaDAO)
         vagaService = new VagaService(mockVagaDAO, mockCompetenciaDAO)
     }
 
