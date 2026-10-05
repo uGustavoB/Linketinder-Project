@@ -5,14 +5,18 @@ import org.uGustavoDev.dao.VagaDAO
 import org.uGustavoDev.model.Vaga
 
 class VagaService {
+    private final VagaDAO vagaDAO
+    private final CompetenciaDAO competenciaDAO
+
+    VagaService(VagaDAO vagaDAO, CompetenciaDAO competenciaDAO) {
+        this.vagaDAO = vagaDAO
+        this.competenciaDAO = competenciaDAO
+    }
 
     void adicionarVaga(Vaga vaga) {
         try {
-            VagaDAO.inserir(vaga)
-            vaga.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAVaga(vaga.id, compId)
-            }
+            vagaDAO.inserir(vaga)
+            vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível salvar a vaga no banco de dados.", e)
         }
@@ -20,7 +24,7 @@ class VagaService {
 
     List<Vaga> listarVagas() {
         try {
-            return VagaDAO.listar()
+            return vagaDAO.listar()
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível listar as vagas do banco de dados.", e)
         }
@@ -28,7 +32,7 @@ class VagaService {
 
     List<Vaga> listarVagasDaEmpresa(int empresaId) {
         try {
-            return VagaDAO.listarPorEmpresa(empresaId)
+            return vagaDAO.listarPorEmpresa(empresaId)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível listar as vagas da empresa.", e)
         }
@@ -36,7 +40,7 @@ class VagaService {
 
     Vaga buscarVagaPorId(int id) {
         try {
-            return VagaDAO.buscarPorId(id)
+            return vagaDAO.buscarPorId(id)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível buscar a vaga no banco de dados.", e)
         }
@@ -69,12 +73,9 @@ class VagaService {
 
     void atualizarVaga(Vaga vaga) {
         try {
-            VagaDAO.atualizar(vaga)
-            CompetenciaDAO.removerVinculosVaga(vaga.id)
-            vaga.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAVaga(vaga.id, compId)
-            }
+            vagaDAO.atualizar(vaga)
+            competenciaDAO.removerVinculosVaga(vaga.id)
+            vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível atualizar a vaga no banco de dados.", e)
         }
@@ -82,9 +83,16 @@ class VagaService {
 
     void deletarVaga(int id) {
         try {
-            VagaDAO.deletar(id)
+            vagaDAO.deletar(id)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível deletar a vaga do banco de dados.", e)
+        }
+    }
+
+    private void vincularCompetenciasAoUsuario(int vagaId, List<String> competencias) {
+        competencias.each { compNome ->
+            int compId = competenciaDAO.buscarOuInserir(compNome)
+            competenciaDAO.vincularAVaga(vagaId, compId)
         }
     }
 }

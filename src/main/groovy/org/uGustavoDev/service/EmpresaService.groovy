@@ -5,20 +5,27 @@ import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.model.Empresa
 
 class EmpresaService {
+    private final EmpresaDAO empresaDAO
+    private final CompetenciaDAO competenciaDAO
+
+    EmpresaService(EmpresaDAO empresaDAO, CompetenciaDAO competenciaDAO) {
+        this.empresaDAO = empresaDAO
+        this.competenciaDAO = competenciaDAO
+    }
 
     void adicionarEmpresa(Empresa empresa) {
-        if (EmpresaDAO.buscarPorEmail(empresa.email) != null) {
+        if (empresaDAO.buscarPorEmail(empresa.email) != null) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${empresa.email}'.")
         }
-        if (EmpresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
+        if (empresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com o CNPJ '${empresa.cnpj}'.")
         }
 
         try {
-            EmpresaDAO.inserir(empresa)
+            empresaDAO.inserir(empresa)
             empresa.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
+                int compId = competenciaDAO.buscarOuInserir(compNome)
+                competenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível salvar a empresa no banco de dados.", e)
@@ -27,7 +34,7 @@ class EmpresaService {
 
     List<Empresa> listarEmpresas() {
         try {
-            return EmpresaDAO.listar()
+            return empresaDAO.listar()
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível listar as empresas do banco de dados.", e)
         }
@@ -35,7 +42,7 @@ class EmpresaService {
 
     Empresa loginEmpresa(String email, String senha) {
         try {
-            Empresa empresa = EmpresaDAO.buscarPorEmail(email)
+            Empresa empresa = empresaDAO.buscarPorEmail(email)
             if (empresa != null && empresa.senha == senha) {
                 return empresa
             }
@@ -47,11 +54,11 @@ class EmpresaService {
 
     void atualizarEmpresa(Empresa empresa) {
         try {
-            EmpresaDAO.atualizar(empresa)
-            CompetenciaDAO.removerVinculosEmpresa(empresa.id)
+            empresaDAO.atualizar(empresa)
+            competenciaDAO.removerVinculosEmpresa(empresa.id)
             empresa.competencias.each { compNome ->
-                int compId = CompetenciaDAO.buscarOuInserir(compNome)
-                CompetenciaDAO.vincularAEmpresa(empresa.id, compId)
+                int compId = competenciaDAO.buscarOuInserir(compNome)
+                competenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível atualizar a empresa no banco de dados.", e)
@@ -60,7 +67,7 @@ class EmpresaService {
 
     void deletarEmpresa(int id) {
         try {
-            EmpresaDAO.deletar(id)
+            empresaDAO.deletar(id)
         } catch (Exception e) {
             throw new RuntimeException("Não foi possível deletar a empresa do banco de dados.", e)
         }

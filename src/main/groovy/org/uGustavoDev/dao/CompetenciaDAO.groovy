@@ -6,12 +6,11 @@ import java.sql.ResultSet
 import java.sql.SQLException
 
 class CompetenciaDAO {
-
     private static void preencherStatement(PreparedStatement stmt, String nome) throws SQLException {
         stmt.setString(1, nome.trim())
     }
 
-    static int buscarOuInserir(String nome) {
+    int buscarOuInserir(String nome) {
         String sqlBusca = "SELECT id FROM competencias WHERE nome = ?"
         
         BaseDao.executarSQL(sqlBusca) { PreparedStatement stmtBusca ->
@@ -38,7 +37,7 @@ class CompetenciaDAO {
         throw new RuntimeException("Não foi possível obter o ID da competência recém-inserida.")
     }
 
-    static void vincularAoCandidato(int candidatoId, int competenciaId) {
+    void vincularAoCandidato(int candidatoId, int competenciaId) {
         String sql = "INSERT INTO candidato_competencia (candidato_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -48,7 +47,7 @@ class CompetenciaDAO {
         }
     }
     
-    static List<String> listarPorCandidato(int candidatoId) {
+    List<String> listarPorCandidato(int candidatoId) {
         List<String> competencias = []
 
         String sql = """
@@ -70,7 +69,7 @@ class CompetenciaDAO {
         return competencias
     }
 
-    static void removerVinculosCandidato(int candidatoId) {
+    void removerVinculosCandidato(int candidatoId) {
         String sql = "DELETE FROM candidato_competencia WHERE candidato_id = ?"
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
@@ -78,7 +77,7 @@ class CompetenciaDAO {
         }
     }
 
-    static void vincularAEmpresa(int empresaId, int competenciaId) {
+    void vincularAEmpresa(int empresaId, int competenciaId) {
         String sql = "INSERT INTO empresa_competencia (empresa_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -88,7 +87,7 @@ class CompetenciaDAO {
         }
     }
 
-    static List<String> listarPorEmpresa(int empresaId) {
+    List<String> listarPorEmpresa(int empresaId) {
         List<String> competencias = []
         String sql = """
             SELECT c.nome 
@@ -109,7 +108,7 @@ class CompetenciaDAO {
         return competencias
     }
 
-    static void removerVinculosEmpresa(int empresaId) {
+    void removerVinculosEmpresa(int empresaId) {
         String sql = "DELETE FROM empresa_competencia WHERE empresa_id = ?"
 
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -118,7 +117,7 @@ class CompetenciaDAO {
         }
     }
 
-    static void vincularAVaga(int vagaId, int competenciaId) {
+    void vincularAVaga(int vagaId, int competenciaId) {
         String sql = "INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
         
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -128,7 +127,7 @@ class CompetenciaDAO {
         }
     }
 
-    static List<String> listarPorVaga(int vagaId) {
+    List<String> listarPorVaga(int vagaId) {
         List<String> competencias = []
         String sql = """
             SELECT c.nome 
@@ -149,7 +148,7 @@ class CompetenciaDAO {
         return competencias
     }
 
-    static void removerVinculosVaga(int vagaId) {
+    void removerVinculosVaga(int vagaId) {
         String sql = "DELETE FROM vaga_competencia WHERE vaga_id = ?"
 
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->

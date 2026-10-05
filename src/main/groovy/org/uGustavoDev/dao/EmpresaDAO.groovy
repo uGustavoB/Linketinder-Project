@@ -36,7 +36,7 @@ class EmpresaDAO {
         return e
     }
 
-    static void inserir(Empresa empresa) {
+    void inserir(Empresa empresa) {
         String sql = """
             INSERT INTO empresas (nome, cnpj, email, descricao, pais, cep, senha) 
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -48,7 +48,7 @@ class EmpresaDAO {
         }
     }
 
-    static List<Empresa> listar() {
+    List<Empresa> listar() {
         List<Empresa> empresas = []
         String sql = "SELECT * FROM empresas"
 
@@ -63,7 +63,7 @@ class EmpresaDAO {
         }
     }
 
-    static Empresa buscarPorId(int id) {
+    Empresa buscarPorId(int id) {
         String sql = "SELECT * FROM empresas WHERE id = ?"
 
         return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -78,7 +78,7 @@ class EmpresaDAO {
         }
     }
 
-    static Empresa buscarPorEmail(String email) {
+    Empresa buscarPorEmail(String email) {
         String sql = "SELECT * FROM empresas WHERE email = ?"
 
         return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -94,7 +94,7 @@ class EmpresaDAO {
 
     }
 
-    static Empresa buscarPorCnpj(String cnpj) {
+    Empresa buscarPorCnpj(String cnpj) {
         String sql = "SELECT * FROM empresas WHERE cnpj = ?"
 
         return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -109,7 +109,7 @@ class EmpresaDAO {
         }
     }
 
-    static void atualizar(Empresa empresa) {
+    void atualizar(Empresa empresa) {
         String sql = """
             UPDATE empresas 
             SET nome = ?, cnpj = ?, email = ?, descricao = ?, pais = ?, cep = ?, senha = ?
@@ -124,7 +124,7 @@ class EmpresaDAO {
         }
     }
 
-    static void deletar(int id) {
+    void deletar(int id) {
         String sql = "DELETE FROM empresas WHERE id = ?"
 
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->

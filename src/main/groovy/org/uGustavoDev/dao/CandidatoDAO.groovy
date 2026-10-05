@@ -5,7 +5,6 @@ import org.uGustavoDev.model.Candidato
 import java.sql.*
 
 class CandidatoDAO {
-
     private static void preencherStatement(PreparedStatement stmt, Candidato candidato) throws SQLException {
         stmt.setString(1, candidato.nome)
         stmt.setString(2, candidato.sobrenome)
@@ -50,7 +49,7 @@ class CandidatoDAO {
         return c
     }
 
-    static void inserir(Candidato candidato) {
+    void inserir(Candidato candidato) {
         String sql = """
             INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, cpf, pais, estado, cep, descricao, senha) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -62,7 +61,7 @@ class CandidatoDAO {
         }
     }
 
-    static List<Candidato> listar() {
+    List<Candidato> listar() {
         List<Candidato> candidatos = []
         String sql = "SELECT * FROM candidatos"
 
@@ -75,7 +74,7 @@ class CandidatoDAO {
         }
     }
 
-    static Candidato buscarPorId(int id) {
+    Candidato buscarPorId(int id) {
         String sql = "SELECT * FROM candidatos WHERE id = ?"
 
         return BaseDao.executarSQL(sql) { stmt ->
@@ -90,7 +89,7 @@ class CandidatoDAO {
         }
     }
 
-    static Candidato buscarPorEmail(String email) {
+    Candidato buscarPorEmail(String email) {
         String sql = "SELECT * FROM candidatos WHERE email = ?"
 
         return BaseDao.executarSQL(sql) { stmt ->
@@ -105,7 +104,7 @@ class CandidatoDAO {
         }
     }
 
-    static Candidato buscarPorCpf(String cpf) {
+    Candidato buscarPorCpf(String cpf) {
         String sql = "SELECT * FROM candidatos WHERE cpf = ?"
 
         return BaseDao.executarSQL(sql) { stmt ->
@@ -120,7 +119,7 @@ class CandidatoDAO {
         }
     }
 
-    static void atualizar(Candidato candidato) {
+    void atualizar(Candidato candidato) {
         String sql = """
             UPDATE candidatos 
             SET nome = ?, sobrenome = ?, data_nascimento = ?, email = ?, cpf = ?, pais = ?, estado = ?, cep = ?, descricao = ?, senha = ?
@@ -134,7 +133,7 @@ class CandidatoDAO {
         }
     }
 
-    static void deletar(int id) {
+    void deletar(int id) {
         String sql = "DELETE FROM candidatos WHERE id = ?"
         BaseDao.executarSQL(sql) { stmt ->
             stmt.setInt(1, id)

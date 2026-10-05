@@ -2,6 +2,10 @@ package org.uGustavoDev
 
 import org.uGustavoDev.controller.CandidatoController
 import org.uGustavoDev.controller.EmpresaController
+import org.uGustavoDev.dao.CandidatoDAO
+import org.uGustavoDev.dao.CompetenciaDAO
+import org.uGustavoDev.dao.EmpresaDAO
+import org.uGustavoDev.dao.VagaDAO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.CandidatoService
@@ -10,9 +14,14 @@ import org.uGustavoDev.service.VagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    CandidatoService candidatoService = new CandidatoService()
-    EmpresaService empresaService = new EmpresaService()
-    VagaService vagaService = new VagaService()
+    CandidatoDAO candidatoDAO = new CandidatoDAO()
+    CompetenciaDAO competenciaDAO = new CompetenciaDAO()
+    EmpresaDAO empresaDAO = new EmpresaDAO()
+    VagaDAO vagaDAO = new VagaDAO()
+
+    CandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO)
+    EmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO)
+    VagaService vagaService = new VagaService(vagaDAO, competenciaDAO)
     
     CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
     EmpresaController empresaController = new EmpresaController(empresaService, vagaService, candidatoService)

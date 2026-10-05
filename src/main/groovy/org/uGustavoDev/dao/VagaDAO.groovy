@@ -32,7 +32,7 @@ class VagaDAO {
         return v
     }
 
-    static void inserir(Vaga vaga) {
+    void inserir(Vaga vaga) {
         String sql = """
             INSERT INTO vagas (empresa_id, nome, descricao, estado, cidade)
             VALUES (?, ?, ?, ?, ?)
@@ -44,7 +44,7 @@ class VagaDAO {
         }
     }
 
-    static List<Vaga> listar() {
+    List<Vaga> listar() {
         List<Vaga> vagas = []
         String sql = "SELECT * FROM vagas"
 
@@ -60,7 +60,7 @@ class VagaDAO {
 
     }
 
-    static Vaga buscarPorId(int id) {
+    Vaga buscarPorId(int id) {
         String sql = "SELECT * FROM vagas WHERE id = ?"
 
         return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
@@ -75,7 +75,7 @@ class VagaDAO {
         }
     }
 
-    static List<Vaga> listarPorEmpresa(int empresaId) {
+    List<Vaga> listarPorEmpresa(int empresaId) {
         List<Vaga> vagas = []
         String sql = "SELECT * FROM vagas WHERE empresa_id = ?"
 
@@ -90,7 +90,7 @@ class VagaDAO {
         }
     }
 
-    static void atualizar(Vaga vaga) {
+    void atualizar(Vaga vaga) {
         String sql = """
             UPDATE vagas 
             SET empresa_id = ?, nome = ?, descricao = ?, estado = ?, cidade = ?
@@ -105,7 +105,7 @@ class VagaDAO {
         }
     }
 
-    static void deletar(int id) {
+    void deletar(int id) {
         String sql = "DELETE FROM vagas WHERE id = ?"
 
         BaseDao.executarSQL(sql) { PreparedStatement stmt ->
