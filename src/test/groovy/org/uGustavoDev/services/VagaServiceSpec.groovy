@@ -5,11 +5,12 @@ import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.VagaService
+import org.uGustavoDev.service.interfaces.IVagaService
 import spock.lang.Specification
 
 class VagaServiceSpec extends Specification {
 
-    VagaService vagaService
+    IVagaService vagaService
     IVagaDAO mockVagaDAO
     ICompetenciaDAO mockCompetenciaDAO
 

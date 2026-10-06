@@ -3,16 +3,16 @@ package org.uGustavoDev.controller
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Vaga
-import org.uGustavoDev.service.CandidatoService
-import org.uGustavoDev.service.VagaService
+import org.uGustavoDev.service.interfaces.ICandidatoService
+import org.uGustavoDev.service.interfaces.IVagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 class CandidatoController {
 
-    private final CandidatoService service
-    private final VagaService vagaService
+    private final ICandidatoService service
+    private final IVagaService vagaService
 
-    CandidatoController(CandidatoService service, VagaService vagaService) {
+    CandidatoController(ICandidatoService service, IVagaService vagaService) {
         this.service = service
         this.vagaService = vagaService
     }

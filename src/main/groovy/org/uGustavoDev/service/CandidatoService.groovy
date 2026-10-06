@@ -4,8 +4,9 @@ import org.uGustavoDev.dao.interfaces.ICandidatoDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
+import org.uGustavoDev.service.interfaces.ICandidatoService
 
-class CandidatoService {
+class CandidatoService implements ICandidatoService {
 
     private final ICandidatoDAO candidatoDAO
     private final ICompetenciaDAO competenciaDAO
@@ -15,6 +16,7 @@ class CandidatoService {
         this.competenciaDAO = competenciaDAO
     }
 
+    @Override
     void adicionarCandidato(Candidato candidato) {
         if (candidatoDAO.buscarPorEmail(candidato.email) != null) {
             throw new IllegalArgumentException("Já existe um candidato cadastrado com o email '${candidato.email}'.")
@@ -31,6 +33,7 @@ class CandidatoService {
         }
     }
 
+    @Override
     List<Candidato> listarCandidatos() {
         try {
             return candidatoDAO.listar()
@@ -39,6 +42,7 @@ class CandidatoService {
         }
     }
 
+    @Override
     Candidato loginCandidato(String email, String senha) {
         try {
             Candidato candidato = candidatoDAO.buscarPorEmail(email)
@@ -51,6 +55,7 @@ class CandidatoService {
         }
     }
 
+    @Override
     void atualizarCandidato(Candidato candidato) {
         try {
             candidatoDAO.atualizar(candidato)
@@ -61,6 +66,7 @@ class CandidatoService {
         }
     }
 
+    @Override
     void deletarCandidato(int id) {
         try {
             candidatoDAO.deletar(id)

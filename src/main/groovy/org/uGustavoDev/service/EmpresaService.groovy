@@ -4,8 +4,9 @@ import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
+import org.uGustavoDev.service.interfaces.IEmpresaService
 
-class EmpresaService {
+class EmpresaService implements IEmpresaService {
 
     private final IEmpresaDAO empresaDAO
     private final ICompetenciaDAO competenciaDAO
@@ -15,6 +16,7 @@ class EmpresaService {
         this.competenciaDAO = competenciaDAO
     }
 
+    @Override
     void adicionarEmpresa(Empresa empresa) {
         if (empresaDAO.buscarPorEmail(empresa.email) != null) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${empresa.email}'.")
@@ -34,6 +36,7 @@ class EmpresaService {
         }
     }
 
+    @Override
     List<Empresa> listarEmpresas() {
         try {
             return empresaDAO.listar()
@@ -42,6 +45,7 @@ class EmpresaService {
         }
     }
 
+    @Override
     Empresa loginEmpresa(String email, String senha) {
         try {
             Empresa empresa = empresaDAO.buscarPorEmail(email)
@@ -54,6 +58,7 @@ class EmpresaService {
         }
     }
 
+    @Override
     void atualizarEmpresa(Empresa empresa) {
         try {
             empresaDAO.atualizar(empresa)
@@ -67,6 +72,7 @@ class EmpresaService {
         }
     }
 
+    @Override
     void deletarEmpresa(int id) {
         try {
             empresaDAO.deletar(id)

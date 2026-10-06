@@ -5,13 +5,14 @@ import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.service.CandidatoService
+import org.uGustavoDev.service.interfaces.ICandidatoService
 import spock.lang.Specification
 
 import java.time.LocalDate
 
 class CandidatoServiceSpec extends Specification {
 
-    CandidatoService candidatoService
+    ICandidatoService candidatoService
     ICandidatoDAO mockCandidatoDAO
     ICompetenciaDAO mockCompetenciaDAO
 

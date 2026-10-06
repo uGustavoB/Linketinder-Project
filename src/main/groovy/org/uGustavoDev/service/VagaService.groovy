@@ -4,8 +4,9 @@ import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
+import org.uGustavoDev.service.interfaces.IVagaService
 
-class VagaService {
+class VagaService implements IVagaService {
 
     private final IVagaDAO vagaDAO
     private final ICompetenciaDAO competenciaDAO

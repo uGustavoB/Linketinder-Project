@@ -5,13 +5,14 @@ import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.EmpresaService
+import org.uGustavoDev.service.interfaces.IEmpresaService
 import spock.lang.Specification
 
 class EmpresaServiceSpec extends Specification {
 
     IEmpresaDAO mockEmpresaDAO
     ICompetenciaDAO mockCompetenciaDAO
-    EmpresaService empresaService
+    IEmpresaService empresaService
 
     void setup() {
         mockEmpresaDAO = Mock(IEmpresaDAO)

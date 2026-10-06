@@ -4,18 +4,18 @@ import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
-import org.uGustavoDev.service.CandidatoService
-import org.uGustavoDev.service.EmpresaService
-import org.uGustavoDev.service.VagaService
+import org.uGustavoDev.service.interfaces.ICandidatoService
+import org.uGustavoDev.service.interfaces.IEmpresaService
+import org.uGustavoDev.service.interfaces.IVagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 class EmpresaController {
 
-    private final EmpresaService empresaService
-    private final VagaService vagaService
-    private final CandidatoService candidatoService
+    private final IEmpresaService empresaService
+    private final IVagaService vagaService
+    private final ICandidatoService candidatoService
 
-    EmpresaController(EmpresaService empresaService, VagaService vagaService, CandidatoService candidatoService) {
+    EmpresaController(IEmpresaService empresaService, IVagaService vagaService, ICandidatoService candidatoService) {
         this.empresaService = empresaService
         this.vagaService = vagaService
         this.candidatoService = candidatoService
