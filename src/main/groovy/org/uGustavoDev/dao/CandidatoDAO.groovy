@@ -7,6 +7,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Types
+import java.sql.Date
 
 class CandidatoDAO implements ICandidatoDAO {
 
@@ -67,9 +68,14 @@ class CandidatoDAO implements ICandidatoDAO {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
-        BaseDao.executarSQL(sql) { stmt ->
+        BaseDao.executarSQLComRetornoDeChave(sql) { stmt ->
             preencherStatement(stmt, candidato)
             stmt.executeUpdate()
+
+            ResultSet rs = stmt.getGeneratedKeys()
+            if (rs.next()) {
+                candidato.id = rs.getInt(1)
+            }
         }
     }
 
