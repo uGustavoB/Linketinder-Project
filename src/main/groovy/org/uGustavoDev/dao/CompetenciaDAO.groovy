@@ -16,18 +16,23 @@ class CompetenciaDAO implements ICompetenciaDAO {
     int buscarOuInserir(String nome) {
         String sqlBusca = "SELECT id FROM competencias WHERE nome = ?"
 
-        BaseDao.executarSQL(sqlBusca) { PreparedStatement stmtBusca ->
+        Integer idBusca = BaseDao.executarSQL(sqlBusca) { PreparedStatement stmtBusca ->
             preencherStatement(stmtBusca, nome)
             ResultSet rs = stmtBusca.executeQuery()
 
             if (rs.next()) {
                 return rs.getInt("id")
             }
+            return null
+        }
+        
+        if (idBusca != null) {
+            return idBusca
         }
 
         String sqlInsert = "INSERT INTO competencias (nome) VALUES (?)"
 
-        BaseDao.executarSQL(sqlInsert) { PreparedStatement stmtInsert ->
+        Integer idInsert = BaseDao.executarSQLComRetornoDeChave(sqlInsert) { PreparedStatement stmtInsert ->
             preencherStatement(stmtInsert, nome)
             stmtInsert.executeUpdate()
             ResultSet rs = stmtInsert.getGeneratedKeys()
@@ -35,6 +40,11 @@ class CompetenciaDAO implements ICompetenciaDAO {
             if (rs.next()) {
                 return rs.getInt(1)
             }
+            return null
+        }
+        
+        if (idInsert != null) {
+            return idInsert
         }
 
         throw new RuntimeException("Não foi possível obter o ID da competência recém-inserida.")
