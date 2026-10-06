@@ -3,6 +3,7 @@ package org.uGustavoDev.services
 import org.uGustavoDev.dao.interfaces.ICandidatoDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
+import org.uGustavoDev.mapper.interfaces.ICandidatoMapper
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.service.CandidatoService
 import org.uGustavoDev.service.interfaces.ICandidatoService
@@ -15,12 +16,14 @@ class CandidatoServiceSpec extends Specification {
     ICandidatoService candidatoService
     ICandidatoDAO mockCandidatoDAO
     ICompetenciaDAO mockCompetenciaDAO
+    ICandidatoMapper mockCandidatoMapper
 
     void setup() {
         mockCandidatoDAO = Mock(ICandidatoDAO)
         mockCompetenciaDAO = Mock(ICompetenciaDAO)
+        mockCandidatoMapper = Mock(ICandidatoMapper)
 
-        candidatoService = new CandidatoService(mockCandidatoDAO, mockCompetenciaDAO)
+        candidatoService = new CandidatoService(mockCandidatoDAO, mockCompetenciaDAO, mockCandidatoMapper)
     }
 
     void "deve salvar candidato e vincular competencias quando dados sao validos e nao existem no banco"() {

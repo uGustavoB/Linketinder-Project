@@ -1,5 +1,6 @@
 package org.uGustavoDev.controller
 
+import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
@@ -26,7 +27,7 @@ class EmpresaController {
     }
 
     void cadastrarEmpresa() {
-        Empresa novaEmpresa = ConsoleUI.pedirDadosEmpresa()
+        EmpresaCadastroDTO novaEmpresa = ConsoleUI.pedirDadosEmpresa()
         try {
             empresaService.adicionarEmpresa(novaEmpresa)
             ConsoleUI.imprimirMensagem("\nEmpresa cadastrada com sucesso!")

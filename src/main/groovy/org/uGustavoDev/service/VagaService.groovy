@@ -2,6 +2,7 @@ package org.uGustavoDev.service
 
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
+import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.interfaces.IVagaService
@@ -16,7 +17,7 @@ class VagaService implements IVagaService {
         this.competenciaDAO = competenciaDAO
     }
 
-    void adicionarVaga(Vaga vaga) {
+    void adicionarVaga(VagaCadastroDTO vaga) {
         try {
             vagaDAO.inserir(vaga)
             vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
@@ -49,7 +50,7 @@ class VagaService implements IVagaService {
         }
     }
 
-    void atualizarVagaDaEmpresa(int empresaId, int vagaId, Vaga vagaEditada) {
+    void atualizarVagaDaEmpresa(int empresaId, int vagaId, VagaCadastroDTO vagaEditada) {
         Vaga vagaExistente = buscarVagaPorId(vagaId)
         if (vagaExistente == null) {
             throw new IllegalArgumentException("Vaga não encontrada.")
@@ -74,7 +75,7 @@ class VagaService implements IVagaService {
         deletarVaga(vagaId)
     }
 
-    void atualizarVaga(Vaga vaga) {
+    void atualizarVaga(VagaCadastroDTO vaga) {
         try {
             vagaDAO.atualizar(vaga)
             competenciaDAO.removerVinculosVaga(vaga.id)

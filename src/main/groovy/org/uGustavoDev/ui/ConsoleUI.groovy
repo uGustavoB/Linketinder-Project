@@ -1,8 +1,10 @@
 package org.uGustavoDev.ui
 
+import org.uGustavoDev.dto.CandidatoCadastroDTO
+import org.uGustavoDev.dto.EmpresaCadastroDTO
+import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
-import org.uGustavoDev.model.Vaga
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -145,61 +147,58 @@ class ConsoleUI {
         return [email:email, senha:senha]
     }
 
-    static Candidato pedirDadosCandidato() {
+    static CandidatoCadastroDTO pedirDadosCandidato() {
         imprimirCabecalho("Cadastro de Candidato")
-        String nome = lerTexto("Nome: ")
-        String sobrenome = lerTexto("Sobrenome: ")
-        String email = lerTexto("Email: ")
-        String senha = lerTexto("Senha (mínimo 6 caracteres): ")
-        String estado = lerTexto("Estado (ex: SP): ")
-        String pais = lerTexto("País: ")
-        String cep = lerTexto("CEP: ")
-        String descricao = lerTexto("Descrição Pessoal: ")
-        String cpf = lerTexto("CPF: ")
 
-        LocalDate dataNasc = lerData("Data de Nascimento (DD/MM/AAAA): ")
+        CandidatoCadastroDTO dto = new CandidatoCadastroDTO()
+        dto.nome = lerTexto("Nome: ")
+        dto.sobrenome = lerTexto("Sobrenome: ")
+        dto.email = lerTexto("Email: ")
+        dto.senha = lerTexto("Senha (mínimo 6 caracteres): ")
+        dto.estado = lerTexto("Estado (ex: SP): ")
+        dto.pais = lerTexto("País: ")
+        dto.cep = lerTexto("CEP: ")
+        dto.descricao = lerTexto("Descrição Pessoal: ")
+        dto.cpf = lerTexto("CPF: ")
+        dto.dataNascimento = lerData("Data de Nascimento (DD/MM/AAAA): ")
 
         String compsStr = lerTexto("Competências (separadas por vírgula): ", true)
-        List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
+        dto.competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        Candidato candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNasc)
-        candidato.senha = senha
-        candidato.competencias = competencias
-        return candidato
+        return dto
     }
 
-    static Empresa pedirDadosEmpresa() {
+    static EmpresaCadastroDTO pedirDadosEmpresa() {
         imprimirCabecalho("Cadastro de Empresa")
-        String nome = lerTexto("Nome da Empresa: ")
-        String email = lerTexto("Email Corporativo: ")
-        String senha = lerTexto("Senha (mínimo 6 caracteres): ")
-        String pais = lerTexto("País: ")
-        String cep = lerTexto("CEP: ")
-        String descricao = lerTexto("Descrição da Empresa: ")
-        String cnpj = lerTexto("CNPJ: ")
+
+        EmpresaCadastroDTO dto = new EmpresaCadastroDTO()
+        dto.nome = lerTexto("Nome da Empresa: ")
+        dto.email = lerTexto("Email Corporativo: ")
+        dto.senha = lerTexto("Senha (mínimo 6 caracteres): ")
+        dto.pais = lerTexto("País: ")
+        dto.cep = lerTexto("CEP: ")
+        dto.descricao = lerTexto("Descrição da Empresa: ")
+        dto.cnpj = lerTexto("CNPJ: ")
 
         String compsStr = lerTexto("Competências requeridas (separadas por vírgula): ", true)
-        List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
+        dto.competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        Empresa empresa = new Empresa(nome, email, pais, cep, descricao, cnpj)
-        empresa.senha = senha
-        empresa.competencias = competencias
-        return empresa
+        return dto
     }
 
-    static Vaga pedirDadosVaga(int empresaId) {
+    static VagaCadastroDTO pedirDadosVaga(int empresaId) {
         imprimirCabecalho("Criar Nova Vaga")
-        String nome = lerTexto("Título da Vaga: ")
-        String descricao = lerTexto("Descrição da Vaga: ")
-        String cidade = lerTexto("Cidade: ")
-        String estado = lerTexto("Estado (ex: SP): ")
+
+        VagaCadastroDTO dto = new VagaCadastroDTO()
+        dto.nome = lerTexto("Título da Vaga: ")
+        dto.descricao = lerTexto("Descrição da Vaga: ")
+        dto.cidade = lerTexto("Cidade: ")
+        dto.estado = lerTexto("Estado (ex: SP): ")
 
         String compsStr = lerTexto("Competências exigidas (separadas por vírgula): ", true)
-        List<String> competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
+        dto.competencias = compsStr ? compsStr.split(",").collect { it.trim() } : []
 
-        Vaga vaga = new Vaga(empresaId, nome, descricao, estado, cidade)
-        vaga.competencias = competencias
-        return vaga
+        return dto
     }
 
 }

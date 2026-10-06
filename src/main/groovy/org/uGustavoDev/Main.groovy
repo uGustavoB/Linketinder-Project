@@ -11,6 +11,8 @@ import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
+import org.uGustavoDev.mapper.CandidatoMapper
+import org.uGustavoDev.mapper.interfaces.ICandidatoMapper
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.CandidatoService
@@ -27,7 +29,9 @@ static void main(String[] args) {
     IEmpresaDAO empresaDAO = new EmpresaDAO(competenciaDAO)
     IVagaDAO vagaDAO = new VagaDAO(competenciaDAO)
 
-    ICandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO)
+    ICandidatoMapper candidatoMapper = new CandidatoMapper()
+
+    ICandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO, candidatoMapper)
     IEmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO)
     IVagaService vagaService = new VagaService(vagaDAO, competenciaDAO)
 

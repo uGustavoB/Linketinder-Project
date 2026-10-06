@@ -1,5 +1,6 @@
 package org.uGustavoDev.controller
 
+import org.uGustavoDev.dto.CandidatoCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Vaga
@@ -22,7 +23,7 @@ class CandidatoController {
     }
 
     void cadastrarCandidato() {
-        Candidato novoCandidato = ConsoleUI.pedirDadosCandidato()
+        CandidatoCadastroDTO novoCandidato = ConsoleUI.pedirDadosCandidato()
         try {
             service.adicionarCandidato(novoCandidato)
             ConsoleUI.imprimirMensagem("\nCandidato cadastrado com sucesso!")
@@ -52,17 +53,19 @@ class CandidatoController {
         ConsoleUI.aguardarContinuacao()
     }
 
-    private Candidato editarPerfil(Candidato candidato) {
+    private Candidato editarPerfil(Candidato candidatoLogado) {
         ConsoleUI.imprimirMensagem("Informe os novos dados do candidato:")
-        Candidato candidatoEditado = ConsoleUI.pedirDadosCandidato()
-        candidatoEditado.id = candidato.id
+
+        CandidatoCadastroDTO dto = ConsoleUI.pedirDadosCandidato()
+
         try {
-            service.atualizarCandidato(candidatoEditado)
+            Candidato candidatoAtualizado = service.atualizarCandidato(candidatoLogado.id, dto)
+
             ConsoleUI.imprimirMensagem("\nCandidato atualizado com sucesso!")
-            return candidatoEditado
+            return candidatoAtualizado
         } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
-            return candidato
+            return candidatoLogado
         } finally {
             ConsoleUI.aguardarContinuacao()
         }
