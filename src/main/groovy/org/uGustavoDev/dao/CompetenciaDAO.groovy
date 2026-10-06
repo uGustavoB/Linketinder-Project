@@ -1,12 +1,19 @@
 package org.uGustavoDev.dao
 
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
 class CompetenciaDAO implements ICompetenciaDAO {
+
+    private final IDatabaseTemplate db
+
+    CompetenciaDAO(IDatabaseTemplate db) {
+        this.db = db
+    }
 
     private static void preencherStatement(PreparedStatement stmt, String nome) throws SQLException {
         stmt.setString(1, nome.trim())
@@ -16,7 +23,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     int buscarOuInserir(String nome) {
         String sqlBusca = "SELECT id FROM competencias WHERE nome = ?"
 
-        Integer idBusca = BaseDao.executarSQL(sqlBusca) { PreparedStatement stmtBusca ->
+        Integer idBusca = db.executarSQL(sqlBusca) { PreparedStatement stmtBusca ->
             preencherStatement(stmtBusca, nome)
             ResultSet rs = stmtBusca.executeQuery()
 
@@ -32,7 +39,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
 
         String sqlInsert = "INSERT INTO competencias (nome) VALUES (?)"
 
-        Integer idInsert = BaseDao.executarSQLComRetornoDeChave(sqlInsert) { PreparedStatement stmtInsert ->
+        Integer idInsert = db.executarSQLComRetornoDeChave(sqlInsert) { PreparedStatement stmtInsert ->
             preencherStatement(stmtInsert, nome)
             stmtInsert.executeUpdate()
             ResultSet rs = stmtInsert.getGeneratedKeys()
@@ -54,7 +61,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     void vincularAoCandidato(int candidatoId, int competenciaId) {
         String sql = "INSERT INTO candidato_competencia (candidato_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
             stmt.setInt(2, competenciaId)
             stmt.executeUpdate()
@@ -72,7 +79,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
             WHERE cc.candidato_id = ?
         """
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
             ResultSet rs = stmt.executeQuery()
 
@@ -87,7 +94,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     @Override
     void removerVinculosCandidato(int candidatoId) {
         String sql = "DELETE FROM candidato_competencia WHERE candidato_id = ?"
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, candidatoId)
             stmt.executeUpdate()
         }
@@ -97,7 +104,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     void vincularAEmpresa(int empresaId, int competenciaId) {
         String sql = "INSERT INTO empresa_competencia (empresa_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             stmt.setInt(2, competenciaId)
             stmt.executeUpdate()
@@ -114,7 +121,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
             WHERE ec.empresa_id = ?
         """
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             ResultSet rs = stmt.executeQuery()
 
@@ -130,7 +137,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     void removerVinculosEmpresa(int empresaId) {
         String sql = "DELETE FROM empresa_competencia WHERE empresa_id = ?"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             stmt.executeUpdate()
         }
@@ -140,7 +147,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     void vincularAVaga(int vagaId, int competenciaId) {
         String sql = "INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, vagaId)
             stmt.setInt(2, competenciaId)
             stmt.executeUpdate()
@@ -157,7 +164,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
             WHERE vc.vaga_id = ?
         """
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, vagaId)
             ResultSet rs = stmt.executeQuery()
 
@@ -173,7 +180,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
     void removerVinculosVaga(int vagaId) {
         String sql = "DELETE FROM vaga_competencia WHERE vaga_id = ?"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, vagaId)
             stmt.executeUpdate()
         }

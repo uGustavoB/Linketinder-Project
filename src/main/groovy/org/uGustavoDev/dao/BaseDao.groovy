@@ -1,5 +1,6 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.factory.ConexaoFactory
 
@@ -8,9 +9,10 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.sql.Statement
 
-class BaseDao {
+class BaseDao implements IDatabaseTemplate {
 
-    static <T> T executarSQL(String sql, Closure closure) {
+    @Override
+    <T> T executarSQL(String sql, Closure closure) {
         try (Connection conexao = ConexaoFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
             closure.delegate = stmt
             return closure(stmt)
@@ -19,7 +21,8 @@ class BaseDao {
         }
     }
 
-    static <T> T executarSQLComRetornoDeChave(String sql, Closure closure) {
+    @Override
+    <T> T executarSQLComRetornoDeChave(String sql, Closure closure) {
         try (Connection conexao = ConexaoFactory.getConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             closure.delegate = stmt
@@ -28,5 +31,5 @@ class BaseDao {
             throw new DatabaseOperationException("Erro ao executar SQL: " + e.message, e)
         }
     }
-
+    
 }

@@ -1,6 +1,8 @@
 package org.uGustavoDev.dao
 
 import org.uGustavoDev.dao.interfaces.ICandidatoDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.model.Candidato
 
 import java.sql.PreparedStatement
@@ -11,9 +13,11 @@ import java.sql.Date
 
 class CandidatoDAO implements ICandidatoDAO {
 
-    private final CompetenciaDAO competenciaDAO
+    private final IDatabaseTemplate db
+    private final ICompetenciaDAO competenciaDAO
 
-    CandidatoDAO(CompetenciaDAO competenciaDAO) {
+    CandidatoDAO(IDatabaseTemplate db, ICompetenciaDAO competenciaDAO) {
+        this.db = db
         this.competenciaDAO = competenciaDAO
     }
 
@@ -68,7 +72,7 @@ class CandidatoDAO implements ICandidatoDAO {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
-        BaseDao.executarSQLComRetornoDeChave(sql) { stmt ->
+        db.executarSQLComRetornoDeChave(sql) { stmt ->
             preencherStatement(stmt, candidato)
             stmt.executeUpdate()
 
@@ -84,7 +88,7 @@ class CandidatoDAO implements ICandidatoDAO {
         List<Candidato> candidatos = []
         String sql = "SELECT * FROM candidatos"
 
-        return BaseDao.executarSQL(sql) { stmt ->
+        return db.executarSQL(sql) { stmt ->
             ResultSet rs = stmt.executeQuery()
             while (rs.next()) {
                 candidatos.add(extrairCandidato(rs))
@@ -97,7 +101,7 @@ class CandidatoDAO implements ICandidatoDAO {
     Candidato buscarPorId(int id) {
         String sql = "SELECT * FROM candidatos WHERE id = ?"
 
-        return BaseDao.executarSQL(sql) { stmt ->
+        return db.executarSQL(sql) { stmt ->
             stmt.setInt(1, id)
             ResultSet rs = stmt.executeQuery()
 
@@ -113,7 +117,7 @@ class CandidatoDAO implements ICandidatoDAO {
     Candidato buscarPorEmail(String email) {
         String sql = "SELECT * FROM candidatos WHERE email = ?"
 
-        return BaseDao.executarSQL(sql) { stmt ->
+        return db.executarSQL(sql) { stmt ->
             stmt.setString(1, email)
             ResultSet rs = stmt.executeQuery()
 
@@ -129,7 +133,7 @@ class CandidatoDAO implements ICandidatoDAO {
     Candidato buscarPorCpf(String cpf) {
         String sql = "SELECT * FROM candidatos WHERE cpf = ?"
 
-        return BaseDao.executarSQL(sql) { stmt ->
+        return db.executarSQL(sql) { stmt ->
             stmt.setString(1, cpf)
             ResultSet rs = stmt.executeQuery()
 
@@ -148,7 +152,7 @@ class CandidatoDAO implements ICandidatoDAO {
             WHERE id = ?
         """
 
-        BaseDao.executarSQL(sql) { stmt ->
+        db.executarSQL(sql) { stmt ->
             preencherStatement(stmt, candidato)
             stmt.setInt(11, candidato.id)
             stmt.executeUpdate()
@@ -158,7 +162,7 @@ class CandidatoDAO implements ICandidatoDAO {
     @Override
     void deletar(int id) {
         String sql = "DELETE FROM candidatos WHERE id = ?"
-        BaseDao.executarSQL(sql) { stmt ->
+        db.executarSQL(sql) { stmt ->
             stmt.setInt(1, id)
             stmt.executeUpdate()
         }

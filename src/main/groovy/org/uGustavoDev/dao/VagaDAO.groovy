@@ -1,6 +1,8 @@
 package org.uGustavoDev.dao
 
 import org.uGustavoDev.dao.interfaces.IVagaDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.model.Vaga
 
 import java.sql.PreparedStatement
@@ -9,9 +11,11 @@ import java.sql.SQLException
 
 class VagaDAO implements IVagaDAO {
 
-    private final CompetenciaDAO competenciaDAO
+    private final IDatabaseTemplate db
+    private final ICompetenciaDAO competenciaDAO
 
-    VagaDAO(CompetenciaDAO competenciaDAO) {
+    VagaDAO(IDatabaseTemplate db, ICompetenciaDAO competenciaDAO) {
+        this.db = db
         this.competenciaDAO = competenciaDAO
     }
 
@@ -46,7 +50,7 @@ class VagaDAO implements IVagaDAO {
             VALUES (?, ?, ?, ?, ?)
         """
 
-        BaseDao.executarSQLComRetornoDeChave(sql) { PreparedStatement stmt ->
+        db.executarSQLComRetornoDeChave(sql) { PreparedStatement stmt ->
             preencherStatement(stmt, vaga)
             stmt.executeUpdate()
 
@@ -62,7 +66,7 @@ class VagaDAO implements IVagaDAO {
         List<Vaga> vagas = []
         String sql = "SELECT * FROM vagas"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             ResultSet rs = stmt.executeQuery()
 
             while (rs.next()) {
@@ -77,7 +81,7 @@ class VagaDAO implements IVagaDAO {
     Vaga buscarPorId(int id) {
         String sql = "SELECT * FROM vagas WHERE id = ?"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, id)
             ResultSet rs = stmt.executeQuery()
 
@@ -94,7 +98,7 @@ class VagaDAO implements IVagaDAO {
         List<Vaga> vagas = []
         String sql = "SELECT * FROM vagas WHERE empresa_id = ?"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, empresaId)
             ResultSet rs = stmt.executeQuery()
 
@@ -113,7 +117,7 @@ class VagaDAO implements IVagaDAO {
             WHERE id = ?
         """
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             preencherStatement(stmt, vaga)
             stmt.setInt(6, vaga.id)
 
@@ -125,7 +129,7 @@ class VagaDAO implements IVagaDAO {
     void deletar(int id) {
         String sql = "DELETE FROM vagas WHERE id = ?"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, id)
             stmt.executeUpdate()
         }

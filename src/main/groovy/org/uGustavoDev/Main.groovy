@@ -1,5 +1,6 @@
 package org.uGustavoDev
 
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.controller.CandidatoController
 import org.uGustavoDev.controller.EmpresaController
 import org.uGustavoDev.dao.CandidatoDAO
@@ -28,10 +29,11 @@ import org.uGustavoDev.service.interfaces.IVagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    ICompetenciaDAO competenciaDAO = new CompetenciaDAO()
-    ICandidatoDAO candidatoDAO = new CandidatoDAO(competenciaDAO)
-    IEmpresaDAO empresaDAO = new EmpresaDAO(competenciaDAO)
-    IVagaDAO vagaDAO = new VagaDAO(competenciaDAO)
+    IDatabaseTemplate db = new org.uGustavoDev.dao.BaseDao()
+    ICompetenciaDAO competenciaDAO = new CompetenciaDAO(db)
+    ICandidatoDAO candidatoDAO = new CandidatoDAO(db, competenciaDAO)
+    IEmpresaDAO empresaDAO = new EmpresaDAO(db, competenciaDAO)
+    IVagaDAO vagaDAO = new VagaDAO(db, competenciaDAO)
 
     ICandidatoMapper candidatoMapper = new CandidatoMapper()
     IEmpresaMapper empresaMapper = new EmpresaMapper()

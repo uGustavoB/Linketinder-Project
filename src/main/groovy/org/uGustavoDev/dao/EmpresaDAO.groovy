@@ -1,6 +1,8 @@
 package org.uGustavoDev.dao
 
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
+import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.model.Empresa
 
 import java.sql.PreparedStatement
@@ -9,9 +11,11 @@ import java.sql.SQLException
 
 class EmpresaDAO implements IEmpresaDAO {
 
-    private final CompetenciaDAO competenciaDAO
+    private final IDatabaseTemplate db
+    private final ICompetenciaDAO competenciaDAO
 
-    EmpresaDAO(CompetenciaDAO competenciaDAO) {
+    EmpresaDAO(IDatabaseTemplate db, ICompetenciaDAO competenciaDAO) {
+        this.db = db
         this.competenciaDAO = competenciaDAO
     }
 
@@ -50,7 +54,7 @@ class EmpresaDAO implements IEmpresaDAO {
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """
 
-        BaseDao.executarSQLComRetornoDeChave(sql) { PreparedStatement stmt ->
+        db.executarSQLComRetornoDeChave(sql) { PreparedStatement stmt ->
             preencherStatement(stmt, empresa)
             stmt.executeUpdate()
 
@@ -66,7 +70,7 @@ class EmpresaDAO implements IEmpresaDAO {
         List<Empresa> empresas = []
         String sql = "SELECT * FROM empresas"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             ResultSet rs = stmt.executeQuery()
 
             while (rs.next()) {
@@ -81,7 +85,7 @@ class EmpresaDAO implements IEmpresaDAO {
     Empresa buscarPorId(int id) {
         String sql = "SELECT * FROM empresas WHERE id = ?"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, id)
             ResultSet rs = stmt.executeQuery()
 
@@ -97,7 +101,7 @@ class EmpresaDAO implements IEmpresaDAO {
     Empresa buscarPorEmail(String email) {
         String sql = "SELECT * FROM empresas WHERE email = ?"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setString(1, email)
             ResultSet rs = stmt.executeQuery()
 
@@ -113,7 +117,7 @@ class EmpresaDAO implements IEmpresaDAO {
     Empresa buscarPorCnpj(String cnpj) {
         String sql = "SELECT * FROM empresas WHERE cnpj = ?"
 
-        return BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        return db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setString(1, cnpj)
             ResultSet rs = stmt.executeQuery()
 
@@ -133,7 +137,7 @@ class EmpresaDAO implements IEmpresaDAO {
             WHERE id = ?
         """
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             preencherStatement(stmt, empresa)
             stmt.setInt(8, empresa.id)
 
@@ -145,7 +149,7 @@ class EmpresaDAO implements IEmpresaDAO {
     void deletar(int id) {
         String sql = "DELETE FROM empresas WHERE id = ?"
 
-        BaseDao.executarSQL(sql) { PreparedStatement stmt ->
+        db.executarSQL(sql) { PreparedStatement stmt ->
             stmt.setInt(1, id)
             stmt.executeUpdate()
         }
