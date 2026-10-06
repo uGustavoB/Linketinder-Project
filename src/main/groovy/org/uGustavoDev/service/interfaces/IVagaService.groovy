@@ -5,9 +5,9 @@ import org.uGustavoDev.model.Vaga
 
 interface IVagaService {
 
-    void adicionarVaga(VagaCadastroDTO vaga)
+    void adicionarVaga(int empresaId, VagaCadastroDTO dto)
     List<Vaga> listarVagas()
     Vaga buscarVagaPorId(int id)
-    void atualizarVaga(VagaCadastroDTO vaga)
+    Vaga atualizarVaga(int vagaId, int empresaId, VagaCadastroDTO dto)
     void deletarVaga(int id)
 }
