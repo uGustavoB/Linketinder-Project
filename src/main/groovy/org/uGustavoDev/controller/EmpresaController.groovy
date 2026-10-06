@@ -1,4 +1,5 @@
 package org.uGustavoDev.controller
+import org.uGustavoDev.dto.VagaCadastroDTO
 
 import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
@@ -27,9 +28,9 @@ class EmpresaController {
     }
 
     void cadastrarEmpresa() {
-        EmpresaCadastroDTO novaEmpresa = ConsoleUI.pedirDadosEmpresa()
+        EmpresaCadastroDTO dto = ConsoleUI.pedirDadosEmpresa()
         try {
-            empresaService.adicionarEmpresa(novaEmpresa)
+            empresaService.adicionarEmpresa(dto)
             ConsoleUI.imprimirMensagem("\nEmpresa cadastrada com sucesso!")
         } catch (DatabaseOperationException | IllegalArgumentException e) {
             ConsoleUI.imprimirMensagem("\nFalha ao cadastrar: " + e.message)
@@ -45,10 +46,10 @@ class EmpresaController {
             ConsoleUI.aguardarContinuacao()
         } else if (opcaoPerfil == 2) {
             ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
-            Empresa empresaEditada = ConsoleUI.pedirDadosEmpresa()
-            empresaEditada.id = empresaLogada.id
+            EmpresaCadastroDTO dto = ConsoleUI.pedirDadosEmpresa()
+            
             try {
-                empresaService.atualizarEmpresa(empresaEditada)
+                Empresa empresaEditada = empresaService.atualizarEmpresa(empresaLogada.id, dto)
                 empresaLogada = empresaEditada
                 ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
             } catch (DatabaseOperationException | IllegalArgumentException e) {
@@ -71,9 +72,9 @@ class EmpresaController {
     void menuVagas(Empresa empresaLogada) {
         int opcaoVagas = ConsoleUI.pedirOpcaoMenuVagasEmpresa()
         if (opcaoVagas == 1) {
-            Vaga novaVaga = ConsoleUI.pedirDadosVaga(empresaLogada.id)
+            VagaCadastroDTO dto = ConsoleUI.pedirDadosVaga(empresaLogada.id)
             try {
-                vagaService.adicionarVaga(novaVaga)
+                vagaService.adicionarVaga(empresaLogada.id, dto)
                 ConsoleUI.imprimirMensagem("\nVaga criada com sucesso!")
             } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("\nFalha ao criar vaga: " + e.message)
@@ -95,9 +96,9 @@ class EmpresaController {
         } else if (opcaoVagas == 3) {
             int vagaId = ConsoleUI.lerEscolha("ID da vaga para editar: ", 1, Integer.MAX_VALUE)
             ConsoleUI.imprimirMensagem("Por favor, informe os novos dados para a vaga:")
-            Vaga vagaEditada = ConsoleUI.pedirDadosVaga(empresaLogada.id)
+            VagaCadastroDTO dtoEditada = ConsoleUI.pedirDadosVaga(empresaLogada.id)
             try {
-                vagaService.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, vagaEditada)
+                vagaService.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, dtoEditada)
                 ConsoleUI.imprimirMensagem("\nVaga atualizada com sucesso!")
             } catch (DatabaseOperationException | IllegalArgumentException e) {
                 ConsoleUI.imprimirMensagem("Erro: " + e.message)

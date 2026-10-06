@@ -13,11 +13,15 @@ import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.mapper.CandidatoMapper
 import org.uGustavoDev.mapper.interfaces.ICandidatoMapper
+import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
+import org.uGustavoDev.mapper.interfaces.IVagaMapper
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.CandidatoService
 import org.uGustavoDev.service.EmpresaService
 import org.uGustavoDev.service.VagaService
+import org.uGustavoDev.mapper.EmpresaMapper
+import org.uGustavoDev.mapper.VagaMapper
 import org.uGustavoDev.service.interfaces.ICandidatoService
 import org.uGustavoDev.service.interfaces.IEmpresaService
 import org.uGustavoDev.service.interfaces.IVagaService
@@ -30,10 +34,12 @@ static void main(String[] args) {
     IVagaDAO vagaDAO = new VagaDAO(competenciaDAO)
 
     ICandidatoMapper candidatoMapper = new CandidatoMapper()
+    IEmpresaMapper empresaMapper = new EmpresaMapper()
+    IVagaMapper vagaMapper = new VagaMapper()
 
     ICandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO, candidatoMapper)
-    IEmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO)
-    IVagaService vagaService = new VagaService(vagaDAO, competenciaDAO)
+    IEmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO, empresaMapper)
+    IVagaService vagaService = new VagaService(vagaDAO, competenciaDAO, vagaMapper)
 
     CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
     EmpresaController empresaController = new EmpresaController(empresaService, vagaService, candidatoService)

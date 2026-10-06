@@ -6,18 +6,22 @@ import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.interfaces.IVagaService
+import org.uGustavoDev.mapper.interfaces.IVagaMapper
 
 class VagaService implements IVagaService {
 
     private final IVagaDAO vagaDAO
     private final ICompetenciaDAO competenciaDAO
+    private final IVagaMapper vagaMapper
 
-    VagaService(IVagaDAO vagaDAO, ICompetenciaDAO competenciaDAO) {
+    VagaService(IVagaDAO vagaDAO, ICompetenciaDAO competenciaDAO, IVagaMapper vagaMapper) {
+        this.vagaMapper = vagaMapper
         this.vagaDAO = vagaDAO
         this.competenciaDAO = competenciaDAO
     }
 
-    void adicionarVaga(VagaCadastroDTO vaga) {
+    void adicionarVaga(int empresaId, VagaCadastroDTO dto) {
+        Vaga vaga = vagaMapper.paraEntidade(dto, empresaId)
         try {
             vagaDAO.inserir(vaga)
             vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
@@ -50,7 +54,7 @@ class VagaService implements IVagaService {
         }
     }
 
-    void atualizarVagaDaEmpresa(int empresaId, int vagaId, VagaCadastroDTO vagaEditada) {
+    void atualizarVagaDaEmpresa(int empresaId, int vagaId, VagaCadastroDTO dto) {
         Vaga vagaExistente = buscarVagaPorId(vagaId)
         if (vagaExistente == null) {
             throw new IllegalArgumentException("Vaga não encontrada.")
@@ -59,8 +63,7 @@ class VagaService implements IVagaService {
             throw new IllegalArgumentException("Esta vaga não pertence à sua empresa.")
         }
 
-        vagaEditada.id = vagaId
-        atualizarVaga(vagaEditada)
+        atualizarVaga(vagaId, empresaId, dto)
     }
 
     void deletarVagaDaEmpresa(int empresaId, int vagaId) {
@@ -75,11 +78,14 @@ class VagaService implements IVagaService {
         deletarVaga(vagaId)
     }
 
-    void atualizarVaga(VagaCadastroDTO vaga) {
+    Vaga atualizarVaga(int vagaId, int empresaId, VagaCadastroDTO dto) {
+        Vaga vaga = vagaMapper.paraEntidade(dto, empresaId)
+        vaga.id = vagaId
         try {
             vagaDAO.atualizar(vaga)
             competenciaDAO.removerVinculosVaga(vaga.id)
             vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
+            return vaga
         } catch (DatabaseOperationException e) {
             throw new DatabaseOperationException("Não foi possível atualizar a vaga no banco de dados.", e)
         }

@@ -6,26 +6,30 @@ import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.interfaces.IEmpresaService
+import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
 
 class EmpresaService implements IEmpresaService {
 
     private final IEmpresaDAO empresaDAO
     private final ICompetenciaDAO competenciaDAO
+    private final IEmpresaMapper empresaMapper
 
-    EmpresaService(IEmpresaDAO empresaDAO, ICompetenciaDAO competenciaDAO) {
+    EmpresaService(IEmpresaDAO empresaDAO, ICompetenciaDAO competenciaDAO, IEmpresaMapper empresaMapper) {
+        this.empresaMapper = empresaMapper
         this.empresaDAO = empresaDAO
         this.competenciaDAO = competenciaDAO
     }
 
     @Override
-    void adicionarEmpresa(EmpresaCadastroDTO empresa) {
-        if (empresaDAO.buscarPorEmail(empresa.email) != null) {
-            throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${empresa.email}'.")
+    void adicionarEmpresa(EmpresaCadastroDTO dto) {
+        if (empresaDAO.buscarPorEmail(dto.email) != null) {
+            throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${dto.email}'.")
         }
-        if (empresaDAO.buscarPorCnpj(empresa.cnpj) != null) {
-            throw new IllegalArgumentException("Já existe uma empresa cadastrada com o CNPJ '${empresa.cnpj}'.")
+        if (empresaDAO.buscarPorCnpj(dto.cnpj) != null) {
+            throw new IllegalArgumentException("Já existe uma empresa cadastrada com o CNPJ '${dto.cnpj}'.")
         }
 
+        Empresa empresa = empresaMapper.paraEntidade(dto)
         try {
             empresaDAO.inserir(empresa)
             empresa.competencias.each { compNome ->
@@ -60,7 +64,9 @@ class EmpresaService implements IEmpresaService {
     }
 
     @Override
-    void atualizarEmpresa(EmpresaCadastroDTO empresa) {
+    Empresa atualizarEmpresa(int id, EmpresaCadastroDTO dto) {
+        Empresa empresa = empresaMapper.paraEntidade(dto)
+        empresa.id = id
         try {
             empresaDAO.atualizar(empresa)
             competenciaDAO.removerVinculosEmpresa(empresa.id)
@@ -68,6 +74,7 @@ class EmpresaService implements IEmpresaService {
                 int compId = competenciaDAO.buscarOuInserir(compNome)
                 competenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
+            return empresa
         } catch (DatabaseOperationException e) {
             throw new DatabaseOperationException("Não foi possível atualizar a empresa no banco de dados.", e)
         }
