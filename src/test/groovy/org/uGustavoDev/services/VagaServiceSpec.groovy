@@ -2,7 +2,9 @@ package org.uGustavoDev.services
 
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
+import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
+import org.uGustavoDev.mapper.interfaces.IVagaMapper
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.VagaService
 import org.uGustavoDev.service.interfaces.IVagaService
@@ -10,162 +12,180 @@ import spock.lang.Specification
 
 class VagaServiceSpec extends Specification {
 
-    IVagaService vagaService
     IVagaDAO mockVagaDAO
     ICompetenciaDAO mockCompetenciaDAO
+    IVagaMapper mockVagaMapper
+    IVagaService vagaService
 
     void setup() {
         mockVagaDAO = Mock(IVagaDAO)
         mockCompetenciaDAO = Mock(ICompetenciaDAO)
-        vagaService = new VagaService(mockVagaDAO, mockCompetenciaDAO)
+        mockVagaMapper = Mock(IVagaMapper)
+        vagaService = new VagaService(mockVagaDAO, mockCompetenciaDAO, mockVagaMapper)
     }
 
     void "deve adicionar uma vaga e registrar suas competencias no banco de dados"() {
-        given: "uma vaga com competencias definidas"
-        Vaga novaVaga = new Vaga(1, "Engenheiro de Software", "Remoto", "SP", "São Paulo")
-        novaVaga.id = 100
-        novaVaga.competencias = ["Groovy", "SQL"]
+        given: "uma vaga preenchida com as devidas competencias"
+        VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Desenvolvedor Backend", descricao: "Vaga para dev java", estado: "SP", cidade: "Sao Paulo", competencias: ["Java", "Spring"])
+        Vaga vaga = new Vaga(1, "Desenvolvedor Backend", "Vaga para dev java", "SP", "Sao Paulo")
+        vaga.id = 100
+        vaga.competencias = ["Java", "Spring"]
 
-        when: "tentamos adicionar essa vaga pelo service"
-        vagaService.adicionarVaga(novaVaga)
+        when: "o servico adicionar for acionado"
+        vagaService.adicionarVaga(1, dto)
 
-        then: "o DAO eh acionado corretamente para persistir a vaga e seus vinculos"
-        1 * mockVagaDAO.inserir(novaVaga)
-        1 * mockCompetenciaDAO.buscarOuInserir("Groovy") >> 10
+        then: "o DAO salva a vaga e as competencias sao inseridas e vinculadas no banco"
+        1 * mockVagaMapper.paraEntidade(dto, 1) >> vaga
+        1 * mockVagaDAO.inserir(vaga)
+        1 * mockCompetenciaDAO.buscarOuInserir("Java") >> 10
         1 * mockCompetenciaDAO.vincularAVaga(100, 10)
-        1 * mockCompetenciaDAO.buscarOuInserir("SQL") >> 20
+        1 * mockCompetenciaDAO.buscarOuInserir("Spring") >> 20
         1 * mockCompetenciaDAO.vincularAVaga(100, 20)
     }
 
     void "deve retornar a lista global de todas as vagas cadastradas"() {
-        given: "vagas existentes no banco"
-        Vaga v1 = new Vaga(1, "Vaga 1", "Desc", "SP", "Capital")
-        Vaga v2 = new Vaga(2, "Vaga 2", "Desc 2", "RJ", "Capital")
-        List<Vaga> listaGlobal = [v1, v2]
+        given: "algumas vagas no sistema"
+        Vaga v1 = new Vaga(1, "Vaga A", "Desc A", "SP", "Sao Paulo")
+        Vaga v2 = new Vaga(2, "Vaga B", "Desc B", "RJ", "Rio de Janeiro")
+        List<Vaga> vagasSalvas = [v1, v2]
 
-        when: "solicitamos a listagem geral"
+        when: "o servico pedir todas as vagas"
         List<Vaga> retorno = vagaService.listarVagas()
 
-        then: "todas as vagas sao trazidas fielmente"
-        1 * mockVagaDAO.listar() >> listaGlobal
-        retorno.size() == 2
+        then: "todas sao repassadas com sucesso"
+        1 * mockVagaDAO.listar() >> vagasSalvas
+        retorno == vagasSalvas
     }
 
     void "deve retornar a lista de vagas restrita a uma empresa especifica"() {
-        given: "vagas apenas da empresa 5"
-        Vaga v1 = new Vaga(5, "Vaga Empresa 5", "Desc", "SP", "Campinas")
-        List<Vaga> vagasEmpresa = [v1]
+        given: "duas vagas da empresa X e uma da empresa Y"
+        Vaga v1 = new Vaga(1, "Vaga A", "Desc A", "SP", "Sao Paulo")
+        Vaga v2 = new Vaga(1, "Vaga B", "Desc B", "RJ", "Rio de Janeiro")
+        List<Vaga> vagasDaEmpresa = [v1, v2]
 
-        when: "pedimos as vagas da empresa 5"
-        List<Vaga> retorno = vagaService.listarVagasDaEmpresa(5)
+        when: "buscar vagas passando o ID da empresa X"
+        List<Vaga> retorno = vagaService.listarVagasDaEmpresa(1)
 
-        then: "o DAO recebe o filtro por id da empresa"
-        1 * mockVagaDAO.listarPorEmpresa(5) >> vagasEmpresa
-        retorno.size() == 1
+        then: "apenas as vagas correspondentes a ela sao retornadas"
+        1 * mockVagaDAO.listarPorEmpresa(1) >> vagasDaEmpresa
+        retorno == vagasDaEmpresa
     }
 
     void "deve encontrar e retornar uma vaga pesquisando pelo seu id"() {
-        given: "uma vaga qualquer"
-        Vaga v1 = new Vaga(1, "Backend", "Home Office", "SC", "Florianopolis")
+        given: "uma vaga cadastrada com um id alvo"
+        Vaga vagaEsperada = new Vaga(1, "Vaga A", "Desc A", "SP", "Sao Paulo")
+        vagaEsperada.id = 100
 
-        when: "buscamos a vaga 10"
-        Vaga retorno = vagaService.buscarVagaPorId(10)
+        when: "pedir a vaga pelo seu ID ao servico"
+        Vaga retorno = vagaService.buscarVagaPorId(100)
 
-        then: "a vaga correspondente e retornada"
-        1 * mockVagaDAO.buscarPorId(10) >> v1
-        retorno == v1
+        then: "o DAO busca corretamente"
+        1 * mockVagaDAO.buscarPorId(100) >> vagaEsperada
+        retorno == vagaEsperada
     }
 
     void "deve bloquear tentativa de edicao de vaga caso ela nao exista no banco"() {
-        given: "dados de uma vaga para atualizacao"
-        Vaga vagaEditada = new Vaga(1, "Falso Backend", "Desc", "SP", "SP")
+        given: "uma DTO tentando editar uma vaga fantasma"
+        VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Editada")
 
-        when: "tentamos forcar uma edicao de uma vaga inexistente"
-        vagaService.atualizarVagaDaEmpresa(1, 999, vagaEditada)
+        when: "o servico da empresa tentar atualizar"
+        vagaService.atualizarVagaDaEmpresa(1, 999, dto)
 
-        then: "o banco retorna nulo e a operacao e barrada imediatamente"
+        then: "uma excecao e disparada e nenhum update ocorre"
         1 * mockVagaDAO.buscarPorId(999) >> null
         0 * mockVagaDAO.atualizar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
+        erro.message == "Vaga não encontrada."
     }
 
     void "deve proibir uma empresa de editar ou tomar posse de uma vaga que pertence a um concorrente"() {
-        given: "uma vaga que sabidamente pertence a empresa 2"
-        Vaga vagaDoConcorrente = new Vaga(2, "Vaga Original", "Desc", "RJ", "Rio")
-        Vaga tentativaDeEdicao = new Vaga(1, "Vaga Hackeada", "Nova", "SP", "SP")
+        given: "uma vaga existente que pertence a empresa 2"
+        VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Editada")
+        Vaga vagaDeOutra = new Vaga(2, "Vaga B", "Desc B", "RJ", "Rio de Janeiro")
+        vagaDeOutra.id = 50
 
-        when: "a empresa 1 tenta editar a vaga da empresa 2"
-        vagaService.atualizarVagaDaEmpresa(1, 10, tentativaDeEdicao)
+        when: "a empresa 1 tentar sorrateiramente atualiza-la"
+        vagaService.atualizarVagaDaEmpresa(1, 50, dto)
 
-        then: "a regra de negocio impede e estampa o erro"
-        1 * mockVagaDAO.buscarPorId(10) >> vagaDoConcorrente
+        then: "acesso negado"
+        1 * mockVagaDAO.buscarPorId(50) >> vagaDeOutra
         0 * mockVagaDAO.atualizar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
+        erro.message == "Esta vaga não pertence à sua empresa."
     }
 
     void "deve atualizar os detalhes de uma vaga existente desde que ela pertenca legitimamente a empresa"() {
-        given: "uma vaga legitima da empresa 1"
-        Vaga vagaLegitima = new Vaga(1, "Vaga Original", "Desc", "SP", "SP")
-        vagaLegitima.id = 50
+        given: "uma vaga da propria empresa e uma edicao solicitada"
+        VagaCadastroDTO dto = new VagaCadastroDTO(competencias: ["C#"])
+        Vaga vagaAntiga = new Vaga(1, "Vaga C#", "Velha", "SP", "Sao Paulo")
+        vagaAntiga.id = 50
+        
+        Vaga vagaEditada = new Vaga(1, "Vaga C#", "Velha", "SP", "Sao Paulo")
+        vagaEditada.id = 50
+        vagaEditada.competencias = ["C#"]
 
-        Vaga edicaoPermitida = new Vaga(1, "Nova Vaga", "Nova Desc", "SP", "Campinas")
-        edicaoPermitida.competencias = ["Go"]
+        when: "a empresa pedir para salvar as alteracoes"
+        vagaService.atualizarVagaDaEmpresa(1, 50, dto)
 
-        when: "a empresa solicita edicao de sua propria vaga"
-        vagaService.atualizarVagaDaEmpresa(1, 50, edicaoPermitida)
-
-        then: "os dados sao passados ao DAO para regravacao juntamente as competencias"
-        1 * mockVagaDAO.buscarPorId(50) >> vagaLegitima
-        1 * mockVagaDAO.atualizar(edicaoPermitida)
+        then: "as validacoes de posse passam e os dados sao repassados para update no banco"
+        1 * mockVagaDAO.buscarPorId(50) >> vagaAntiga
+        1 * mockVagaMapper.paraEntidade(dto, 1) >> vagaEditada
+        1 * mockVagaDAO.atualizar(vagaEditada)
         1 * mockCompetenciaDAO.removerVinculosVaga(50)
-        1 * mockCompetenciaDAO.buscarOuInserir("Go") >> 5
-        1 * mockCompetenciaDAO.vincularAVaga(50, 5)
+        1 * mockCompetenciaDAO.buscarOuInserir("C#") >> 77
+        1 * mockCompetenciaDAO.vincularAVaga(50, 77)
     }
 
     void "deve bloquear delecao de vaga se a mesma nao existir"() {
-        when: "tentar deletar algo fantasma"
+        when: "uma empresa tentar deletar uma vaga fantasma"
         vagaService.deletarVagaDaEmpresa(1, 999)
 
-        then: "receber block imediato"
+        then: "erro validado e delecao abortada"
         1 * mockVagaDAO.buscarPorId(999) >> null
         0 * mockVagaDAO.deletar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
+        erro.message == "Vaga não encontrada."
     }
 
     void "deve impedir ativamente que uma empresa apague a vaga de outra"() {
-        given: "uma vaga pertencente a empresa 2"
-        Vaga vagaConcorrente = new Vaga(2, "Vaga Alheia", "Desc", "MG", "BH")
+        given: "uma vaga cadastrada pela empresa concorrente"
+        Vaga vagaDeOutra = new Vaga(2, "Vaga", "Desc", "SP", "Sao Paulo")
+        vagaDeOutra.id = 50
 
-        when: "a empresa 1 manda um comando de drop na vaga"
-        vagaService.deletarVagaDaEmpresa(1, 10)
+        when: "a empresa tentar deleta-la"
+        vagaService.deletarVagaDaEmpresa(1, 50)
 
-        then: "o perigo e interceptado e ninguem se machuca"
-        1 * mockVagaDAO.buscarPorId(10) >> vagaConcorrente
+        then: "a exclusao e negada sumariamente"
+        1 * mockVagaDAO.buscarPorId(50) >> vagaDeOutra
         0 * mockVagaDAO.deletar(_)
         IllegalArgumentException erro = thrown(IllegalArgumentException)
+        erro.message == "Esta vaga não pertence à sua empresa."
     }
 
     void "deve concluir a delecao da vaga desde que seja proprietaria da mesma"() {
-        given: "uma vaga legitima"
-        Vaga vagaLegitima = new Vaga(1, "Minha Vaga", "Desc", "SP", "SP")
+        given: "uma vaga licita da empresa"
+        Vaga vagaPropria = new Vaga(1, "Vaga", "Desc", "SP", "Sao Paulo")
+        vagaPropria.id = 50
 
-        when: "a proprietaria pede exclusao"
-        vagaService.deletarVagaDaEmpresa(1, 10)
+        when: "empresa comandar a delecao"
+        vagaService.deletarVagaDaEmpresa(1, 50)
 
-        then: "a vontade e respeitada e o id e repassado pro banco"
-        1 * mockVagaDAO.buscarPorId(10) >> vagaLegitima
-        1 * mockVagaDAO.deletar(10)
+        then: "a vaga e enviada para o escuro do DAO"
+        1 * mockVagaDAO.buscarPorId(50) >> vagaPropria
+        1 * mockVagaDAO.deletar(50)
     }
 
     void "deve envelopar erro misterioso de banco de dados e repassar como runtime exception"() {
-        given: "uma falha grave de infra"
-        Vaga novaVaga = new Vaga(1, "X", "Y", "Z", "W")
+        given: "uma vaga legitima pronta para salvar"
+        VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Vaga")
+        Vaga vaga = new Vaga(1, "Vaga", "Desc", "SP", "Sao Paulo")
 
-        when: "ocorre interacao com o servico"
-        vagaService.adicionarVaga(novaVaga)
+        when: "mandar adicionar"
+        vagaService.adicionarVaga(1, dto)
 
-        then: "a falha grossa vira uma RuntimeException polida"
-        1 * mockVagaDAO.inserir(_) >> { throw new DatabaseOperationException("Tabela nao existe") }
+        then: "banco morre e o erro e traduzido educadamente pelo service"
+        1 * mockVagaMapper.paraEntidade(dto, 1) >> vaga
+        1 * mockVagaDAO.inserir(vaga) >> { throw new DatabaseOperationException("SQL Timeout") }
         DatabaseOperationException erro = thrown(DatabaseOperationException)
     }
 
