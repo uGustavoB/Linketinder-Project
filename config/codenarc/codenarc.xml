@@ -12,6 +12,12 @@
         <rule-config name="Indentation">
             <property name="enabled" value="false" />
         </rule-config>
+        <rule-config name="TrailingWhitespace">
+            <property name="enabled" value="false" />
+        </rule-config>
+        <rule-config name="SpaceAroundMapEntryColon">
+            <property name="enabled" value="false" />
+        </rule-config>
     </ruleset-ref>
     <ruleset-ref path="rulesets/unused.xml"/>
 </ruleset>
