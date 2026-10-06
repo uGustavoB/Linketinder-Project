@@ -4,9 +4,9 @@ import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
+import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.interfaces.IEmpresaService
-import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
 
 class EmpresaService implements IEmpresaService {
 

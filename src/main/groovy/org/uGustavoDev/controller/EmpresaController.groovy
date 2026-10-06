@@ -1,7 +1,7 @@
 package org.uGustavoDev.controller
-import org.uGustavoDev.dto.VagaCadastroDTO
 
 import org.uGustavoDev.dto.EmpresaCadastroDTO
+import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
@@ -47,7 +47,7 @@ class EmpresaController {
         } else if (opcaoPerfil == 2) {
             ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
             EmpresaCadastroDTO dto = ConsoleUI.pedirDadosEmpresa()
-            
+
             try {
                 Empresa empresaEditada = empresaService.atualizarEmpresa(empresaLogada.id, dto)
                 empresaLogada = empresaEditada

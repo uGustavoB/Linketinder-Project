@@ -12,6 +12,8 @@ import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.mapper.CandidatoMapper
+import org.uGustavoDev.mapper.EmpresaMapper
+import org.uGustavoDev.mapper.VagaMapper
 import org.uGustavoDev.mapper.interfaces.ICandidatoMapper
 import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
 import org.uGustavoDev.mapper.interfaces.IVagaMapper
@@ -20,8 +22,6 @@ import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.service.CandidatoService
 import org.uGustavoDev.service.EmpresaService
 import org.uGustavoDev.service.VagaService
-import org.uGustavoDev.mapper.EmpresaMapper
-import org.uGustavoDev.mapper.VagaMapper
 import org.uGustavoDev.service.interfaces.ICandidatoService
 import org.uGustavoDev.service.interfaces.IEmpresaService
 import org.uGustavoDev.service.interfaces.IVagaService

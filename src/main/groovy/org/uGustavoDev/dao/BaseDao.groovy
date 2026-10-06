@@ -20,7 +20,7 @@ class BaseDao {
     }
 
     static <T> T executarSQLComRetornoDeChave(String sql, Closure closure) {
-        try (Connection conexao = ConexaoFactory.getConnection(); 
+        try (Connection conexao = ConexaoFactory.getConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             closure.delegate = stmt
             return closure(stmt)
@@ -28,4 +28,5 @@ class BaseDao {
             throw new DatabaseOperationException("Erro ao executar SQL: " + e.message, e)
         }
     }
+
 }

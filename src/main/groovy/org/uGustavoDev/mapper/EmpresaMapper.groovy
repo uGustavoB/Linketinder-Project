@@ -5,6 +5,7 @@ import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
 import org.uGustavoDev.model.Empresa
 
 class EmpresaMapper implements IEmpresaMapper {
+
     @Override
     Empresa paraEntidade(EmpresaCadastroDTO dto) {
         Empresa empresa = new Empresa(
@@ -19,4 +20,5 @@ class EmpresaMapper implements IEmpresaMapper {
         empresa.competencias = dto.competencias
         return empresa
     }
+
 }

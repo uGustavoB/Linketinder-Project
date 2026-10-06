@@ -25,7 +25,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
             }
             return null
         }
-        
+
         if (idBusca != null) {
             return idBusca
         }
@@ -42,7 +42,7 @@ class CompetenciaDAO implements ICompetenciaDAO {
             }
             return null
         }
-        
+
         if (idInsert != null) {
             return idInsert
         }

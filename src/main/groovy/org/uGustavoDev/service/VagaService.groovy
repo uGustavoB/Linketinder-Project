@@ -4,9 +4,9 @@ import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.exceptions.DatabaseOperationException
+import org.uGustavoDev.mapper.interfaces.IVagaMapper
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.interfaces.IVagaService
-import org.uGustavoDev.mapper.interfaces.IVagaMapper
 
 class VagaService implements IVagaService {
 

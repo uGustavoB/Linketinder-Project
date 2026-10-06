@@ -49,7 +49,7 @@ class VagaDAO implements IVagaDAO {
         BaseDao.executarSQLComRetornoDeChave(sql) { PreparedStatement stmt ->
             preencherStatement(stmt, vaga)
             stmt.executeUpdate()
-            
+
             ResultSet rs = stmt.getGeneratedKeys()
             if (rs.next()) {
                 vaga.id = rs.getInt(1)

@@ -5,6 +5,7 @@ import org.uGustavoDev.mapper.interfaces.IVagaMapper
 import org.uGustavoDev.model.Vaga
 
 class VagaMapper implements IVagaMapper {
+
     @Override
     Vaga paraEntidade(VagaCadastroDTO dto, int empresaId) {
         Vaga vaga = new Vaga(
@@ -17,4 +18,5 @@ class VagaMapper implements IVagaMapper {
         vaga.competencias = dto.competencias
         return vaga
     }
+
 }

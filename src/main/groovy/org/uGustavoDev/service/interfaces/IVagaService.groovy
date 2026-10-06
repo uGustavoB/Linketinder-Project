@@ -10,4 +10,5 @@ interface IVagaService {
     Vaga buscarVagaPorId(int id)
     Vaga atualizarVaga(int vagaId, int empresaId, VagaCadastroDTO dto)
     void deletarVaga(int id)
+
 }

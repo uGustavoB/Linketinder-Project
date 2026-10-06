@@ -53,7 +53,7 @@ class EmpresaDAO implements IEmpresaDAO {
         BaseDao.executarSQLComRetornoDeChave(sql) { PreparedStatement stmt ->
             preencherStatement(stmt, empresa)
             stmt.executeUpdate()
-            
+
             ResultSet rs = stmt.getGeneratedKeys()
             if (rs.next()) {
                 empresa.id = rs.getInt(1)
