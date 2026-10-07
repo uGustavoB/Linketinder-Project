@@ -19,12 +19,15 @@ class Candidato extends Pessoa {
             String CEP,
             String descricao,
             String cpf,
-            LocalDate dataNascimento) {
-        super(nome, email, pais, CEP, descricao)
+            LocalDate dataNascimento,
+            String senha = null
+    ) {
+        super(nome, email, pais, CEP, descricao, senha)
         this.sobrenome = sobrenome
         this.estado = estado
         this.cpf = cpf
         this.dataNascimento = dataNascimento
+        this.senha = senha
     }
 
     String toAnonymousString() {

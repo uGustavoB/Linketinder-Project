@@ -13,12 +13,13 @@ abstract class Pessoa implements IPessoa {
     String senha
     List<String> competencias = []
 
-    Pessoa(String nome, String email, String pais, String CEP, String descricao) {
+    Pessoa(String nome, String email, String pais, String CEP, String descricao, String senha) {
         this.nome = nome
         this.email = email
         this.pais = pais
         this.CEP = CEP
         this.descricao = descricao
+        this.senha = senha
     }
 
     void adicionarCompetencias(List<String> novasCompetencias) {
