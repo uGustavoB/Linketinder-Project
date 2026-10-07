@@ -1,5 +1,6 @@
 package org.uGustavoDev.services
 
+import org.uGustavoDev.builder.VagaBuilder
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.dto.VagaCadastroDTO
@@ -27,9 +28,15 @@ class VagaServiceSpec extends Specification {
     void "deve adicionar uma vaga e registrar suas competencias no banco de dados"() {
         given: "uma vaga preenchida com as devidas competencias"
         VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Desenvolvedor Backend", descricao: "Vaga para dev java", estado: "SP", cidade: "Sao Paulo", competencias: ["Java", "Spring"])
-        Vaga vaga = new Vaga(1, "Desenvolvedor Backend", "Vaga para dev java", "SP", "Sao Paulo")
-        vaga.id = 100
-        vaga.competencias = ["Java", "Spring"]
+        Vaga vaga = new VagaBuilder()
+                .id(100)
+                .empresaId(1)
+                .nome("Desenvolvedor Backend")
+                .descricao("Vaga para dev java")
+                .estado("SP")
+                .cidade("Sao Paulo")
+                .competencias(["Java", "Spring"])
+                .build()
 
         when: "o servico adicionar for acionado"
         vagaService.adicionarVaga(1, dto)
@@ -45,8 +52,23 @@ class VagaServiceSpec extends Specification {
 
     void "deve retornar a lista global de todas as vagas cadastradas"() {
         given: "algumas vagas no sistema"
-        Vaga v1 = new Vaga(1, "Vaga A", "Desc A", "SP", "Sao Paulo")
-        Vaga v2 = new Vaga(2, "Vaga B", "Desc B", "RJ", "Rio de Janeiro")
+        Vaga v1 = new VagaBuilder()
+                .id(1)
+                .empresaId(1)
+                .nome("Vaga A")
+                .descricao("Desc A")
+                .estado("SP")
+                .cidade("Sao Paulo")
+                .build()
+        Vaga v2 = new VagaBuilder()
+                .id(2)
+                .empresaId(1)
+                .nome("Vaga B")
+                .descricao("Desc B")
+                .estado("RJ")
+                .cidade("Rio de Janeiro")
+                .build()
+
         List<Vaga> vagasSalvas = [v1, v2]
 
         when: "o servico pedir todas as vagas"
@@ -59,8 +81,23 @@ class VagaServiceSpec extends Specification {
 
     void "deve retornar a lista de vagas restrita a uma empresa especifica"() {
         given: "duas vagas da empresa X e uma da empresa Y"
-        Vaga v1 = new Vaga(1, "Vaga A", "Desc A", "SP", "Sao Paulo")
-        Vaga v2 = new Vaga(1, "Vaga B", "Desc B", "RJ", "Rio de Janeiro")
+        Vaga v1 = new VagaBuilder()
+                .id(1)
+                .empresaId(1)
+                .nome("Vaga A")
+                .descricao("Desc A")
+                .estado("SP")
+                .cidade("Sao Paulo")
+                .build()
+        Vaga v2 = new VagaBuilder()
+                .id(2)
+                .empresaId(1)
+                .nome("Vaga B")
+                .descricao("Desc B")
+                .estado("RJ")
+                .cidade("Rio de Janeiro")
+                .build()
+
         List<Vaga> vagasDaEmpresa = [v1, v2]
 
         when: "buscar vagas passando o ID da empresa X"
@@ -73,8 +110,14 @@ class VagaServiceSpec extends Specification {
 
     void "deve encontrar e retornar uma vaga pesquisando pelo seu id"() {
         given: "uma vaga cadastrada com um id alvo"
-        Vaga vagaEsperada = new Vaga(1, "Vaga A", "Desc A", "SP", "Sao Paulo")
-        vagaEsperada.id = 100
+        Vaga vagaEsperada = new VagaBuilder()
+                .id(100)
+                .empresaId(1)
+                .nome("Vaga A")
+                .descricao("Desc A")
+                .estado("SP")
+                .cidade("Sao Paulo")
+                .build()
 
         when: "pedir a vaga pelo seu ID ao servico"
         Vaga retorno = vagaService.buscarVagaPorId(100)

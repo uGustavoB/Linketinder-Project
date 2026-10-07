@@ -19,7 +19,7 @@ class CandidatoSpec extends Specification {
         LocalDate dataNascimento = LocalDate.of(2005, 1, 1)
 
         when: "o candidato é instanciado"
-        Candidato candidato = new Candidato(nome, sobrenome, email, estado, pais, cep, descricao, cpf, dataNascimento)
+        Candidato candidato = new org.uGustavoDev.builder.CandidatoBuilder().nome(nome).sobrenome(sobrenome).email(email).estado(estado).pais(pais).CEP(cep).descricao(descricao).cpf(cpf).dataNascimento(dataNascimento).build()
 
         then: "os atributos do candidato devem ser corretamente atribuídos"
         candidato.nome == nome
@@ -36,7 +36,7 @@ class CandidatoSpec extends Specification {
 
     void "deve permitir adicionar e atualizar a lista de competências"() {
         given: "um candidato e uma lista de competências"
-        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
+        Candidato candidato = new org.uGustavoDev.builder.CandidatoBuilder().nome("Gustavo").sobrenome("Silva").email("gustavo@example.com").estado("PB").pais("Brasil").CEP("58000-000").descricao("Dev").cpf("111.111.111-11").dataNascimento(LocalDate.of(2005, 1, 1)).build()
         List<String> competencias = ["Java", "Python"]
 
         when: "as competências são adicionadas ao candidato"
@@ -49,7 +49,7 @@ class CandidatoSpec extends Specification {
 
     void "deve permitir adicionar uma única competência"() {
         given: "um candidato"
-        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
+        Candidato candidato = new org.uGustavoDev.builder.CandidatoBuilder().nome("Gustavo").sobrenome("Silva").email("gustavo@example.com").estado("PB").pais("Brasil").CEP("58000-000").descricao("Dev").cpf("111.111.111-11").dataNascimento(LocalDate.of(2005, 1, 1)).build()
 
         when: "uma competência é adicionada ao candidato"
         candidato.adicionarCompetencia("JavaScript")
@@ -61,7 +61,7 @@ class CandidatoSpec extends Specification {
 
     void "deve permitir remover uma competência"() {
         given: "um candidato e uma lista de competências"
-        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
+        Candidato candidato = new org.uGustavoDev.builder.CandidatoBuilder().nome("Gustavo").sobrenome("Silva").email("gustavo@example.com").estado("PB").pais("Brasil").CEP("58000-000").descricao("Dev").cpf("111.111.111-11").dataNascimento(LocalDate.of(2005, 1, 1)).build()
         List<String> competencias = ["Java", "Python"]
 
         when: "as competências são adicionadas e uma é removida"
@@ -75,7 +75,7 @@ class CandidatoSpec extends Specification {
 
     void "deve retornar o CPF ao chamar obterDocumento()"() {
         given: "um candidato com CPF"
-        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
+        Candidato candidato = new org.uGustavoDev.builder.CandidatoBuilder().nome("Gustavo").sobrenome("Silva").email("gustavo@example.com").estado("PB").pais("Brasil").CEP("58000-000").descricao("Dev").cpf("111.111.111-11").dataNascimento(LocalDate.of(2005, 1, 1)).build()
 
         expect: "obterDocumento() retorna o CPF correto"
         candidato.obterDocumento() == "111.111.111-11"
@@ -83,7 +83,7 @@ class CandidatoSpec extends Specification {
 
     void "nao deve falhar ao tentar remover uma competência inexistente"() {
         given: "um candidato com algumas competências"
-        Candidato candidato = new Candidato("Gustavo", "Silva", "gustavo@example.com", "PB", "Brasil", "58000-000", "Dev", "111.111.111-11", LocalDate.of(2005, 1, 1))
+        Candidato candidato = new org.uGustavoDev.builder.CandidatoBuilder().nome("Gustavo").sobrenome("Silva").email("gustavo@example.com").estado("PB").pais("Brasil").CEP("58000-000").descricao("Dev").cpf("111.111.111-11").dataNascimento(LocalDate.of(2005, 1, 1)).build()
         candidato.adicionarCompetencia("Java")
 
         when: "tentamos remover uma competência que nao esta na lista"

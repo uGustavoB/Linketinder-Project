@@ -1,5 +1,6 @@
 package org.uGustavoDev.services
 
+import org.uGustavoDev.builder.EmpresaBuilder
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dto.EmpresaCadastroDTO
@@ -27,9 +28,16 @@ class EmpresaServiceSpec extends Specification {
     void "deve salvar empresa e vincular competencias quando dados sao validos e nao existem no banco"() {
         given: "uma empresa com dados ineditos"
         EmpresaCadastroDTO dto = new EmpresaCadastroDTO(nome: "Google", email: "google@google.com", pais: "USA", cep: "12345", descricao: "Tecnologia", cnpj: "11.111.111/0001-11", competencias: ["Java", "Python"])
-        Empresa novaEmpresa = new Empresa("Google", "google@google.com", "USA", "12345", "Tecnologia", "11.111.111/0001-11")
-        novaEmpresa.id = 1
-        novaEmpresa.competencias = ["Java", "Python"]
+        Empresa novaEmpresa = new EmpresaBuilder()
+                .id(1)
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345")
+                .descricao("Tecnologia")
+                .cnpj("11.111.111/0001-11")
+                .competencias(["Java", "Python"])
+                .build()
 
         when: "o servico e chamado para adicionar a empresa"
         empresaService.adicionarEmpresa(dto)
@@ -48,7 +56,14 @@ class EmpresaServiceSpec extends Specification {
     void "deve bloquear a criacao de empresa quando o email ja estiver em uso"() {
         given: "uma empresa cujo email ja pertence a outra cadastrada"
         EmpresaCadastroDTO dto = new EmpresaCadastroDTO(email: "usado@google.com", cnpj: "11.111.111/0001-11")
-        Empresa empresaExistente = new Empresa("Antiga", "usado@google.com", "Brasil", "00000", "Startup", "22.222.222/0001-22")
+        Empresa empresaExistente = new EmpresaBuilder()
+                .nome("Antiga")
+                .email("usado@google.com")
+                .pais("Brasil")
+                .cep("00000")
+                .descricao("Startup")
+                .cnpj("22.222.222/0001-22")
+                .build()
 
         when: "tentar adicionar"
         empresaService.adicionarEmpresa(dto)
@@ -64,7 +79,14 @@ class EmpresaServiceSpec extends Specification {
     void "deve bloquear a criacao de empresa quando o cnpj ja estiver em uso"() {
         given: "uma empresa com CNPJ ja cadastrado no sistema"
         EmpresaCadastroDTO dto = new EmpresaCadastroDTO(email: "nova@google.com", cnpj: "99.999.999/0001-99")
-        Empresa empresaExistente = new Empresa("Antiga", "antiga@google.com", "Brasil", "00000", "Startup", "99.999.999/0001-99")
+        Empresa empresaExistente = new EmpresaBuilder()
+                .nome("Antiga")
+                .email("antiga@google.com")
+                .pais("Brasil")
+                .cep("00000")
+                .descricao("Startup")
+                .cnpj("99.999.999/0001-99")
+                .build()
 
         when: "tentar adicionar"
         empresaService.adicionarEmpresa(dto)
@@ -81,7 +103,14 @@ class EmpresaServiceSpec extends Specification {
     void "deve envelopar erro do banco de dados em um runtime exception ao inserir empresa"() {
         given: "uma empresa valida mas com banco fora do ar"
         EmpresaCadastroDTO dto = new EmpresaCadastroDTO(email: "google@google.com", cnpj: "11.111.111/0001-11")
-        Empresa novaEmpresa = new Empresa("Google", "google@google.com", "USA", "12345", "Tecnologia", "11.111.111/0001-11")
+        Empresa novaEmpresa = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345")
+                .descricao("Tecnologia")
+                .cnpj("11.111.111/0001-11")
+                .build()
 
         when: "tentar adicionar"
         empresaService.adicionarEmpresa(dto)
@@ -97,8 +126,23 @@ class EmpresaServiceSpec extends Specification {
 
     void "deve retornar lista completa de empresas sem alteracoes"() {
         given: "duas empresas cadastradas"
-        Empresa e1 = new Empresa("Google", "google@google.com", "USA", "12345", "Tecnologia", "11.111.111/0001-11")
-        Empresa e2 = new Empresa("Meta", "meta@meta.com", "USA", "54321", "Redes Sociais", "22.222.222/0001-22")
+        Empresa e1 = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345")
+                .descricao("Tecnologia")
+                .cnpj("11.111.111/0001-11")
+                .build()
+        Empresa e2 = new EmpresaBuilder()
+                .nome("Meta")
+                .email("meta@meta.com")
+                .pais("USA")
+                .cep("54321")
+                .descricao("Redes Sociais")
+                .cnpj("22.222.222/0001-22")
+                .build()
+
         List<Empresa> listaSimulada = [e1, e2]
 
         when: "listar empresas pelo servico"
@@ -113,8 +157,15 @@ class EmpresaServiceSpec extends Specification {
 
     void "deve realizar o login com sucesso ao fornecer as credenciais corretas"() {
         given: "uma empresa com a senha correta registrada no sistema"
-        Empresa e1 = new Empresa("Google", "google@google.com", "USA", "12345", "Tecnologia", "11.111.111/0001-11")
-        e1.senha = "senhaSegura123"
+        Empresa e1 = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .senha("senhaSegura123")
+                .pais("USA")
+                .cep("12345")
+                .descricao("Tecnologia")
+                .cnpj("11.111.111/0001-11")
+                .build()
 
         when: "tentar logar fornecendo a mesma senha"
         Empresa logada = empresaService.loginEmpresa("google@google.com", "senhaSegura123")
@@ -126,8 +177,15 @@ class EmpresaServiceSpec extends Specification {
 
     void "deve negar o login e retornar nulo quando a senha fornecida estiver incorreta"() {
         given: "uma empresa no banco possuindo senha especifica"
-        Empresa e1 = new Empresa("Google", "google@google.com", "USA", "12345", "Tecnologia", "11.111.111/0001-11")
-        e1.senha = "senhaSegura123"
+        Empresa e1 = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .senha("senhaSegura123")
+                .pais("USA")
+                .cep("12345")
+                .descricao("Tecnologia")
+                .cnpj("11.111.111/0001-11")
+                .build()
 
         when: "tentar logar digitando a senha errada"
         Empresa logada = empresaService.loginEmpresa("google@google.com", "senhaErrada")
@@ -149,7 +207,15 @@ class EmpresaServiceSpec extends Specification {
     void "deve atualizar os dados da empresa e recriar vinculos de competencias no banco"() {
         given: "uma empresa modificando suas atribuicoes de competencias"
         EmpresaCadastroDTO dto = new EmpresaCadastroDTO(competencias: ["Rust"])
-        Empresa e1 = new Empresa("Google", "google@google.com", "USA", "12345", "Tecnologia", "11.111.111/0001-11")
+        Empresa e1 = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345")
+                .descricao("Tecnologia")
+                .cnpj("11.111.111/0001-11")
+                .build()
+
         e1.id = 5
         e1.competencias = ["Rust"]
 

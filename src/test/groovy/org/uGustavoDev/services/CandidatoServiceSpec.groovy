@@ -1,5 +1,6 @@
 package org.uGustavoDev.services
 
+import org.uGustavoDev.builder.CandidatoBuilder
 import org.uGustavoDev.dao.interfaces.ICandidatoDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dto.CandidatoCadastroDTO
@@ -29,9 +30,19 @@ class CandidatoServiceSpec extends Specification {
     void "deve salvar candidato e vincular competencias quando dados sao validos e nao existem no banco"() {
         given: "um candidato com dados ineditos"
         CandidatoCadastroDTO dto = new CandidatoCadastroDTO(nome: "Ana", sobrenome: "Silva", email: "ana@email.com", estado: "SP", pais: "Brasil", cep: "01000", descricao: "Dev Groovy", cpf: "111", dataNascimento: LocalDate.of(1990, 1, 1), competencias: ["Groovy", "Spock"])
-        Candidato novoCandidato = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000", "Dev Groovy", "111", LocalDate.of(1990, 1, 1))
-        novoCandidato.id = 1
-        novoCandidato.competencias = ["Groovy", "Spock"]
+        Candidato novoCandidato = new CandidatoBuilder()
+                .id(1)
+                .nome("Ana")
+                .sobrenome("Silva")
+                .email("ana@email.com")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01000")
+                .descricao("Dev Groovy")
+                .cpf("111")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .competencias(["Groovy", "Spock"])
+                .build()
 
         when: "o servico e chamado para adicionar o candidato"
         candidatoService.adicionarCandidato(dto)
@@ -50,7 +61,17 @@ class CandidatoServiceSpec extends Specification {
     void "deve bloquear a criacao de candidato quando o email ja estiver em uso"() {
         given: "um candidato cujo email ja pertence a outro usuario"
         CandidatoCadastroDTO dto = new CandidatoCadastroDTO(email: "usado@email.com", cpf: "111")
-        Candidato candidatoExistente = new Candidato("Antigo", "Usuario", "usado@email.com", "RJ", "Brasil", "20000", "Dev Java", "222", LocalDate.of(1985, 1, 1))
+        Candidato candidatoExistente = new CandidatoBuilder()
+                .nome("Antigo")
+                .sobrenome("Usuario")
+                .email("usado@email.com")
+                .estado("RJ")
+                .pais("Brasil")
+                .CEP("20000")
+                .descricao("Dev Java")
+                .cpf("222")
+                .dataNascimento(LocalDate.of(1985, 1, 1))
+                .build()
 
         when: "tentar adicionar"
         candidatoService.adicionarCandidato(dto)
@@ -66,7 +87,17 @@ class CandidatoServiceSpec extends Specification {
     void "deve bloquear a criacao de candidato quando o cpf ja estiver em uso"() {
         given: "um candidato com CPF ja cadastrado no sistema"
         CandidatoCadastroDTO dto = new CandidatoCadastroDTO(email: "novo@email.com", cpf: "999")
-        Candidato candidatoExistente = new Candidato("Antigo", "Usuario", "antigo@email.com", "RJ", "Brasil", "20000", "Dev Java", "999", LocalDate.of(1985, 1, 1))
+        Candidato candidatoExistente = new CandidatoBuilder()
+                .nome("Antigo")
+                .sobrenome("Usuario")
+                .email("antigo@email.com")
+                .estado("RJ")
+                .pais("Brasil")
+                .CEP("20000")
+                .descricao("Dev Java")
+                .cpf("999")
+                .dataNascimento(LocalDate.of(1985, 1, 1))
+                .build()
 
         when: "tentar adicionar"
         candidatoService.adicionarCandidato(dto)
@@ -83,7 +114,17 @@ class CandidatoServiceSpec extends Specification {
     void "deve envelopar erro do banco de dados em um runtime exception ao inserir candidato"() {
         given: "um candidato valido mas com banco fora do ar"
         CandidatoCadastroDTO dto = new CandidatoCadastroDTO(email: "ana@email.com", cpf: "111")
-        Candidato novoCandidato = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000", "Dev Groovy", "111", LocalDate.of(1990, 1, 1))
+        Candidato novoCandidato = new CandidatoBuilder()
+                .nome("Ana")
+                .sobrenome("Silva")
+                .email("ana@email.com")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01000")
+                .descricao("Dev Groovy")
+                .cpf("111")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .build()
 
         when: "tentar adicionar"
         candidatoService.adicionarCandidato(dto)
@@ -99,8 +140,29 @@ class CandidatoServiceSpec extends Specification {
 
     void "deve retornar lista completa de candidatos sem alteracoes"() {
         given: "dois candidatos cadastrados"
-        Candidato c1 = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000", "Dev Groovy", "111", LocalDate.of(1990, 1, 1))
-        Candidato c2 = new Candidato("Beto", "Souza", "beto@email.com", "RJ", "Brasil", "20000", "Dev Java", "222", LocalDate.of(1992, 2, 2))
+        Candidato c1 = new CandidatoBuilder()
+                .nome("Ana")
+                .sobrenome("Silva")
+                .email("ana@email.com")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01000")
+                .descricao("Dev Groovy")
+                .cpf("111")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .build()
+        Candidato c2 = new CandidatoBuilder()
+                .nome("Beto")
+                .sobrenome("Souza")
+                .email("beto@email.com")
+                .estado("RJ")
+                .pais("Brasil")
+                .CEP("20000")
+                .descricao("Dev Java")
+                .cpf("222")
+                .dataNascimento(LocalDate.of(1992, 2, 2))
+                .build()
+
         List<Candidato> listaSimulada = [c1, c2]
 
         when: "listar candidatos pelo servico"
@@ -115,8 +177,18 @@ class CandidatoServiceSpec extends Specification {
 
     void "deve realizar o login com sucesso ao fornecer as credenciais corretas"() {
         given: "um candidato com a senha correta registrada no sistema"
-        Candidato c1 = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000", "Dev Groovy", "111", LocalDate.of(1990, 1, 1))
-        c1.senha = "senhaSegura123"
+        Candidato c1 = new CandidatoBuilder()
+                .nome("Ana")
+                .sobrenome("Silva")
+                .email("ana@email.com")
+                .senha("senhaSegura123")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01000")
+                .descricao("Dev Groovy")
+                .cpf("111")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .build()
 
         when: "tentar logar fornecendo a mesma senha"
         Candidato logado = candidatoService.loginCandidato("ana@email.com", "senhaSegura123")
@@ -128,8 +200,18 @@ class CandidatoServiceSpec extends Specification {
 
     void "deve negar o login e retornar nulo quando a senha fornecida estiver incorreta"() {
         given: "um candidato no banco possuindo senha especifica"
-        Candidato c1 = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000", "Dev Groovy", "111", LocalDate.of(1990, 1, 1))
-        c1.senha = "senhaSegura123"
+        Candidato c1 = new CandidatoBuilder()
+                .nome("Ana")
+                .sobrenome("Silva")
+                .email("ana@email.com")
+                .senha("senhaCorreta")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01000")
+                .descricao("Dev Groovy")
+                .cpf("111")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .build()
 
         when: "tentar logar digitando a senha errada"
         Candidato logado = candidatoService.loginCandidato("ana@email.com", "senhaErrada")
@@ -151,9 +233,19 @@ class CandidatoServiceSpec extends Specification {
     void "deve atualizar os dados do candidato e recriar vinculos de competencias no banco"() {
         given: "um candidato modificando suas atribuicoes de competencias"
         CandidatoCadastroDTO dto = new CandidatoCadastroDTO(email: "ana@email.com", cpf: "111", competencias: ["Rust"])
-        Candidato c1 = new Candidato("Ana", "Silva", "ana@email.com", "SP", "Brasil", "01000", "Dev", "111", LocalDate.of(1990, 1, 1))
-        c1.id = 5
-        c1.competencias = ["Rust"]
+        Candidato c1 = new CandidatoBuilder()
+                .id(5)
+                .nome("Ana")
+                .sobrenome("Silva")
+                .email("ana@email.com")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01000")
+                .descricao("Dev")
+                .cpf("111")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .competencias(["Rust"])
+                .build()
 
         when: "solicitar a atualizacao atraves do servico"
         candidatoService.atualizarCandidato(5, dto)
