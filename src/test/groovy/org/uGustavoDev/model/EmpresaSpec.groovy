@@ -1,5 +1,6 @@
 package org.uGustavoDev.model
 
+import org.uGustavoDev.builder.EmpresaBuilder
 import spock.lang.Specification
 
 class EmpresaSpec extends Specification {
@@ -14,7 +15,14 @@ class EmpresaSpec extends Specification {
         String cnpj = "12.345.678/0001-90"
 
         when: "uma nova empresa é instanciada"
-        Empresa empresa = new org.uGustavoDev.builder.EmpresaBuilder().nome(nome).email(email).pais(pais).cep(cep).descricao(descricao).cnpj(cnpj).build()
+        Empresa empresa = new EmpresaBuilder()
+                .nome(nome)
+                .email(email)
+                .pais(pais)
+                .cep(cep)
+                .descricao(descricao)
+                .cnpj(cnpj)
+                .build()
 
         then: "a empresa é instanciada com os dados corretos"
         empresa.nome == nome
@@ -28,7 +36,14 @@ class EmpresaSpec extends Specification {
 
     void "deve permitir adicionar e atualizar a lista de competências"() {
         given: "uma empresa e uma lista de competências"
-        Empresa empresa = new org.uGustavoDev.builder.EmpresaBuilder().nome("Google").email("google@google.com").pais("USA").cep("12345-678").descricao("Empresa de tecnologia.").cnpj("12.345.678/0001-90").build()
+        Empresa empresa = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345-678")
+                .descricao("Empresa de tecnologia.")
+                .cnpj("12.345.678/0001-90")
+                .build()
         List<String> competencias = ["Java", "Python", "JavaScript"]
 
         when: "as competências são adicionadas à empresa"
@@ -41,7 +56,14 @@ class EmpresaSpec extends Specification {
 
     void "deve permitir adicionar uma única competência"() {
         given: "uma empresa"
-        Empresa empresa = new org.uGustavoDev.builder.EmpresaBuilder().nome("Google").email("google@google.com").pais("USA").cep("12345-678").descricao("Empresa de tecnologia.").cnpj("12.345.678/0001-90").build()
+        Empresa empresa = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345-678")
+                .descricao("Empresa de tecnologia.")
+                .cnpj("12.345.678/0001-90")
+                .build()
 
         when: "uma competência é adicionada à empresa"
         empresa.adicionarCompetencia("Go")
@@ -53,7 +75,14 @@ class EmpresaSpec extends Specification {
 
     void "deve permitir remover uma competência"() {
         given: "uma empresa com competências e uma lista de competências"
-        Empresa empresa = new org.uGustavoDev.builder.EmpresaBuilder().nome("Google").email("google@google.com").pais("USA").cep("12345-678").descricao("Empresa de tecnologia.").cnpj("12.345.678/0001-90").build()
+        Empresa empresa = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345-678")
+                .descricao("Empresa de tecnologia.")
+                .cnpj("12.345.678/0001-90")
+                .build()
         List<String> competencias = ["Java", "Python", "JavaScript"]
         empresa.adicionarCompetencias(competencias)
 
@@ -67,7 +96,14 @@ class EmpresaSpec extends Specification {
 
     void "deve retornar o CNPJ ao chamar obterDocumento()"() {
         given: "uma empresa com CNPJ"
-        Empresa empresa = new org.uGustavoDev.builder.EmpresaBuilder().nome("Google").email("google@google.com").pais("USA").cep("12345-678").descricao("Empresa de tecnologia.").cnpj("12.345.678/0001-90").build()
+        Empresa empresa = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345-678")
+                .descricao("Empresa de tecnologia.")
+                .cnpj("12.345.678/0001-90")
+                .build()
 
         expect: "obterDocumento() retorna o CNPJ correto"
         empresa.obterDocumento() == "12.345.678/0001-90"
@@ -75,7 +111,14 @@ class EmpresaSpec extends Specification {
 
     void "nao deve falhar ao tentar remover uma competência inexistente"() {
         given: "uma empresa com algumas competências"
-        Empresa empresa = new org.uGustavoDev.builder.EmpresaBuilder().nome("Google").email("google@google.com").pais("USA").cep("12345-678").descricao("Empresa de tecnologia.").cnpj("12.345.678/0001-90").build()
+        Empresa empresa = new EmpresaBuilder()
+                .nome("Google")
+                .email("google@google.com")
+                .pais("USA")
+                .cep("12345-678")
+                .descricao("Empresa de tecnologia.")
+                .cnpj("12.345.678/0001-90")
+                .build()
         empresa.adicionarCompetencia("Java")
 
         when: "tentamos remover uma competência que nao esta na lista"
