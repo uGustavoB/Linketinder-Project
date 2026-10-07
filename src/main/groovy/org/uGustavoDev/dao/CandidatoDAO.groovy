@@ -1,5 +1,6 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.builder.CandidatoBuilder
 import org.uGustavoDev.dao.interfaces.ICandidatoDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
@@ -40,29 +41,27 @@ class CandidatoDAO implements ICandidatoDAO {
     }
 
     private Candidato extrairCandidato(ResultSet rs) throws SQLException {
-        Candidato c = new Candidato(
-                rs.getString("nome"),
-                rs.getString("sobrenome"),
-                rs.getString("email"),
-                rs.getString("estado"),
-                rs.getString("pais"),
-                rs.getString("cep"),
-                rs.getString("descricao"),
-                rs.getString("cpf"),
-                null
-        )
-        c.id = rs.getInt("id")
-        c.senha = rs.getString("senha")
-
         Date dataNascimentoSql = rs.getDate("data_nascimento")
-        if (dataNascimentoSql != null) {
-            c.dataNascimento = dataNascimentoSql.toLocalDate()
-        }
+        
+        Candidato candidato = new CandidatoBuilder()
+                .id(rs.getInt("id"))
+                .nome(rs.getString("nome"))
+                .sobrenome(rs.getString("sobrenome"))
+                .email(rs.getString("email"))
+                .estado(rs.getString("estado"))
+                .pais(rs.getString("pais"))
+                .CEP(rs.getString("cep"))
+                .descricao(rs.getString("descricao"))
+                .cpf(rs.getString("cpf"))
+                .dataNascimento(dataNascimentoSql != null ? dataNascimentoSql.toLocalDate() : null)
+                .build()
+                
+        candidato.senha = rs.getString("senha")
 
-        List<String> competencias = competenciaDAO.listarPorCandidato(c.id)
-        c.adicionarCompetencias(competencias)
+        List<String> competencias = competenciaDAO.listarPorCandidato(candidato.id)
+        candidato.adicionarCompetencias(competencias)
 
-        return c
+        return candidato
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.builder.VagaBuilder
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
@@ -28,19 +29,19 @@ class VagaDAO implements IVagaDAO {
     }
 
     private Vaga extrairVaga(ResultSet rs) throws SQLException {
-        Vaga v = new Vaga(
-                rs.getInt("empresa_id"),
-                rs.getString("nome"),
-                rs.getString("descricao"),
-                rs.getString("estado"),
-                rs.getString("cidade")
-        )
-        v.id = rs.getInt("id")
+        Vaga vaga = new VagaBuilder()
+                .id(rs.getInt("id"))
+                .empresaId(rs.getInt("empresa_id"))
+                .nome(rs.getString("nome"))
+                .descricao(rs.getString("descricao"))
+                .estado(rs.getString("estado"))
+                .cidade(rs.getString("cidade"))
+                .build()
 
-        List<String> competencias = competenciaDAO.listarPorVaga(v.id)
-        v.adicionarCompetencias(competencias)
+        List<String> competencias = competenciaDAO.listarPorVaga(vaga.id)
+        vaga.adicionarCompetencias(competencias)
 
-        return v
+        return vaga
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.uGustavoDev.dao
 
+import org.uGustavoDev.builder.EmpresaBuilder
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
 import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
@@ -30,21 +31,22 @@ class EmpresaDAO implements IEmpresaDAO {
     }
 
     private Empresa extrairEmpresa(ResultSet rs) throws SQLException {
-        Empresa e = new Empresa(
-                rs.getString("nome"),
-                rs.getString("email"),
-                rs.getString("pais"),
-                rs.getString("cep"),
-                rs.getString("descricao"),
-                rs.getString("cnpj")
-        )
-        e.id = rs.getInt("id")
-        e.senha = rs.getString("senha")
+        Empresa empresa = new EmpresaBuilder()
+                .id(rs.getInt("id"))
+                .nome(rs.getString("nome"))
+                .email(rs.getString("email"))
+                .pais(rs.getString("pais"))
+                .cep(rs.getString("cep"))
+                .descricao(rs.getString("descricao"))
+                .cnpj(rs.getString("cnpj"))
+                .build()
+                
+        empresa.senha = rs.getString("senha")
 
-        List<String> competencias = competenciaDAO.listarPorEmpresa(e.id)
-        e.adicionarCompetencias(competencias)
+        List<String> competencias = competenciaDAO.listarPorEmpresa(empresa.id)
+        empresa.adicionarCompetencias(competencias)
 
-        return e
+        return empresa
     }
 
     @Override
