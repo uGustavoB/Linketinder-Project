@@ -1,14 +1,15 @@
 package org.uGustavoDev
 
-import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.controller.CandidatoController
 import org.uGustavoDev.controller.EmpresaController
+import org.uGustavoDev.dao.BaseDao
 import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.dao.CompetenciaDAO
 import org.uGustavoDev.dao.EmpresaDAO
 import org.uGustavoDev.dao.VagaDAO
 import org.uGustavoDev.dao.interfaces.ICandidatoDAO
 import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
+import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
@@ -29,7 +30,7 @@ import org.uGustavoDev.service.interfaces.IVagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    IDatabaseTemplate db = new org.uGustavoDev.dao.BaseDao()
+    IDatabaseTemplate db = new BaseDao()
     ICompetenciaDAO competenciaDAO = new CompetenciaDAO(db)
     ICandidatoDAO candidatoDAO = new CandidatoDAO(db, competenciaDAO)
     IEmpresaDAO empresaDAO = new EmpresaDAO(db, competenciaDAO)

@@ -99,6 +99,7 @@ class VagaService implements IVagaService {
         }
     }
 
+    // Gustavo - mudar nome do método
     private void vincularCompetenciasAoUsuario(int vagaId, List<String> competencias) {
         competencias.each { compNome ->
             int compId = competenciaDAO.buscarOuInserir(compNome)
