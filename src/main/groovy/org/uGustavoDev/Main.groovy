@@ -1,51 +1,18 @@
 package org.uGustavoDev
 
+import org.uGustavoDev.factory.DependencyFactory
 import org.uGustavoDev.controller.CandidatoController
 import org.uGustavoDev.controller.EmpresaController
-import org.uGustavoDev.dao.BaseDao
-import org.uGustavoDev.dao.CandidatoDAO
-import org.uGustavoDev.dao.CompetenciaDAO
-import org.uGustavoDev.dao.EmpresaDAO
-import org.uGustavoDev.dao.VagaDAO
-import org.uGustavoDev.dao.interfaces.ICandidatoDAO
-import org.uGustavoDev.dao.interfaces.ICompetenciaDAO
-import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
-import org.uGustavoDev.dao.interfaces.IEmpresaDAO
-import org.uGustavoDev.dao.interfaces.IVagaDAO
 import org.uGustavoDev.exceptions.DatabaseOperationException
-import org.uGustavoDev.mapper.CandidatoMapper
-import org.uGustavoDev.mapper.EmpresaMapper
-import org.uGustavoDev.mapper.VagaMapper
-import org.uGustavoDev.mapper.interfaces.ICandidatoMapper
-import org.uGustavoDev.mapper.interfaces.IEmpresaMapper
-import org.uGustavoDev.mapper.interfaces.IVagaMapper
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
-import org.uGustavoDev.service.CandidatoService
-import org.uGustavoDev.service.EmpresaService
-import org.uGustavoDev.service.VagaService
-import org.uGustavoDev.service.interfaces.ICandidatoService
-import org.uGustavoDev.service.interfaces.IEmpresaService
-import org.uGustavoDev.service.interfaces.IVagaService
 import org.uGustavoDev.ui.ConsoleUI
 
 static void main(String[] args) {
-    IDatabaseTemplate db = new BaseDao()
-    ICompetenciaDAO competenciaDAO = new CompetenciaDAO(db)
-    ICandidatoDAO candidatoDAO = new CandidatoDAO(db, competenciaDAO)
-    IEmpresaDAO empresaDAO = new EmpresaDAO(db, competenciaDAO)
-    IVagaDAO vagaDAO = new VagaDAO(db, competenciaDAO)
+    DependencyFactory factory = DependencyFactory.getInstance()
 
-    ICandidatoMapper candidatoMapper = new CandidatoMapper()
-    IEmpresaMapper empresaMapper = new EmpresaMapper()
-    IVagaMapper vagaMapper = new VagaMapper()
-
-    ICandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO, candidatoMapper)
-    IEmpresaService empresaService = new EmpresaService(empresaDAO, competenciaDAO, empresaMapper)
-    IVagaService vagaService = new VagaService(vagaDAO, competenciaDAO, vagaMapper)
-
-    CandidatoController candidatoController = new CandidatoController(candidatoService, vagaService)
-    EmpresaController empresaController = new EmpresaController(empresaService, vagaService, candidatoService)
+    CandidatoController candidatoController = factory.candidatoController
+    EmpresaController empresaController = factory.empresaController
 
     boolean executando = true
     Candidato candidatoLogado = null
