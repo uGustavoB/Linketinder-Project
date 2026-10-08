@@ -2,14 +2,12 @@ package org.uGustavoDev.controller
 
 import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.dto.VagaCadastroDTO
-import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.service.interfaces.ICandidatoService
 import org.uGustavoDev.service.interfaces.IEmpresaService
 import org.uGustavoDev.service.interfaces.IVagaService
-import org.uGustavoDev.ui.ConsoleUI
 
 class EmpresaController {
 
@@ -27,108 +25,35 @@ class EmpresaController {
         return empresaService.loginEmpresa(email, senha)
     }
 
-    void cadastrarEmpresa() {
-        EmpresaCadastroDTO dto = ConsoleUI.pedirDadosEmpresa()
-        try {
-            empresaService.adicionarEmpresa(dto)
-            ConsoleUI.imprimirMensagem("\nEmpresa cadastrada com sucesso!")
-        } catch (DatabaseOperationException | IllegalArgumentException e) {
-            ConsoleUI.imprimirMensagem("\nFalha ao cadastrar: " + e.message)
-        }
-        ConsoleUI.aguardarContinuacao()
+    void cadastrarEmpresa(EmpresaCadastroDTO dto) {
+        empresaService.adicionarEmpresa(dto)
     }
 
-    Empresa menuPerfil(Empresa empresaLogada) {
-        int opcaoPerfil = ConsoleUI.pedirOpcaoMenuPerfil()
-        if (opcaoPerfil == 1) {
-            ConsoleUI.imprimirCabecalho("Meu Perfil (Empresa)")
-            ConsoleUI.imprimirMensagem(empresaLogada.toString())
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoPerfil == 2) {
-            ConsoleUI.imprimirMensagem("Por favor, informe seus novos dados:")
-            EmpresaCadastroDTO dto = ConsoleUI.pedirDadosEmpresa()
-
-            try {
-                Empresa empresaEditada = empresaService.atualizarEmpresa(empresaLogada.id, dto)
-                empresaLogada = empresaEditada
-                ConsoleUI.imprimirMensagem("\nEmpresa atualizada com sucesso!")
-            } catch (DatabaseOperationException | IllegalArgumentException e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao atualizar: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoPerfil == 3) {
-            try {
-                empresaService.deletarEmpresa(empresaLogada.id)
-                empresaLogada = null
-                ConsoleUI.imprimirMensagem("\nConta deletada com sucesso.")
-            } catch (DatabaseOperationException | IllegalArgumentException e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao deletar: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        }
-        return empresaLogada
+    Empresa atualizarEmpresa(int id, EmpresaCadastroDTO dto) {
+        return empresaService.atualizarEmpresa(id, dto)
     }
 
-    void menuVagas(Empresa empresaLogada) {
-        int opcaoVagas = ConsoleUI.pedirOpcaoMenuVagasEmpresa()
-        if (opcaoVagas == 1) {
-            VagaCadastroDTO dto = ConsoleUI.pedirDadosVaga(empresaLogada.id)
-            try {
-                vagaService.adicionarVaga(empresaLogada.id, dto)
-                ConsoleUI.imprimirMensagem("\nVaga criada com sucesso!")
-            } catch (DatabaseOperationException | IllegalArgumentException e) {
-                ConsoleUI.imprimirMensagem("\nFalha ao criar vaga: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoVagas == 2) {
-            try {
-                List<Vaga> vagas = vagaService.listarVagasDaEmpresa(empresaLogada.id)
-                if (vagas.isEmpty()) {
-                    ConsoleUI.imprimirMensagem("Você ainda não criou nenhuma vaga.")
-                } else {
-                    ConsoleUI.imprimirCabecalho("Minhas Vagas")
-                    vagas.each { ConsoleUI.imprimirMensagem(it.toString()) }
-                }
-            } catch (DatabaseOperationException | IllegalArgumentException e) {
-                ConsoleUI.imprimirMensagem("Falha ao listar vagas: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoVagas == 3) {
-            int vagaId = ConsoleUI.lerEscolha("ID da vaga para editar: ", 1, Integer.MAX_VALUE)
-            ConsoleUI.imprimirMensagem("Por favor, informe os novos dados para a vaga:")
-            VagaCadastroDTO dtoEditada = ConsoleUI.pedirDadosVaga(empresaLogada.id)
-            try {
-                vagaService.atualizarVagaDaEmpresa(empresaLogada.id, vagaId, dtoEditada)
-                ConsoleUI.imprimirMensagem("\nVaga atualizada com sucesso!")
-            } catch (DatabaseOperationException | IllegalArgumentException e) {
-                ConsoleUI.imprimirMensagem("Erro: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        } else if (opcaoVagas == 4) {
-            int vagaId = ConsoleUI.lerEscolha("ID da vaga para deletar: ", 1, Integer.MAX_VALUE)
-            try {
-                vagaService.deletarVagaDaEmpresa(empresaLogada.id, vagaId)
-                ConsoleUI.imprimirMensagem("\nVaga deletada com sucesso.")
-            } catch (DatabaseOperationException | IllegalArgumentException e) {
-                ConsoleUI.imprimirMensagem("Erro: " + e.message)
-            }
-            ConsoleUI.aguardarContinuacao()
-        }
+    void deletarEmpresa(int id) {
+        empresaService.deletarEmpresa(id)
     }
 
-    void menuExplorarCandidatos() {
-        try {
-            List<Candidato> candidatos = candidatoService.listarCandidatos()
-            if (candidatos.isEmpty()) {
-                ConsoleUI.imprimirMensagem("Nenhum candidato cadastrado no momento.")
-            } else {
-                ConsoleUI.imprimirCabecalho("Lista de Candidatos Disponíveis")
-                candidatos.each { ConsoleUI.imprimirMensagem(it.toAnonymousString()) }
-            }
-        } catch (DatabaseOperationException | IllegalArgumentException e) {
-            ConsoleUI.imprimirMensagem("Falha ao listar candidatos: " + e.message)
-        }
-        ConsoleUI.aguardarContinuacao()
+    void adicionarVaga(int empresaId, VagaCadastroDTO dto) {
+        vagaService.adicionarVaga(empresaId, dto)
     }
 
+    List<Vaga> listarVagasDaEmpresa(int empresaId) {
+        return vagaService.listarVagasDaEmpresa(empresaId)
+    }
+
+    void atualizarVagaDaEmpresa(int empresaId, int vagaId, VagaCadastroDTO dto) {
+        vagaService.atualizarVagaDaEmpresa(empresaId, vagaId, dto)
+    }
+
+    void deletarVagaDaEmpresa(int empresaId, int vagaId) {
+        vagaService.deletarVagaDaEmpresa(empresaId, vagaId)
+    }
+
+    List<Candidato> listarCandidatos() {
+        return candidatoService.listarCandidatos()
+    }
 }
