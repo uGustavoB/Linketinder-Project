@@ -2,7 +2,7 @@ package org.uGustavoDev.dao
 
 import org.uGustavoDev.dao.interfaces.IDatabaseTemplate
 import org.uGustavoDev.exceptions.DatabaseOperationException
-import org.uGustavoDev.factory.ConexaoFactory
+import org.uGustavoDev.factory.ConexaoSingleton
 
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -13,7 +13,8 @@ class BaseDao implements IDatabaseTemplate {
 
     @Override
     <T> T executarSQL(String sql, Closure closure) {
-        try (Connection conexao = ConexaoFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        Connection conexao = ConexaoSingleton.getInstance()
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             closure.delegate = stmt
             return closure(stmt)
         } catch (SQLException e) {
@@ -23,8 +24,8 @@ class BaseDao implements IDatabaseTemplate {
 
     @Override
     <T> T executarSQLComRetornoDeChave(String sql, Closure closure) {
-        try (Connection conexao = ConexaoFactory.getConnection();
-             PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conexao = ConexaoSingleton.getInstance()
+        try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             closure.delegate = stmt
             return closure(stmt)
         } catch (SQLException e) {
