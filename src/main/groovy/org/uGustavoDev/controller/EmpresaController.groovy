@@ -56,4 +56,5 @@ class EmpresaController {
     List<Candidato> listarCandidatos() {
         return candidatoService.listarCandidatos()
     }
+
 }

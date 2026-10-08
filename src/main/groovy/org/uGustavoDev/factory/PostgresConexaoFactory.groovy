@@ -22,4 +22,5 @@ class PostgresConexaoFactory implements IConexaoFactory {
             throw new RuntimeException("Erro ao conectar no banco de dados PostgreSQL: ${e.message}", e)
         }
     }
+
 }

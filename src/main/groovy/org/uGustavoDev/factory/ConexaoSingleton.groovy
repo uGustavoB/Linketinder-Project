@@ -6,7 +6,7 @@ class ConexaoSingleton {
 
     private static Connection instance
 
-    private ConexaoSingleton() {}
+    private ConexaoSingleton() { }
 
     static synchronized Connection getInstance() {
         if (instance == null || instance.isClosed()) {

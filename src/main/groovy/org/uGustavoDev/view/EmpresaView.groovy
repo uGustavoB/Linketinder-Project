@@ -4,6 +4,7 @@ import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.model.Empresa
 
 class EmpresaView {
+
     private final GenericView genericoView
 
     EmpresaView(GenericView genericoView) {
@@ -32,4 +33,5 @@ class EmpresaView {
         genericoView.mostrarCabecalho("Meu Perfil (Empresa)")
         genericoView.mostrarMensagem(empresa.toString())
     }
+
 }

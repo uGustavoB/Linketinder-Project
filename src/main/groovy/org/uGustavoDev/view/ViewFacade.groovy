@@ -8,6 +8,7 @@ import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Vaga
 
 class ViewFacade {
+
     CandidatoView candidatoView
     EmpresaView empresaView
     VagaView vagaView
@@ -125,4 +126,5 @@ class ViewFacade {
         genericoView.mostrarMensagem("0 - Voltar")
         return genericoView.lerEscolha("Sua escolha: ", 0, 4)
     }
+
 }

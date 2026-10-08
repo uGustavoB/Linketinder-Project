@@ -35,4 +35,5 @@ class CandidatoController {
     List<Vaga> listarVagas() {
         return vagaService.listarVagas()
     }
+
 }

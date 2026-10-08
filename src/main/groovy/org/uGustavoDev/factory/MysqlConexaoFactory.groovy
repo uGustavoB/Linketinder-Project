@@ -22,4 +22,5 @@ class MysqlConexaoFactory implements IConexaoFactory {
             throw new RuntimeException("Erro ao conectar no banco de dados MySQL: ${e.message}", e)
         }
     }
+
 }

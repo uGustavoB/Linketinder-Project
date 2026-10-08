@@ -4,6 +4,7 @@ import org.uGustavoDev.dto.CandidatoCadastroDTO
 import org.uGustavoDev.model.Candidato
 
 class CandidatoView {
+
     private final GenericView genericoView
 
     CandidatoView(GenericView genericoView) {
@@ -44,4 +45,5 @@ class CandidatoView {
             candidatos.each { genericoView.mostrarMensagem(it.toAnonymousString()) }
         }
     }
+
 }

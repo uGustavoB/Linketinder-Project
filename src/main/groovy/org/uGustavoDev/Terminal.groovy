@@ -9,6 +9,7 @@ import org.uGustavoDev.model.Vaga
 import org.uGustavoDev.view.ViewFacade
 
 class Terminal {
+
     private final CandidatoController candidatoController
     private final EmpresaController empresaController
     private final ViewFacade view
@@ -278,4 +279,5 @@ class Terminal {
         }
         view.aguardarContinuacao()
     }
+
 }

@@ -4,6 +4,7 @@ import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.model.Vaga
 
 class VagaView {
+
     private final GenericView genericoView
 
     VagaView(GenericView genericoView) {
@@ -33,4 +34,5 @@ class VagaView {
             vagas.each { genericoView.mostrarMensagem(it.toString()) }
         }
     }
+
 }
