@@ -10,6 +10,8 @@ Trata-se de um MVP (Minimum Viable Product) via console escrito em **Groovy**, o
 
 > **Modelagem de Dados**: O banco de dados foi construído com o auxílio da ferramenta **dbdiagram.io**, contando com tabelas de Candidatos, Empresas, Vagas e Competências. O diagrama DER (.pdf) e scripts de inserção podem ser conferidos na [Documentação de Modelagem](specs/README.md).
 
+> **API RESTful**: Para informações detalhadas sobre os endpoints HTTP, servidor Tomcat embutido, payloads de requisição/resposta e como executar/testar os serviços web, consulte a [Documentação da API](docs/API.md).
+
 ---
 
 ## Funcionalidades
@@ -31,30 +33,38 @@ src/
 │   └── groovy/
 │       └── org/
 │           └── uGustavoDev/
-│               ├── Main.groovy              # Ponto de entrada (Roteador principal)
-│               ├── controller/              # Camada de controle de fluxo (MVC)
-│               │   ├── CandidatoController.groovy
-│               │   └── EmpresaController.groovy
-│               ├── service/                 # Camada de regras de negócio (Validações)
+│               ├── Main.groovy              # Ponto de entrada (inicializa o ServidorAPI)
+│               ├── ServidorAPI.groovy       # Servidor HTTP Tomcat embutido e mapeamento de rotas
+│               ├── Terminal.groovy          # Interface de console/terminal (modo legado)
+│               ├── builder/                 # Builders fluentes para entidades de domínio
+│               ├── controller/
+│               │   ├── api/                 # Controllers da API RESTful (Servlets HTTP)
+│               │   │   ├── BaseController.groovy
+│               │   │   ├── CandidatoController.groovy
+│               │   │   ├── EmpresaController.groovy
+│               │   │   └── VagaController.groovy
+│               │   └── view/                # Controllers voltados à interface de console
+│               │       ├── CandidatoController.groovy
+│               │       └── EmpresaController.groovy
+│               ├── dao/                     # Data Access Objects (comunicação com PostgreSQL via JDBC)
+│               ├── dto/                     # Objetos de transferência de dados (DTOs de entrada)
+│               ├── exceptions/              # Exceções customizadas da aplicação
+│               ├── factory/                 # Injeção de dependências e fábricas de conexões
+│               ├── mapper/                  # Conversores entre DTOs e entidades
+│               ├── model/                   # Classes de Entidade (Pessoa, Candidato, Empresa, Vaga)
+│               ├── service/                 # Camada de regras de negócio e validações
 │               │   ├── CandidatoService.groovy
 │               │   ├── EmpresaService.groovy
 │               │   └── VagaService.groovy
-│               ├── dao/                     # Data Access Objects (Comunicação com PostgreSQL)
-│               ├── model/                   # Classes de Entidade
-│               │   ├── Pessoa.groovy        # Classe base (abstrata)
-│               │   ├── Candidato.groovy     
-│               │   ├── Empresa.groovy       
-│               │   └── Vaga.groovy
-│               └── ui/
-│                   └── ConsoleUI.groovy     # Único local que interage com o terminal (Inputs/Prints)
+│               └── view/                    # Views e Facade da interface de console
 └── test/
     └── groovy/
         └── org/
             └── uGustavoDev/
-                ├── model/                   # Testes unitários puros das entidades
+                ├── model/                   # Testes unitários das entidades
                 │   ├── CandidatoSpec.groovy 
                 │   └── EmpresaSpec.groovy   
-                └── services/                # Testes automatizados usando Spock e GroovyMock(DAO)
+                └── services/                # Testes automatizados usando Spock e Mocks
                     ├── CandidatoServiceSpec.groovy 
                     ├── EmpresaServiceSpec.groovy
                     └── VagaServiceSpec.groovy
