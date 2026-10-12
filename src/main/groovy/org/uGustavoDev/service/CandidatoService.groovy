@@ -21,7 +21,7 @@ class CandidatoService implements ICandidatoService {
     }
 
     @Override
-    void adicionarCandidato(CandidatoCadastroDTO dto) {
+    Candidato adicionarCandidato(CandidatoCadastroDTO dto) {
         if (candidatoDAO.buscarPorEmail(dto.email) != null) {
             throw new IllegalArgumentException("Já existe um candidato cadastrado com o email '${dto.email}'.")
         }
@@ -34,6 +34,7 @@ class CandidatoService implements ICandidatoService {
         try {
             candidatoDAO.inserir(novoCandidato)
             vincularCompetenciasAoUsuario(novoCandidato.id, novoCandidato.competencias)
+            return novoCandidato
         } catch (DatabaseOperationException e) {
             e.printStackTrace(); throw new DatabaseOperationException("Não foi possível salvar o candidato no banco de dados. Causa: " + e.cause?.message, e)
         }

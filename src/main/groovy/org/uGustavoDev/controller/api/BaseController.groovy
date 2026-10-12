@@ -80,6 +80,10 @@ abstract class BaseController extends HttpServlet {
         enviarRespostaJson(response, HttpServletResponse.SC_OK, dados)
     }
 
+    protected void enviarRespostaCriado(HttpServletResponse response, Object dados) {
+        enviarRespostaJson(response, HttpServletResponse.SC_CREATED, dados)
+    }
+
     protected void enviarRespostaSemConteudo(HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_NO_CONTENT)
         response.setHeader("Access-Control-Allow-Origin", "*")
@@ -92,5 +96,14 @@ abstract class BaseController extends HttpServlet {
         ]
         enviarRespostaJson(response, status, payloadErro)
     }
-    
+
+    protected void tratarExcecao(HttpServletResponse response, Exception e) {
+        if (e instanceof ValidationException || e instanceof IllegalArgumentException) {
+            enviarRespostaErro(response, HttpServletResponse.SC_BAD_REQUEST, e.message)
+        } else if (e instanceof DatabaseOperationException) {
+            enviarRespostaErro(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.message)
+        } else {
+            enviarRespostaErro(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro interno no servidor: " + e.message)
+        }
+    }
 }
