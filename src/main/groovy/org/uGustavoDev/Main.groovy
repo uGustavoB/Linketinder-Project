@@ -15,7 +15,7 @@ static void main(String[] args) {
 
 //    terminal.iniciar()
 
-    ServidorAPI tomcatServer = new ServidorAPI(factory.candidatoController)
+    ServidorAPI tomcatServer = new ServidorAPI(factory.candidatoController, factory.empresaApiController)
 
     tomcatServer.run()
 }
