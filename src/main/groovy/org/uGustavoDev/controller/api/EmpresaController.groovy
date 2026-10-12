@@ -40,4 +40,5 @@ class EmpresaController extends BaseController {
             tratarExcecao(resp, e)
         }
     }
+
 }

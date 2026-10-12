@@ -6,7 +6,7 @@ import org.uGustavoDev.controller.api.CandidatoController
 import org.uGustavoDev.controller.api.EmpresaController
 import org.uGustavoDev.controller.api.VagaController
 
-class ServidorAPI implements Runnable{
+class ServidorAPI implements Runnable {
 
     private String PORT = "8081"
     private CandidatoController candidatoController

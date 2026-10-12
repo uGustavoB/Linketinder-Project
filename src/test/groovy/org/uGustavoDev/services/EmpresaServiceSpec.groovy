@@ -27,7 +27,14 @@ class EmpresaServiceSpec extends Specification {
 
     void "deve salvar empresa e vincular competencias quando dados sao validos e nao existem no banco"() {
         given: "uma empresa com dados ineditos"
-        EmpresaCadastroDTO dto = new EmpresaCadastroDTO(nome: "Google", email: "google@google.com", pais: "USA", cep: "12345", descricao: "Tecnologia", cnpj: "11.111.111/0001-11", competencias: ["Java", "Python"])
+        EmpresaCadastroDTO dto = new EmpresaCadastroDTO(nome: "Google",
+                email: "google@google.com",
+                pais: "USA",
+                cep: "12345",
+                descricao: "Tecnologia",
+                cnpj: "11.111.111/0001-11",
+                competencias: ["Java", "Python"]
+        )
         Empresa novaEmpresa = new EmpresaBuilder()
                 .id(1)
                 .nome("Google")
@@ -244,7 +251,7 @@ class EmpresaServiceSpec extends Specification {
 
         then: "o erro nao vaza exposto, mas sim sob uma exception prevista do service"
         1 * mockEmpresaDAO.listar() >> { throw new DatabaseOperationException("Timeout do banco") }
-        DatabaseOperationException erro = thrown(DatabaseOperationException)
+        thrown(DatabaseOperationException)
     }
 
 }

@@ -29,7 +29,18 @@ class CandidatoServiceSpec extends Specification {
 
     void "deve salvar candidato e vincular competencias quando dados sao validos e nao existem no banco"() {
         given: "um candidato com dados ineditos"
-        CandidatoCadastroDTO dto = new CandidatoCadastroDTO(nome: "Ana", sobrenome: "Silva", email: "ana@email.com", estado: "SP", pais: "Brasil", cep: "01000", descricao: "Dev Groovy", cpf: "111", dataNascimento: LocalDate.of(1990, 1, 1), competencias: ["Groovy", "Spock"])
+        CandidatoCadastroDTO dto = new CandidatoCadastroDTO(
+                nome: "Ana",
+                sobrenome: "Silva",
+                email: "ana@email.com",
+                estado: "SP",
+                pais: "Brasil",
+                cep: "01000",
+                descricao: "Dev Groovy",
+                cpf: "111",
+                dataNascimento: LocalDate.of(1990, 1, 1),
+                competencias: ["Groovy", "Spock"]
+        )
         Candidato novoCandidato = new CandidatoBuilder()
                 .id(1)
                 .nome("Ana")

@@ -2,7 +2,6 @@ package org.uGustavoDev.controller.api
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
@@ -106,4 +105,5 @@ abstract class BaseController extends HttpServlet {
             enviarRespostaErro(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro interno no servidor: " + e.message)
         }
     }
+
 }

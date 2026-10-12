@@ -40,4 +40,5 @@ class CandidatoController extends BaseController {
             tratarExcecao(resp, e)
         }
     }
+
 }

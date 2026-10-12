@@ -18,6 +18,9 @@
         <rule-config name="SpaceAroundMapEntryColon">
             <property name="enabled" value="false" />
         </rule-config>
+        <rule-config name="LineLength">
+            <property name="length" value="150" />
+        </rule-config>
     </ruleset-ref>
     <ruleset-ref path="rulesets/unused.xml"/>
 </ruleset>

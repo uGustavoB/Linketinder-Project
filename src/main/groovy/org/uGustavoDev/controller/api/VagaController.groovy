@@ -40,4 +40,5 @@ class VagaController extends BaseController {
             tratarExcecao(resp, e)
         }
     }
+
 }
