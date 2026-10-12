@@ -73,6 +73,17 @@ src/
 
 ---
 
+## Padrões de Projeto (Design Patterns)
+
+Durante o desenvolvimento, aplicamos padrões de projeto para garantir uma arquitetura escalável e de fácil manutenção:
+
+- **Facade**: Aplicado para abstrair a complexidade de roteamento do ponto de entrada (`Main`). Ele atua como uma interface unificada e simplificada que encapsula a lógica de qual `View` e `Controller` devem ser acionados, escondendo essa complexidade do cliente.
+- **Builder**: Utilizado na criação das entidades de domínio (`Candidato` e `Empresa`). Como essas classes possuem muitos atributos (dados, competências), o Builder permite construí-las passo a passo e de forma fluente, evitando construtores com muitos parâmetros e garantindo clareza na instanciação.
+- **Singleton**: Implementado no gerenciador de banco de dados para garantir uma única instância global de conexão com o PostgreSQL em todo o ciclo de vida da aplicação. Isso previne gargalos de conexão e centraliza os recursos do banco.
+- **Factory**: Atua como um centralizador de injeção de dependências. A Factory fica encarregada de fabricar e fornecer as conexões de banco de dados, e de instanciar toda a cadeia de dependências em cascata (injetando os respectivos `DAOs` nos `Services`, e `Services` nos `Controllers`), promovendo o baixo acoplamento e facilitando a testabilidade.
+
+---
+
 ## Tecnologias
 
 - **Groovy** (Linguagem escolhida para produtividade e compatibilidade com o ecossistema Java)
