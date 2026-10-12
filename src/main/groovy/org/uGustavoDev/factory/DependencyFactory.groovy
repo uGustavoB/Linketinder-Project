@@ -2,6 +2,7 @@ package org.uGustavoDev.factory
 
 import org.uGustavoDev.controller.api.CandidatoController
 import org.uGustavoDev.controller.api.EmpresaController as EmpresaApiController
+import org.uGustavoDev.controller.api.VagaController
 import org.uGustavoDev.controller.view.EmpresaController
 import org.uGustavoDev.dao.BaseDao
 import org.uGustavoDev.dao.CandidatoDAO
@@ -48,6 +49,7 @@ class DependencyFactory {
     CandidatoController candidatoController
     EmpresaController empresaController
     EmpresaApiController empresaApiController
+    VagaController vagaController
 
     private DependencyFactory() {
         iniciarDependencias()
@@ -95,6 +97,7 @@ class DependencyFactory {
         candidatoController = new CandidatoController(candidatoService)
         empresaController = new EmpresaController(empresaService, vagaService, candidatoService)
         empresaApiController = new EmpresaApiController(empresaService)
+        vagaController = new VagaController(vagaService)
     }
 
 }
