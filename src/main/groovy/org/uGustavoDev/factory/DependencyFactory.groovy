@@ -1,7 +1,7 @@
 package org.uGustavoDev.factory
 
-import org.uGustavoDev.controller.CandidatoController
-import org.uGustavoDev.controller.EmpresaController
+import org.uGustavoDev.controller.view.CandidatoController
+import org.uGustavoDev.controller.view.EmpresaController
 import org.uGustavoDev.dao.BaseDao
 import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.dao.CompetenciaDAO

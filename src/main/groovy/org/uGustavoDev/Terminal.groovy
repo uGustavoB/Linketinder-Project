@@ -1,7 +1,7 @@
 package org.uGustavoDev
 
-import org.uGustavoDev.controller.CandidatoController
-import org.uGustavoDev.controller.EmpresaController
+import org.uGustavoDev.controller.view.CandidatoController
+import org.uGustavoDev.controller.view.EmpresaController
 import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
