@@ -21,7 +21,7 @@ class EmpresaService implements IEmpresaService {
     }
 
     @Override
-    void adicionarEmpresa(EmpresaCadastroDTO dto) {
+    Empresa adicionarEmpresa(EmpresaCadastroDTO dto) {
         if (empresaDAO.buscarPorEmail(dto.email) != null) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com o email '${dto.email}'.")
         }
@@ -36,6 +36,7 @@ class EmpresaService implements IEmpresaService {
                 int compId = competenciaDAO.buscarOuInserir(compNome)
                 competenciaDAO.vincularAEmpresa(empresa.id, compId)
             }
+            return empresa
         } catch (DatabaseOperationException e) {
             throw new DatabaseOperationException("Não foi possível salvar a empresa no banco de dados.", e)
         }

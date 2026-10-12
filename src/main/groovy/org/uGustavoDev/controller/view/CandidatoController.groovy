@@ -1,4 +1,4 @@
-package org.uGustavoDev.controller
+package org.uGustavoDev.controller.view
 
 import org.uGustavoDev.dto.CandidatoCadastroDTO
 import org.uGustavoDev.model.Candidato

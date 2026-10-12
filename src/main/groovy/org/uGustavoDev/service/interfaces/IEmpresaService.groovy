@@ -5,7 +5,7 @@ import org.uGustavoDev.model.Empresa
 
 interface IEmpresaService {
 
-    void adicionarEmpresa(EmpresaCadastroDTO dto)
+    Empresa adicionarEmpresa(EmpresaCadastroDTO dto)
     List<Empresa> listarEmpresas()
     Empresa loginEmpresa(String email, String senha)
     Empresa atualizarEmpresa(int id, EmpresaCadastroDTO dto)

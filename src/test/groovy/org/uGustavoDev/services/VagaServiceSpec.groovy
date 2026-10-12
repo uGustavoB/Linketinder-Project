@@ -27,7 +27,12 @@ class VagaServiceSpec extends Specification {
 
     void "deve adicionar uma vaga e registrar suas competencias no banco de dados"() {
         given: "uma vaga preenchida com as devidas competencias"
-        VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Desenvolvedor Backend", descricao: "Vaga para dev java", estado: "SP", cidade: "Sao Paulo", competencias: ["Java", "Spring"])
+        VagaCadastroDTO dto = new VagaCadastroDTO(nome: "Desenvolvedor Backend",
+                descricao: "Vaga para dev java",
+                estado: "SP",
+                cidade: "Sao Paulo",
+                competencias: ["Java", "Spring"]
+        )
         Vaga vaga = new VagaBuilder()
                 .id(100)
                 .empresaId(1)
@@ -229,7 +234,7 @@ class VagaServiceSpec extends Specification {
         then: "banco morre e o erro e traduzido educadamente pelo service"
         1 * mockVagaMapper.paraEntidade(dto, 1) >> vaga
         1 * mockVagaDAO.inserir(vaga) >> { throw new DatabaseOperationException("SQL Timeout") }
-        DatabaseOperationException erro = thrown(DatabaseOperationException)
+        thrown(DatabaseOperationException)
     }
 
 }

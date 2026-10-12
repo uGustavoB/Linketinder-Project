@@ -7,11 +7,19 @@ static void main(String[] args) {
     DependencyFactory factory = DependencyFactory.getInstance()
     ViewFacade view = new ViewFacade()
 
-    Terminal terminal = new Terminal(
+//    Terminal terminal = new Terminal(
+//            factory.candidatoController,
+//            factory.empresaController,
+//            view
+//    )
+
+//    terminal.iniciar()
+
+    ServidorAPI tomcatServer = new ServidorAPI(
             factory.candidatoController,
-            factory.empresaController,
-            view
+            factory.empresaApiController,
+            factory.vagaController
     )
 
-    terminal.iniciar()
+    tomcatServer.run()
 }

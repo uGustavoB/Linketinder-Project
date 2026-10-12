@@ -13,6 +13,7 @@ class CandidatoMapper implements ICandidatoMapper {
                 .nome(dto.nome)
                 .sobrenome(dto.sobrenome)
                 .email(dto.email)
+                .senha(dto.senha)
                 .estado(dto.estado)
                 .pais(dto.pais)
                 .CEP(dto.cep)

@@ -20,14 +20,24 @@ class VagaService implements IVagaService {
         this.competenciaDAO = competenciaDAO
     }
 
-    void adicionarVaga(int empresaId, VagaCadastroDTO dto) {
+    @Override
+    Vaga adicionarVaga(int empresaId, VagaCadastroDTO dto) {
         Vaga vaga = vagaMapper.paraEntidade(dto, empresaId)
         try {
             vagaDAO.inserir(vaga)
             vincularCompetenciasAoUsuario(vaga.id, vaga.competencias)
+            return vaga
         } catch (DatabaseOperationException e) {
             throw new DatabaseOperationException("Não foi possível salvar a vaga no banco de dados.", e)
         }
+    }
+
+    @Override
+    Vaga adicionarVaga(VagaCadastroDTO dto) {
+        if (dto.empresaId == null) {
+            throw new IllegalArgumentException("O id da empresa (empresaId) é obrigatório para cadastrar uma vaga.")
+        }
+        return adicionarVaga(dto.empresaId, dto)
     }
 
     List<Vaga> listarVagas() {
