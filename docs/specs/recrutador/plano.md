@@ -28,18 +28,9 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 
 ---
 
-## Tarefa 5: Implementação da Camada de Serviço e Testes Spock (Back-End)
-- **Objetivo:** Criar `IRecrutadorService` e `RecrutadorService` validando regras de negócio (unicidade de e-mail e CPF, verificação de existência da empresa, tratamento de senha e filtragem por área/acesso), acompanhados da suíte de testes unitários com Spock Mocks (`RecrutadorServiceSpec`).
-- **Camada afetada:** Back-End (Serviços / Regras de Negócio).
-- **Arquivos a criar ou alterar:**
-  - `src/main/groovy/org/uGustavoDev/service/interfaces/IRecrutadorService.groovy` (Criar)
-  - `src/main/groovy/org/uGustavoDev/service/RecrutadorService.groovy` (Criar)
-  - `src/test/groovy/org/uGustavoDev/services/RecrutadorServiceSpec.groovy` (Criar)
-  - `CHANGELOG.md` (Alterar)
-- **Testes necessários:** Testes unitários cobrindo cenários de sucesso, duplicidade de e-mail/CPF, senha inválida e vínculo com empresa.
-- **Comandos ou verificações para validar a conclusão:** `./gradlew test --tests "org.uGustavoDev.services.RecrutadorServiceSpec"`
-- **Critérios de aceite relacionados:** Cobertura de todos os cenários Gherkin definidos na `spec.md`.
-- **Verificações de preservação do Princípio do Anonimato:** Validação de que serviços de recrutadores não vazam dados para candidatos.
+- [x] **Tarefa 5: Implementação da Camada de Serviço e Testes Spock (Back-End)**
+  - *Objetivo:* Criar `IRecrutadorService` e `RecrutadorService` com validações de regra de negócio, acompanhados da suíte de testes unitários com Spock Mocks (`RecrutadorServiceSpec`).
+  - *Status:* Concluído. Serviços, interface e testes unitários implementados e validados com 100% de sucesso.
 
 ---
 

@@ -8,6 +8,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Interface `IRecrutadorService`, implementação `RecrutadorService` com validações de unicidade, vínculo corporativo e senha, acompanhadas da suíte de testes unitários com Spock Mocks (`RecrutadorServiceSpec`).
 - Interface `IRecrutadorDAO` e implementação `RecrutadorDAO` com tipagem estática e suporte JDBC para operações de persistência e consulta de recrutadores.
 - DTO de cadastro `RecrutadorCadastroDTO`, contrato `IRecrutadorMapper` e implementação `RecrutadorMapper` com tipagem estática, acompanhados de testes Spock.
 - Entidade de domínio `Recrutador` e `RecrutadorBuilder` com tipagem estática estrita (`groovy.transform.CompileStatic`) e testes Spock correspondentes.
