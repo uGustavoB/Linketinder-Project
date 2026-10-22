@@ -10,17 +10,9 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 
 ---
 
-## Tarefa 2: Implementação do Modelo de Domínio e Builders de Recrutador (Back-End)
-- **Objetivo:** Criar a entidade `Recrutador` estipulando os atributos de domínio (`id`, `empresaId`, `nome`, `area`, `descricao`, `email`, `cpf`, `dataNascimento`, `senha`) com tipagem estática estrita (`groovy.transform.CompileStatic`) e o `RecrutadorBuilder` para construção fluente em testes.
-- **Camada afetada:** Back-End (Domínio / Builders).
-- **Arquivos a criar ou alterar:**
-  - `src/main/groovy/org/uGustavoDev/model/Recrutador.groovy` (Criar)
-  - `src/main/groovy/org/uGustavoDev/builder/RecrutadorBuilder.groovy` (Criar)
-  - `CHANGELOG.md` (Alterar)
-- **Testes necessários:** Testes unitários de instanciação do modelo e builder (`src/test/groovy/org/uGustavoDev/model/RecrutadorSpec.groovy`).
-- **Comandos ou verificações para validar a conclusão:** `./gradlew test --tests "org.uGustavoDev.model.RecrutadorSpec"`
-- **Critérios de aceite relacionados:** Estrutura correta da entidade conforme especificação.
-- **Verificações de preservação do Princípio do Anonimato:** Assegurar que nenhuma propriedade sensível de recrutador seja exposta em métodos de serialização pública.
+- [x] **Tarefa 2: Implementação do Modelo de Domínio e Builders de Recrutador (Back-End)**
+  - *Objetivo:* Criar a entidade `Recrutador` e o `RecrutadorBuilder` com tipagem estática.
+  - *Status:* Concluído. Entidade, Builder e testes Spock (`RecrutadorSpec`) implementados e validados.
 
 ---
 
