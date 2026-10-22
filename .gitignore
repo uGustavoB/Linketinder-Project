@@ -42,3 +42,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 .env
+
+### AI ###
+graphify-out/
+.claude/
+CLAUDE.md
