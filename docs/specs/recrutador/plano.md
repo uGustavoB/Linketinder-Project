@@ -34,31 +34,12 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 
 ---
 
-## Tarefa 6: Implementação do Controller REST e Registro de Dependências (Back-End)
-- **Objetivo:** Criar `RecrutadorController` estendendo `BaseController` para expor os endpoints REST de cadastro (`POST /recrutadores`) e listagem/exclusão, atualizando o `DependencyFactory` e o `ServidorAPI` para registrar o servlet.
-- **Camada afetada:** Back-End (Controladores / API REST / IoC).
-- **Arquivos a criar ou alterar:**
-  - `src/main/groovy/org/uGustavoDev/controller/api/RecrutadorController.groovy` (Criar)
-  - `src/main/groovy/org/uGustavoDev/factory/DependencyFactory.groovy` (Alterar)
-  - `src/main/groovy/org/uGustavoDev/ServidorAPI.groovy` (Alterar)
-  - `CHANGELOG.md` (Alterar)
-- **Testes necessários:** Testes de integração/unitários de controller.
-- **Comandos ou verificações para validar a conclusão:** Inicialização do servidor embutido via `./gradlew run` e requisições HTTP validando os endpoints.
-- **Critérios de aceite relacionados:** Exposição correta dos endpoints REST e tratamento de erros via `BaseController`.
-- **Verificações de preservação do Princípio do Anonimato:** Endpoints protegidos e desvinculados de rotas de candidatos.
+- [x] **Tarefa 6: Implementação do Controller REST e Registro de Dependências (Back-End)**
+  - *Objetivo:* Criar `RecrutadorController` estendendo `BaseController` para expor os endpoints REST de recrutadores, atualizando o `DependencyFactory`, o `ServidorAPI` e o `Main`.
+  - *Status:* Concluído. Controller REST implementado e registrado no container de dependências e no Tomcat embutido. Valorr validado por compilação e testes automatizados.
 
 ---
 
-## Tarefa 7: Validação Integrada, Análise CodeNarc e Regressão (Back-End / Qualidade)
-- **Objetivo:** Executar a suíte completa de testes (`./gradlew test`), executar a análise estática CodeNarc (`./gradlew codenarcMain codenarcTest`) e garantir que não há regressões em nenhuma funcionalidade pré-existente (Candidatos, Empresas, Vagas).
-- **Camada afetada:** Back-End / Qualidade e Testes.
-- **Arquivos a criar ou alterar:**
-  - `CHANGELOG.md` (Alterar)
-- **Testes necessários:** Suíte completa de testes automatizados e CodeNarc.
-- **Comandos ou verificações para validar a conclusão:** 
-  ```bash
-  ./gradlew test
-  ./gradlew codenarcMain codenarcTest
-  ```
-- **Critérios de aceite relacionados:** 100% de sucesso nos testes, sem violações estáticas indevidas de CodeNarc e preservação de todas as regras anteriores.
-- **Verificações de preservação do Princípio do Anonimato:** Auditoria final confirmando que o anonimato de candidatos permanece intacto e recrutadores permanecem em sigilo.
+- [x] **Tarefa 7: Validação Integrada, Análise CodeNarc e Regressão (Back-End / Qualidade)**
+  - *Objetivo:* Executar a suíte completa de testes (`./gradlew test`), executar a análise estática CodeNarc e garantir que não há regressões.
+  - *Status:* Concluído. Testes executados com sucesso total (100% aprovados), sem regressões e com atualização do `CHANGELOG.md` e conformidade com o Princípio do Anonimato.

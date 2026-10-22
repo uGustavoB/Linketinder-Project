@@ -167,4 +167,5 @@ class RecrutadorDAO implements IRecrutadorDAO {
             stmt.executeUpdate()
         }
     }
+
 }

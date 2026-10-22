@@ -24,8 +24,7 @@ class Recrutador {
             String email,
             String cpf,
             LocalDate dataNascimento,
-            String senha
-    ) {
+            String senha) {
         this.empresaId = empresaId
         this.nome = nome
         this.area = area
@@ -45,8 +44,7 @@ class Recrutador {
             String email,
             String cpf,
             LocalDate dataNascimento,
-            String senha
-    ) {
+            String senha) {
         this.id = id
         this.empresaId = empresaId
         this.nome = nome
@@ -57,4 +55,5 @@ class Recrutador {
         this.dataNascimento = dataNascimento
         this.senha = senha
     }
+
 }

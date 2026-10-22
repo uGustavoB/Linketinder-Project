@@ -122,4 +122,5 @@ class RecrutadorService implements IRecrutadorService {
             throw new DatabaseOperationException("Não foi possível deletar o recrutador do banco de dados.", e)
         }
     }
+
 }

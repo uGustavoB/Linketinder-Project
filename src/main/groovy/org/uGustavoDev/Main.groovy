@@ -18,6 +18,7 @@ static void main(String[] args) {
     ServidorAPI tomcatServer = new ServidorAPI(
             factory.candidatoController,
             factory.empresaApiController,
+            factory.recrutadorController,
             factory.vagaController
     )
 

@@ -65,4 +65,5 @@ class RecrutadorBuilder {
     Recrutador build() {
         return new Recrutador(id, empresaId, nome, area, descricao, email, cpf, dataNascimento, senha)
     }
+
 }
