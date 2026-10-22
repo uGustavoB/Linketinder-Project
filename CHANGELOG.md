@@ -8,6 +8,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Interface `IRecrutadorDAO` e implementação `RecrutadorDAO` com tipagem estática e suporte JDBC para operações de persistência e consulta de recrutadores.
 - DTO de cadastro `RecrutadorCadastroDTO`, contrato `IRecrutadorMapper` e implementação `RecrutadorMapper` com tipagem estática, acompanhados de testes Spock.
 - Entidade de domínio `Recrutador` e `RecrutadorBuilder` com tipagem estática estrita (`groovy.transform.CompileStatic`) e testes Spock correspondentes.
 - Tabela `recrutadores` no script DDL do banco de dados (`specs/db/linketinder_db.sql`) com restrições de chave estrangeira, unicidade de e-mail/CPF e validação de senha.

@@ -22,17 +22,9 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 
 ---
 
-## Tarefa 4: Implementação da Camada DAO de Recrutadores (Back-End / Banco de Dados)
-- **Objetivo:** Criar a interface `IRecrutadorDAO` e a classe de acesso a dados `RecrutadorDAO` estendendo `BaseDao`, provendo operações JDBC para inserir, buscar por ID, e-mail ou CPF, listar por empresa e deletar recrutadores.
-- **Camada afetada:** Back-End (DAO) e Banco de Dados.
-- **Arquivos a criar ou alterar:**
-  - `src/main/groovy/org/uGustavoDev/dao/interfaces/IRecrutadorDAO.groovy` (Criar)
-  - `src/main/groovy/org/uGustavoDev/dao/RecrutadorDAO.groovy` (Criar)
-  - `CHANGELOG.md` (Alterar)
-- **Testes necessários:** Testes de persistência e consulta DAO.
-- **Comandos ou verificações para validar a conclusão:** `./gradlew test`
-- **Critérios de aceite relacionados:** Garantia de unicidade via consultas DAO e persistência correta com `empresa_id`.
-- **Verificações de preservação do Princípio do Anonimato:** Operações de banco restritas ao escopo corporativo.
+- [x] **Tarefa 4: Implementação da Camada DAO de Recrutadores (Back-End / Banco de Dados)**
+  - *Objetivo:* Criar a interface `IRecrutadorDAO` e a classe `RecrutadorDAO` com operações JDBC para persistência e consulta.
+  - *Status:* Concluído. Interface DAO, implementação JDBC estaticamente tipada e atualização do changelog realizadas com sucesso. Validadas por compilação e suíte de testes.
 
 ---
 
