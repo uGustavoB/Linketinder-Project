@@ -16,18 +16,9 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 
 ---
 
-## Tarefa 3: Implementação dos DTOs e Mappers de Recrutador (Back-End)
-- **Objetivo:** Criar o DTO de cadastro `RecrutadorCadastroDTO` e o mapeador `RecrutadorMapper` (implementando `IRecrutadorMapper`) para converter DTOs em instâncias de `Recrutador` com tipagem estática.
-- **Camada afetada:** Back-End (DTO / Mappers).
-- **Arquivos a criar ou alterar:**
-  - `src/main/groovy/org/uGustavoDev/dto/RecrutadorCadastroDTO.groovy` (Criar)
-  - `src/main/groovy/org/uGustavoDev/mapper/interfaces/IRecrutadorMapper.groovy` (Criar)
-  - `src/main/groovy/org/uGustavoDev/mapper/RecrutadorMapper.groovy` (Criar)
-  - `CHANGELOG.md` (Alterar)
-- **Testes necessários:** Testes unitários do mapper.
-- **Comandos ou verificações para validar a conclusão:** `./gradlew test`
-- **Critérios de aceite relacionados:** Conversão correta entre payload de entrada e entidade de domínio.
-- **Verificações de preservação do Princípio do Anonimato:** Isolamento estrito de DTOs internos de recrutador.
+- [x] **Tarefa 3: Implementação dos DTOs e Mappers de Recrutador (Back-End)**
+  - *Objetivo:* Criar o DTO de cadastro `RecrutadorCadastroDTO` e o mapeador `RecrutadorMapper`.
+  - *Status:* Concluído. DTO, interface mapper, implementação e testes unitários Spock (`RecrutadorMapperSpec`) implementados e validados.
 
 ---
 
