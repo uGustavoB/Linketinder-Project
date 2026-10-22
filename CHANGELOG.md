@@ -1,0 +1,27 @@
+# Changelog
+
+Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
+
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.0/spec.html).
+
+## [Não lançado]
+
+### Adicionado
+- Documentação técnica e de diretrizes para agentes e desenvolvedores em `AGENTS.md`.
+- Definição estruturada da skill de desenvolvimento orientado por especificação (`feature-com-spec`).
+
+---
+
+## [0.1.0] — 2026-10-21 (Estimado com base no histórico)
+
+### Adicionado
+- Endpoints de cadastro e listagem de vagas (`POST /vagas`, `GET /vagas`).
+- Endpoints de cadastro e listagem de empresas (`POST /empresas`, `GET /empresas`).
+- Endpoint de cadastro e listagem de candidatos (`POST /candidatos`, `GET /candidatos`).
+- Servidor HTTP embutido baseado em Apache Tomcat Embed Core (`ServidorAPI.groovy`).
+- Camada de persistência relacional via JDBC (DAOs, Conexão via Singleton e Factory).
+- Suíte de testes automatizados com Spock Framework e validação de qualidade estática com CodeNarc.
+- Interface Frontend SPA em TypeScript e Vite com persistência em `LocalStorage` e gráficos de competências.
+- Fluxo interativo de console legado (`Terminal.groovy`) estruturado com padrão Facade.
+- Padrões de projeto implementados: Builder, Factory, Singleton, DAO e Mappers.
