@@ -8,6 +8,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Endpoint REST `PUT /recrutadores/{id}` em `RecrutadorController` para suportar a atualização de recrutadores via API REST.
 - Validação integrada da feature de recrutadores, execução bem-sucedida de testes automatizados e preservação integral do Princípio do Anonimato.
 - `RecrutadorController` expondo os endpoints REST para gerenciamento de recrutadores (`/recrutadores/*`), registrado no `DependencyFactory` e no servidor embutido `ServidorAPI`.
 - Interface `IRecrutadorService`, implementação `RecrutadorService` com validações de unicidade, vínculo corporativo e senha, acompanhadas da suíte de testes unitários com Spock Mocks (`RecrutadorServiceSpec`).

@@ -46,6 +46,6 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 
 ---
 
-- [ ] **Tarefa 8: Implementação do Endpoint REST de Atualização (`PUT /recrutadores/{id}`)**
+- [x] **Tarefa 8: Implementação do Endpoint REST de Atualização (`PUT /recrutadores/{id}`)**
   - *Objetivo:* Expor a operação de atualização de recrutadores via API REST no `RecrutadorController`.
-  - *Status:* Pendente. Aguardando execução conforme novo escopo aprovado.
+  - *Status:* Concluído. Método `doPut` implementado no `RecrutadorController`, validado por testes automatizados, com `CHANGELOG.md` atualizado e sigilo preservado.
