@@ -8,6 +8,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Tabela `recrutadores` no script DDL do banco de dados (`specs/db/linketinder_db.sql`) com restrições de chave estrangeira, unicidade de e-mail/CPF e validação de senha.
 - Documentação técnica e de diretrizes para agentes e desenvolvedores em `AGENTS.md`.
 - Definição estruturada da skill de desenvolvimento orientado por especificação (`feature-com-spec`).
 

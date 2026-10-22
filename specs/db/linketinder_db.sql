@@ -75,4 +75,20 @@ CREATE TABLE curtidas (
 CREATE INDEX idx_vagas_empresa_id ON vagas(empresa_id);
 CREATE INDEX idx_candidato_competencia_competencia_id ON candidato_competencia(competencia_id);
 CREATE INDEX idx_vaga_competencia_competencia_id ON vaga_competencia(competencia_id);
-CREATE INDEX idx_curtidas_vaga_id ON curtidas(vaga_id);CREATE INDEX idx_empresa_competencia_competencia_id ON empresa_competencia(competencia_id);
+CREATE INDEX idx_curtidas_vaga_id ON curtidas(vaga_id);
+CREATE INDEX idx_empresa_competencia_competencia_id ON empresa_competencia(competencia_id);
+
+-- Recrutadores
+CREATE TABLE recrutadores (
+                             id              SERIAL PRIMARY KEY,
+                             empresa_id      INTEGER NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
+                             nome            VARCHAR(100) NOT NULL,
+                             area            VARCHAR(100) NOT NULL,
+                             descricao       TEXT,
+                             email           VARCHAR(255) UNIQUE NOT NULL,
+                             cpf             VARCHAR(14) UNIQUE NOT NULL,
+                             data_nascimento DATE,
+                             senha           VARCHAR(255) NOT NULL CHECK (char_length(senha) >= 6)
+);
+
+CREATE INDEX idx_recrutadores_empresa_id ON recrutadores(empresa_id);
