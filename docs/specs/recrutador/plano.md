@@ -43,3 +43,9 @@ Este plano organiza as tarefas atômicas e sequenciais para implementação da f
 - [x] **Tarefa 7: Validação Integrada, Análise CodeNarc e Regressão (Back-End / Qualidade)**
   - *Objetivo:* Executar a suíte completa de testes (`./gradlew test`), executar a análise estática CodeNarc e garantir que não há regressões.
   - *Status:* Concluído. Testes executados com sucesso total (100% aprovados), sem regressões e com atualização do `CHANGELOG.md` e conformidade com o Princípio do Anonimato.
+
+---
+
+- [ ] **Tarefa 8: Implementação do Endpoint REST de Atualização (`PUT /recrutadores/{id}`)**
+  - *Objetivo:* Expor a operação de atualização de recrutadores via API REST no `RecrutadorController`.
+  - *Status:* Pendente. Aguardando execução conforme novo escopo aprovado.

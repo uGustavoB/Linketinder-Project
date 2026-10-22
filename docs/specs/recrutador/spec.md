@@ -17,6 +17,12 @@
    - `cpf` (String, único, obrigatório, formato `XXX.XXX.XXX-XX`)
    - `dataNascimento` (LocalDate, opcional/obrigatório conforme regra de cadastro)
    - `senha` (String, obrigatória, mínimo de 6 caracteres)
+2. **Operações REST Suportadas:**
+   - Cadastro (`POST /recrutadores`)
+   - Listagem geral e por empresa (`GET /recrutadores`, `GET /recrutadores?empresaId=X`)
+   - Busca por ID (`GET /recrutadores/{id}`)
+   - Atualização (`PUT /recrutadores/{id}`)
+   - Exclusão (`DELETE /recrutadores/{id}`)
 2. **Unicidade de Dados:**
    - O e-mail e o CPF do recrutador devem ser estritamente únicos no banco de dados. Tentativas de duplicidade devem lançar exceção de validação (`IllegalArgumentException` ou `ValidationException`).
 3. **Vínculo com Empresa:**
