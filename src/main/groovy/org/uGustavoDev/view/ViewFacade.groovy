@@ -2,9 +2,11 @@ package org.uGustavoDev.view
 
 import org.uGustavoDev.dto.CandidatoCadastroDTO
 import org.uGustavoDev.dto.EmpresaCadastroDTO
+import org.uGustavoDev.dto.RecrutadorCadastroDTO
 import org.uGustavoDev.dto.VagaCadastroDTO
 import org.uGustavoDev.model.Candidato
 import org.uGustavoDev.model.Empresa
+import org.uGustavoDev.model.Recrutador
 import org.uGustavoDev.model.Vaga
 
 class ViewFacade {
@@ -12,6 +14,7 @@ class ViewFacade {
     CandidatoView candidatoView
     EmpresaView empresaView
     VagaView vagaView
+    RecrutadorView recrutadorView
     GenericView genericoView
 
     ViewFacade() {
@@ -19,6 +22,20 @@ class ViewFacade {
         this.candidatoView = new CandidatoView(this.genericoView)
         this.empresaView = new EmpresaView(this.genericoView)
         this.vagaView = new VagaView(this.genericoView)
+        this.recrutadorView = new RecrutadorView(this.genericoView)
+    }
+
+    ViewFacade(
+            GenericView genericoView,
+            CandidatoView candidatoView,
+            EmpresaView empresaView,
+            VagaView vagaView,
+            RecrutadorView recrutadorView) {
+        this.genericoView = genericoView
+        this.candidatoView = candidatoView
+        this.empresaView = empresaView
+        this.vagaView = vagaView
+        this.recrutadorView = recrutadorView
     }
 
     void mostrarCabecalho(String titulo) {
@@ -125,6 +142,43 @@ class ViewFacade {
         genericoView.mostrarMensagem("4 - Deletar uma vaga")
         genericoView.mostrarMensagem("0 - Voltar")
         return genericoView.lerEscolha("Sua escolha: ", 0, 4)
+    }
+
+    RecrutadorCadastroDTO obterDadosRecrutador(Integer empresaId = null) {
+        return recrutadorView.obterDadosRecrutador(empresaId)
+    }
+
+    void mostrarPerfilRecrutador(Recrutador recrutador, Empresa empresa = null) {
+        recrutadorView.mostrarPerfilRecrutador(recrutador, empresa)
+    }
+
+    int mostrarMenuPerfilRecrutador() {
+        return recrutadorView.mostrarMenuPerfil()
+    }
+
+    int mostrarMenuRecrutador(Recrutador recrutador) {
+        return recrutadorView.mostrarMenuRecrutador(recrutador)
+    }
+
+    void mostrarRecrutadores(List<Recrutador> recrutadores, String titulo = "Lista de Recrutadores") {
+        recrutadorView.mostrarRecrutadores(recrutadores, titulo)
+    }
+
+    int mostrarMenuGestaoRecrutadores() {
+        return empresaView.mostrarMenuGestaoRecrutadores()
+    }
+
+    void mostrarRecrutadoresEmpresa(List<Recrutador> recrutadores) {
+        empresaView.mostrarRecrutadores(recrutadores)
+    }
+
+    int mostrarMenuTipoLogin() {
+        genericoView.mostrarCabecalho("Login - Selecione seu Perfil")
+        genericoView.mostrarMensagem("1 - Candidato")
+        genericoView.mostrarMensagem("2 - Empresa")
+        genericoView.mostrarMensagem("3 - Recrutador")
+        genericoView.mostrarMensagem("0 - Voltar")
+        return genericoView.lerEscolha("Sua escolha: ", 0, 3)
     }
 
 }

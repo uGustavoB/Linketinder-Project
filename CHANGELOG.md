@@ -8,6 +8,10 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Classe `RecrutadorView` com formulário de dados (herança de `empresaId`), exibição formatada de perfil, menu de perfil restrito (sem auto-deleção) e menu de recrutador autenticado.
+- Submenu de gestão de recrutadores (`mostrarMenuGestaoRecrutadores`) e listagem formatada de recrutadores vinculados na `EmpresaView`.
+- Delegações correspondentes e menu de seleção de perfil de autenticação (`mostrarMenuTipoLogin`) adicionados ao `ViewFacade`.
+- Testes unitários com Spock cobrindo os fluxos de visualização e menus em `RecrutadorViewSpec`, `EmpresaViewSpec` e `ViewFacadeSpec`.
 - Método de autenticação `loginRecrutador(String email, String senha)` em `IRecrutadorService` e `RecrutadorService`, com testes unitários em `RecrutadorServiceSpec` cobrindo cenários de sucesso, senha incorreta, e-mail inexistente e propagação de `DatabaseOperationException`.
 - Suíte de testes unitários Spock para `RecrutadorController` (`RecrutadorControllerSpec`) cobrindo o endpoint REST `PUT /recrutadores/{id}` com cenários de 200 OK, 404 Not Found, 409 Conflict, 400 Bad Request e 415 Unsupported Media Type.
 - Endpoint REST `PUT /recrutadores/{id}` em `RecrutadorController` para suportar a atualização de recrutadores via API REST.

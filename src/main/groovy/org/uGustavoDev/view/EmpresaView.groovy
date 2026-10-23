@@ -2,6 +2,7 @@ package org.uGustavoDev.view
 
 import org.uGustavoDev.dto.EmpresaCadastroDTO
 import org.uGustavoDev.model.Empresa
+import org.uGustavoDev.model.Recrutador
 
 class EmpresaView {
 
@@ -32,6 +33,26 @@ class EmpresaView {
     void mostrarPerfilEmpresa(Empresa empresa) {
         genericoView.mostrarCabecalho("Meu Perfil (Empresa)")
         genericoView.mostrarMensagem(empresa.toString())
+    }
+
+    int mostrarMenuGestaoRecrutadores() {
+        genericoView.mostrarCabecalho("Gestão de Recrutadores")
+        genericoView.mostrarMensagem("1 - Cadastrar Recrutador")
+        genericoView.mostrarMensagem("2 - Listar Recrutadores")
+        genericoView.mostrarMensagem("3 - Deletar Recrutador")
+        genericoView.mostrarMensagem("0 - Voltar")
+        return genericoView.lerEscolha("Sua escolha: ", 0, 3)
+    }
+
+    void mostrarRecrutadores(List<Recrutador> recrutadores) {
+        genericoView.mostrarCabecalho("Lista de Recrutadores da Empresa")
+        if (recrutadores == null || recrutadores.isEmpty()) {
+            genericoView.mostrarMensagem("Nenhum recrutador cadastrado para esta empresa.")
+        } else {
+            recrutadores.each { Recrutador r ->
+                genericoView.mostrarMensagem("ID: #${r.id} | Nome: ${r.nome} | Email: ${r.email} | Área: ${r.area ?: 'N/A'}")
+            }
+        }
     }
 
 }

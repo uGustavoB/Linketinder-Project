@@ -25,17 +25,21 @@ Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o end
 
 ---
 
-## Tarefa 3: Criação da `RecrutadorView`, Submenus de Gestão e Expansão do `ViewFacade`
-- **Objetivo:** 
-  1. Criar `RecrutadorView` para formulários de dados de recrutador (sem solicitar `empresaId`, pois é herdado da empresa logada), exibição formatada do perfil (com dados da empresa associada) e menu de perfil restrito (sem opção de auto-deleção).
-  2. Implementar menu de gestão de recrutadores para a Empresa (`1 - Cadastrar Recrutador`, `2 - Listar Recrutadores`, `3 - Deletar Recrutador`, `0 - Voltar`) e listagem formatada de recrutadores.
-  3. Expor as operações correspondentes no `ViewFacade`.
-- **Arquivos afetados:**
-  - `src/main/groovy/org/uGustavoDev/view/RecrutadorView.groovy` (Novo)
-  - `src/main/groovy/org/uGustavoDev/view/EmpresaView.groovy`
-  - `src/main/groovy/org/uGustavoDev/view/ViewFacade.groovy`
-- **Cenários cobertos:** Menus e formulários isolados, sem expor opções inválidas ao perfil logado.
-- **Validação:** `./gradlew classes`
+- [x] **Tarefa 3: Criação da `RecrutadorView`, Submenus de Gestão e Expansão do `ViewFacade`**
+  - **Objetivo:** 
+    1. Criar `RecrutadorView` para formulários de dados de recrutador (sem solicitar `empresaId`, pois é herdado da empresa logada), exibição formatada do perfil (com dados da empresa associada) e menu de perfil restrito (sem opção de auto-deleção).
+    2. Implementar menu de gestão de recrutadores para a Empresa (`1 - Cadastrar Recrutador`, `2 - Listar Recrutadores`, `3 - Deletar Recrutador`, `0 - Voltar`) e listagem formatada de recrutadores.
+    3. Expor as operações correspondentes no `ViewFacade`.
+  - **Arquivos afetados:**
+    - `src/main/groovy/org/uGustavoDev/view/RecrutadorView.groovy` (Novo)
+    - `src/main/groovy/org/uGustavoDev/view/EmpresaView.groovy`
+    - `src/main/groovy/org/uGustavoDev/view/ViewFacade.groovy`
+    - `src/test/groovy/org/uGustavoDev/view/RecrutadorViewSpec.groovy` (Novo)
+    - `src/test/groovy/org/uGustavoDev/view/EmpresaViewSpec.groovy` (Novo)
+    - `src/test/groovy/org/uGustavoDev/view/ViewFacadeSpec.groovy` (Novo)
+  - **Cenários cobertos:** Menus e formulários isolados, sem expor opções inválidas ao perfil logado (auto-deleção proibida, herança de empresaId).
+  - **Status:** Concluído. Views criadas/estendidas com tipagem estática e cobertas por 12 testes unitários Spock.
+  - **Validação:** `./gradlew test --tests "org.uGustavoDev.view.*"`
 
 ---
 
