@@ -14,14 +14,14 @@ Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o end
 
 ---
 
-## Tarefa 2: Método de Autenticação no Serviço de Recrutadores
-- **Objetivo:** Garantir a presença do contrato e implementação do método `loginRecrutador(String email, String senha)` em `IRecrutadorService` e `RecrutadorService`, permitindo autenticação por e-mail e senha no terminal.
-- **Arquivos afetados:**
-  - `src/main/groovy/org/uGustavoDev/service/interfaces/IRecrutadorService.groovy`
-  - `src/main/groovy/org/uGustavoDev/service/RecrutadorService.groovy`
-  - `src/test/groovy/org/uGustavoDev/services/RecrutadorServiceSpec.groovy`
-- **Cenários cobertos:** Login com sucesso (retorna entidade), senha incorreta ou e-mail inexistente (retorna `null`).
-- **Validação:** `./gradlew test --tests "org.uGustavoDev.services.RecrutadorServiceSpec"`
+- [x] **Tarefa 2: Método de Autenticação no Serviço de Recrutadores**
+  - **Objetivo:** Garantir a presença do contrato e implementação do método `loginRecrutador(String email, String senha)` em `IRecrutadorService` e `RecrutadorService`, permitindo autenticação por e-mail e senha no terminal.
+  - **Arquivos afetados:**
+    - `src/main/groovy/org/uGustavoDev/service/interfaces/IRecrutadorService.groovy`
+    - `src/main/groovy/org/uGustavoDev/service/RecrutadorService.groovy`
+    - `src/test/groovy/org/uGustavoDev/services/RecrutadorServiceSpec.groovy`
+  - **Cenários cobertos:** Login com sucesso (retorna entidade), senha incorreta ou e-mail inexistente (retorna `null`), propagação de `DatabaseOperationException`.
+  - **Status:** Concluído. Método implementado com tipagem estática e coberto por 4 novos cenários de testes unitários no `RecrutadorServiceSpec`.
 
 ---
 

@@ -13,6 +13,8 @@ interface IRecrutadorService {
 
     Recrutador buscarRecrutadorPorId(int id)
 
+    Recrutador loginRecrutador(String email, String senha)
+
     Recrutador atualizarRecrutador(int id, RecrutadorCadastroDTO dto)
 
     void deletarRecrutador(int id)

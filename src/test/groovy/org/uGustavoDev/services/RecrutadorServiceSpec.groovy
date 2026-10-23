@@ -5,6 +5,7 @@ import org.uGustavoDev.builder.RecrutadorBuilder
 import org.uGustavoDev.dao.interfaces.IEmpresaDAO
 import org.uGustavoDev.dao.interfaces.IRecrutadorDAO
 import org.uGustavoDev.dto.RecrutadorCadastroDTO
+import org.uGustavoDev.exceptions.DatabaseOperationException
 import org.uGustavoDev.mapper.interfaces.IRecrutadorMapper
 import org.uGustavoDev.model.Empresa
 import org.uGustavoDev.model.Recrutador
@@ -168,4 +169,59 @@ class RecrutadorServiceSpec extends Specification {
         IllegalArgumentException e = thrown()
         e.message.contains("Recrutador não encontrado para exclusão")
     }
+
+    void "deve autenticar recrutador com sucesso quando email e senha forem validos"() {
+        given: "um recrutador existente com credenciais válidas"
+        Recrutador recrutadorEsperado = new RecrutadorBuilder()
+                .id(1)
+                .empresaId(1)
+                .nome("Mariana")
+                .email("mariana@empresa.com")
+                .senha("senha123")
+                .build()
+
+        when: "o login é executado com as credenciais corretas"
+        Recrutador resultado = recrutadorService.loginRecrutador("mariana@empresa.com", "senha123")
+
+        then: "o DAO busca pelo email e o recrutador autenticado é retornado"
+        1 * mockRecrutadorDAO.buscarPorEmail("mariana@empresa.com") >> recrutadorEsperado
+        resultado == recrutadorEsperado
+    }
+
+    void "deve retornar null quando o recrutador nao for encontrado pelo email informado"() {
+        when: "o login é executado com um email não cadastrado"
+        Recrutador resultado = recrutadorService.loginRecrutador("naoexiste@empresa.com", "senha123")
+
+        then: "o DAO não encontra o registro e o resultado é nulo"
+        1 * mockRecrutadorDAO.buscarPorEmail("naoexiste@empresa.com") >> null
+        resultado == null
+    }
+
+    void "deve retornar null quando a senha informada for incorreta"() {
+        given: "um recrutador com senha definida"
+        Recrutador recrutador = new RecrutadorBuilder()
+                .id(1)
+                .email("mariana@empresa.com")
+                .senha("senhaCorreta123")
+                .build()
+
+        when: "o login é executado com senha divergente"
+        Recrutador resultado = recrutadorService.loginRecrutador("mariana@empresa.com", "senhaIncorreta")
+
+        then: "o DAO busca pelo email mas a autenticação falha retornando nulo"
+        1 * mockRecrutadorDAO.buscarPorEmail("mariana@empresa.com") >> recrutador
+        resultado == null
+    }
+
+    void "deve lancar DatabaseOperationException quando ocorrer erro de banco no login do recrutador"() {
+        when: "ocorre uma falha no acesso a dados durante a busca pelo email"
+        recrutadorService.loginRecrutador("mariana@empresa.com", "senha123")
+
+        then: "uma DatabaseOperationException é propagada"
+        1 * mockRecrutadorDAO.buscarPorEmail("mariana@empresa.com") >> {
+            throw new DatabaseOperationException("Falha de conexão com o banco.")
+        }
+        thrown(DatabaseOperationException)
+    }
+
 }

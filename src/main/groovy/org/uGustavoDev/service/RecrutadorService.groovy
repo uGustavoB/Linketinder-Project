@@ -79,6 +79,19 @@ class RecrutadorService implements IRecrutadorService {
     }
 
     @Override
+    Recrutador loginRecrutador(String email, String senha) {
+        try {
+            Recrutador recrutador = recrutadorDAO.buscarPorEmail(email)
+            if (recrutador != null && recrutador.senha == senha) {
+                return recrutador
+            }
+            return null
+        } catch (DatabaseOperationException e) {
+            throw new DatabaseOperationException("Erro ao tentar realizar login de recrutador no banco.", e)
+        }
+    }
+
+    @Override
     Recrutador atualizarRecrutador(int id, RecrutadorCadastroDTO dto) {
         Recrutador existente = recrutadorDAO.buscarPorId(id)
         if (existente == null) {
