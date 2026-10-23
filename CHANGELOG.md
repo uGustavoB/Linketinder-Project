@@ -8,6 +8,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Suíte de testes unitários Spock para `RecrutadorController` (`RecrutadorControllerSpec`) cobrindo o endpoint REST `PUT /recrutadores/{id}` com cenários de 200 OK, 404 Not Found, 409 Conflict, 400 Bad Request e 415 Unsupported Media Type.
 - Endpoint REST `PUT /recrutadores/{id}` em `RecrutadorController` para suportar a atualização de recrutadores via API REST.
 - Validação integrada da feature de recrutadores, execução bem-sucedida de testes automatizados e preservação integral do Princípio do Anonimato.
 - `RecrutadorController` expondo os endpoints REST para gerenciamento de recrutadores (`/recrutadores/*`), registrado no `DependencyFactory` e no servidor embutido `ServidorAPI`.

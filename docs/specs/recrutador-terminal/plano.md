@@ -4,12 +4,13 @@ Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o end
 
 ---
 
-## Tarefa 1: Implementação do Endpoint REST de Edição (`PUT /recrutadores/{id}`)
-- **Objetivo:** Adicionar o método `doPut` em `RecrutadorController` (REST) para permitir a atualização cadastral de recrutadores via API JSON, consumindo o serviço existente.
-- **Arquivos afetados:**
-  - `src/main/groovy/org/uGustavoDev/controller/api/RecrutadorController.groovy`
-- **Cenários cobertos:** Atualização com dados válidos (`200 OK`), ID inexistente (`404`), dados inválidos/conflito de e-mail/CPF (`400`/`409`).
-- **Validação:** `./gradlew test`
+- [x] **Tarefa 1: Implementação do Endpoint REST de Edição (`PUT /recrutadores/{id}`)**
+  - **Objetivo:** Adicionar o método `doPut` em `RecrutadorController` (REST) para permitir a atualização cadastral de recrutadores via API JSON, consumindo o serviço existente.
+  - **Arquivos afetados:**
+    - `src/main/groovy/org/uGustavoDev/controller/api/RecrutadorController.groovy`
+    - `src/test/groovy/org/uGustavoDev/controller/api/RecrutadorControllerSpec.groovy`
+  - **Cenários cobertos:** Atualização com dados válidos (`200 OK`), ID inexistente (`404`), dados inválidos/conflito de e-mail/CPF (`400`/`409`).
+  - **Status:** Concluído. Método `doPut` ajustado com respostas estruturadas de erro (400, 404, 409) e coberto por suíte Spock com 6 cenários de teste (`RecrutadorControllerSpec`).
 
 ---
 

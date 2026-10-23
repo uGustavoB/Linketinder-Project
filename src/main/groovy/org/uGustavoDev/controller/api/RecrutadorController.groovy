@@ -6,6 +6,7 @@ import org.uGustavoDev.dto.RecrutadorCadastroDTO
 import org.uGustavoDev.model.Recrutador
 import org.uGustavoDev.service.interfaces.IRecrutadorService
 
+@SuppressWarnings("CatchException")
 class RecrutadorController extends BaseController {
 
     private final IRecrutadorService recrutadorService
@@ -78,7 +79,15 @@ class RecrutadorController extends BaseController {
                     return
                 }
             }
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de recrutador inválido para atualização.")
+            enviarRespostaErro(resp, HttpServletResponse.SC_BAD_REQUEST, "ID de recrutador inválido para atualização.")
+        } catch (IllegalArgumentException e) {
+            if (e.message?.contains("não encontrado")) {
+                enviarRespostaErro(resp, HttpServletResponse.SC_NOT_FOUND, e.message)
+            } else if (e.message?.contains("Já existe")) {
+                enviarRespostaErro(resp, HttpServletResponse.SC_CONFLICT, e.message)
+            } else {
+                tratarExcecao(resp, e)
+            }
         } catch (Exception e) {
             tratarExcecao(resp, e)
         }
