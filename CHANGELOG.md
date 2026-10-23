@@ -8,7 +8,8 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
-- Integração do fluxo de navegação do recrutador no terminal (login tripartite, menu autenticado, gestão de vagas da empresa, exploração anônima de candidatos e submenu corporativo de recrutadores na empresa) com controladores de view `RecrutadorController` e `EmpresaController`, injeção no `DependencyFactory` e testes unitários em `RecrutadorControllerSpec` e `EmpresaControllerSpec`.
+- Suíte de testes unitários Spock em `RecrutadorServiceSpec` completada com 27 cenários cobrindo validações de duplicidade de CPF, listagem global, busca por ID, atualização cadastral completa, deleção e propagação de exceções de banco (`DatabaseOperationException`).
+- Integração do fluxo de navegação do recrutador no terminal (login tripartite, menu autenticado, gestão de vagas da empresa, exploração anônima de candidatos e submenu corporativo de recrutadores na empresa) com controladores de view `RecrutadorController` e `EmpresaController` e injeção no `DependencyFactory`.
 - Classe `RecrutadorView` com formulário de dados (herança de `empresaId`), exibição formatada de perfil, menu de perfil restrito (sem auto-deleção) e menu de recrutador autenticado.
 - Submenu de gestão de recrutadores (`mostrarMenuGestaoRecrutadores`) e listagem formatada de recrutadores vinculados na `EmpresaView`.
 - Delegações correspondentes e menu de seleção de perfil de autenticação (`mostrarMenuTipoLogin`) adicionados ao `ViewFacade`.

@@ -39,4 +39,6 @@ class RecrutadorSpec extends Specification {
         recrutador.dataNascimento == dataNascimento
         recrutador.senha == senha
     }
+
 }
+

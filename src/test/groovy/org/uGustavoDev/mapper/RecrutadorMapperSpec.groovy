@@ -36,4 +36,6 @@ class RecrutadorMapperSpec extends Specification {
         recrutador.dataNascimento == dto.dataNascimento
         recrutador.senha == dto.senha
     }
+
 }
+

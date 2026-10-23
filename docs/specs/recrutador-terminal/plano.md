@@ -67,6 +67,7 @@ Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o end
 - **Arquivos afetados:**
   - `src/test/groovy/org/uGustavoDev/services/RecrutadorServiceSpec.groovy`
 - **Cenários cobertos:** Sucesso e exceções de persistência e validação.
+- **Status:** Concluído. Suíte em `RecrutadorServiceSpec` expandida com 27 cenários cobrindo regras de negócio, unicidade de CPF/email, validação de senha, busca, listagem, atualização, exclusão e tratamento de falhas de banco de dados (`DatabaseOperationException`).
 - **Validação:** `./gradlew test`
 
 ---
