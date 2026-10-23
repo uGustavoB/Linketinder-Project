@@ -3,24 +3,29 @@ package org.uGustavoDev
 import org.uGustavoDev.factory.DependencyFactory
 import org.uGustavoDev.view.ViewFacade
 
-static void main(String[] args) {
-    DependencyFactory factory = DependencyFactory.getInstance()
-    ViewFacade view = new ViewFacade()
+class Main {
 
-//    Terminal terminal = new Terminal(
-//            factory.candidatoController,
-//            factory.empresaController,
-//            view
-//    )
+    static void main(String[] args) {
+        DependencyFactory factory = DependencyFactory.getInstance()
+        ViewFacade view = new ViewFacade()
 
-//    terminal.iniciar()
+        Terminal terminal = new Terminal(
+                factory.candidatoViewController,
+                factory.empresaViewController,
+                factory.recrutadorViewController,
+                view
+        )
 
-    ServidorAPI tomcatServer = new ServidorAPI(
-            factory.candidatoController,
-            factory.empresaApiController,
-            factory.recrutadorController,
-            factory.vagaController
-    )
+        terminal.iniciar()
 
-    tomcatServer.run()
+//        ServidorAPI tomcatServer = new ServidorAPI(
+//                factory.candidatoApiController,
+//                factory.empresaApiController,
+//                factory.recrutadorApiController,
+//                factory.vagaApiController
+//        )
+//
+//        tomcatServer.run()
+    }
+
 }

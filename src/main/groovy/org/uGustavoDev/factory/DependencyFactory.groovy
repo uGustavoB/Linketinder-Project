@@ -1,10 +1,12 @@
 package org.uGustavoDev.factory
 
-import org.uGustavoDev.controller.api.CandidatoController
+import org.uGustavoDev.controller.view.CandidatoController as CandidatoViewController
+import org.uGustavoDev.controller.view.EmpresaController as EmpresaViewController
+import org.uGustavoDev.controller.view.RecrutadorController as RecrutadorViewController
+import org.uGustavoDev.controller.api.CandidatoController as CandidatoApiController
 import org.uGustavoDev.controller.api.EmpresaController as EmpresaApiController
-import org.uGustavoDev.controller.api.RecrutadorController
-import org.uGustavoDev.controller.api.VagaController
-import org.uGustavoDev.controller.view.EmpresaController
+import org.uGustavoDev.controller.api.RecrutadorController as RecrutadorApiController
+import org.uGustavoDev.controller.api.VagaController as VagaApiController
 import org.uGustavoDev.dao.BaseDao
 import org.uGustavoDev.dao.CandidatoDAO
 import org.uGustavoDev.dao.CompetenciaDAO
@@ -56,11 +58,14 @@ class DependencyFactory {
     IRecrutadorService recrutadorService
     IVagaService vagaService
 
-    CandidatoController candidatoController
-    EmpresaController empresaController
+    CandidatoApiController candidatoApiController
     EmpresaApiController empresaApiController
-    RecrutadorController recrutadorController
-    VagaController vagaController
+    RecrutadorApiController recrutadorApiController
+    VagaApiController vagaApiController
+
+    CandidatoViewController candidatoViewController
+    EmpresaViewController empresaViewController
+    RecrutadorViewController recrutadorViewController
 
     private DependencyFactory() {
         iniciarDependencias()
@@ -108,11 +113,19 @@ class DependencyFactory {
     }
 
     private void inicializarControllers() {
-        candidatoController = new CandidatoController(candidatoService)
-        empresaController = new EmpresaController(empresaService, vagaService, candidatoService)
+        candidatoApiController = new CandidatoApiController(candidatoService)
         empresaApiController = new EmpresaApiController(empresaService)
-        recrutadorController = new RecrutadorController(recrutadorService)
-        vagaController = new VagaController(vagaService)
+        recrutadorApiController = new RecrutadorApiController(recrutadorService)
+        vagaApiController = new VagaApiController(vagaService)
+
+        candidatoViewController = new CandidatoViewController(candidatoService, vagaService)
+        empresaViewController = new EmpresaViewController(empresaService, vagaService, candidatoService, recrutadorService)
+        recrutadorViewController = new RecrutadorViewController(
+                recrutadorService,
+                vagaService,
+                candidatoService,
+                empresaService
+        )
     }
 
 }

@@ -121,8 +121,9 @@ class ViewFacade {
         genericoView.mostrarMensagem("1 - Meu Perfil")
         genericoView.mostrarMensagem("2 - Minhas Vagas")
         genericoView.mostrarMensagem("3 - Explorar Candidatos")
+        genericoView.mostrarMensagem("4 - Gerenciar Recrutadores")
         genericoView.mostrarMensagem("0 - Sair (Logout)")
-        return genericoView.lerEscolha("Sua escolha: ", 0, 3)
+        return genericoView.lerEscolha("Sua escolha: ", 0, 4)
     }
 
     int mostrarMenuPerfil() {

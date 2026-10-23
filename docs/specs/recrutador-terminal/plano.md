@@ -57,7 +57,8 @@ Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o end
   - `src/main/groovy/org/uGustavoDev/controller/view/EmpresaController.groovy`
   - `src/main/groovy/org/uGustavoDev/Terminal.groovy`
 - **Cenários cobertos:** Navegação de ponta a ponta para todos os perfis conforme regras de negócio.
-- **Validação:** `./gradlew classes`
+- **Status:** Concluído. Controladores de view integrados, injeção de dependências no `DependencyFactory`, fluxos de navegação e autenticação de 3 perfis no `Terminal.groovy`, e testes unitários criados em `RecrutadorControllerSpec` e `EmpresaControllerSpec`.
+- **Validação:** `./gradlew test --tests "org.uGustavoDev.controller.view.*"`
 
 ---
 
