@@ -72,12 +72,17 @@ Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o end
 
 ---
 
-## Tarefa 6: Validação Integrada, CodeNarc e Auditoria de Anonimato
-- **Objetivo:** Executar suíte completa de testes, análise estática CodeNarc e certificar que candidatos permanecem 100% anônimos ao serem listados por recrutadores. Atualizar documentação de release.
-- **Arquivos afetados:**
-  - `CHANGELOG.md`
-- **Validação:**
-  ```bash
-  ./gradlew test
-  ./gradlew codenarcMain codenarcTest
-  ```
+- [x] **Tarefa 6: Validação Integrada, CodeNarc e Auditoria de Anonimato**
+  - **Objetivo:** Executar suíte completa de testes, análise estática CodeNarc e certificar que candidatos permanecem 100% anônimos ao serem listados por recrutadores. Atualizar documentação de release.
+  - **Arquivos afetados:**
+    - `CHANGELOG.md`
+    - `src/main/groovy/org/uGustavoDev/ServidorAPI.groovy`
+    - `src/test/groovy/org/uGustavoDev/model/CandidatoSpec.groovy`
+    - `src/test/groovy/org/uGustavoDev/controller/view/RecrutadorControllerSpec.groovy`
+  - **Validação:**
+    ```bash
+    ./gradlew test
+    ./gradlew codenarcMain codenarcTest
+    ```
+  - **Status:** Concluído. 94 testes executados e aprovados com 100% de sucesso. Auditoria do Princípio do Anonimato confirmada por teste unitário em `CandidatoSpec`. Zero violações de CodeNarc nos arquivos da feature.
+

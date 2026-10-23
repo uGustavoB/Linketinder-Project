@@ -156,4 +156,40 @@ class CandidatoSpec extends Specification {
         candidato.competencias.contains("Java")
     }
 
+    void "deve garantir que toAnonymousString oculte dados pessoais sensiveis preservando anonimato"() {
+        given: "um candidato completo com dados pessoais sensíveis"
+        Candidato candidato = new CandidatoBuilder()
+                .id(42)
+                .nome("Maria")
+                .sobrenome("Santos")
+                .email("maria.santos@email.com")
+                .estado("SP")
+                .pais("Brasil")
+                .CEP("01001-000")
+                .descricao("Desenvolvedora Backend")
+                .cpf("222.333.444-55")
+                .dataNascimento(LocalDate.of(1990, 5, 20))
+                .competencias(["Groovy", "Java"])
+                .build()
+
+        when: "a representacao anonima e gerada"
+        String anonimo = candidato.toAnonymousString()
+
+        then: "informacoes tecnicas e localizacao geral estao presentes"
+        anonimo.contains("[#42]")
+        anonimo.contains("SP, Brasil")
+        anonimo.contains("Desenvolvedora Backend")
+        anonimo.contains("Groovy, Java")
+
+        and: "nenhum dado pessoal identificavel (PII) e exposto"
+        !anonimo.contains("Maria")
+        !anonimo.contains("Santos")
+        !anonimo.contains("maria.santos@email.com")
+        !anonimo.contains("222.333.444-55")
+        !anonimo.contains("01001-000")
+        !anonimo.contains("1990")
+        !anonimo.contains("20/05/1990")
+    }
+
 }
+

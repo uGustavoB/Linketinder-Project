@@ -15,7 +15,11 @@ class ServidorAPI implements Runnable {
     private RecrutadorController recrutadorController
     private VagaController vagaController
 
-    ServidorAPI(CandidatoController candidatoController, EmpresaController empresaController, RecrutadorController recrutadorController, VagaController vagaController) {
+    ServidorAPI(
+            CandidatoController candidatoController,
+            EmpresaController empresaController,
+            RecrutadorController recrutadorController,
+            VagaController vagaController) {
         this.candidatoController = candidatoController
         this.empresaController = empresaController
         this.recrutadorController = recrutadorController

@@ -8,6 +8,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Validação integrada de ponta a ponta da feature de Recrutador no terminal (CLI) e API REST, auditoria do Princípio do Anonimato na exploração de candidatos com testes unitários em `CandidatoSpec` e testes unitários do controlador de visão em `RecrutadorControllerSpec`, com 100% de aprovação na suíte Spock (94 testes) e conformidade estática CodeNarc.
 - Suíte de testes unitários Spock em `RecrutadorServiceSpec` completada com 27 cenários cobrindo validações de duplicidade de CPF, listagem global, busca por ID, atualização cadastral completa, deleção e propagação de exceções de banco (`DatabaseOperationException`).
 - Integração do fluxo de navegação do recrutador no terminal (login tripartite, menu autenticado, gestão de vagas da empresa, exploração anônima de candidatos e submenu corporativo de recrutadores na empresa) com controladores de view `RecrutadorController` e `EmpresaController` e injeção no `DependencyFactory`.
 - Classe `RecrutadorView` com formulário de dados (herança de `empresaId`), exibição formatada de perfil, menu de perfil restrito (sem auto-deleção) e menu de recrutador autenticado.
