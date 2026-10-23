@@ -8,6 +8,23 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/v1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Validação integrada de ponta a ponta da feature de Recrutador no terminal (CLI) e API REST, auditoria do Princípio do Anonimato na exploração de candidatos com testes unitários em `CandidatoSpec` e testes unitários do controlador de visão em `RecrutadorControllerSpec`, com 100% de aprovação na suíte Spock (94 testes) e conformidade estática CodeNarc.
+- Suíte de testes unitários Spock em `RecrutadorServiceSpec` completada com 27 cenários cobrindo validações de duplicidade de CPF, listagem global, busca por ID, atualização cadastral completa, deleção e propagação de exceções de banco (`DatabaseOperationException`).
+- Integração do fluxo de navegação do recrutador no terminal (login tripartite, menu autenticado, gestão de vagas da empresa, exploração anônima de candidatos e submenu corporativo de recrutadores na empresa) com controladores de view `RecrutadorController` e `EmpresaController` e injeção no `DependencyFactory`.
+- Classe `RecrutadorView` com formulário de dados (herança de `empresaId`), exibição formatada de perfil, menu de perfil restrito (sem auto-deleção) e menu de recrutador autenticado.
+- Submenu de gestão de recrutadores (`mostrarMenuGestaoRecrutadores`) e listagem formatada de recrutadores vinculados na `EmpresaView`.
+- Delegações correspondentes e menu de seleção de perfil de autenticação (`mostrarMenuTipoLogin`) adicionados ao `ViewFacade`.
+- Testes unitários com Spock cobrindo os fluxos de visualização e menus em `RecrutadorViewSpec`, `EmpresaViewSpec` e `ViewFacadeSpec`.
+- Método de autenticação `loginRecrutador(String email, String senha)` em `IRecrutadorService` e `RecrutadorService`, com testes unitários em `RecrutadorServiceSpec` cobrindo cenários de sucesso, senha incorreta, e-mail inexistente e propagação de `DatabaseOperationException`.
+- Suíte de testes unitários Spock para `RecrutadorController` (`RecrutadorControllerSpec`) cobrindo o endpoint REST `PUT /recrutadores/{id}` com cenários de 200 OK, 404 Not Found, 409 Conflict, 400 Bad Request e 415 Unsupported Media Type.
+- Endpoint REST `PUT /recrutadores/{id}` em `RecrutadorController` para suportar a atualização de recrutadores via API REST.
+- Validação integrada da feature de recrutadores, execução bem-sucedida de testes automatizados e preservação integral do Princípio do Anonimato.
+- `RecrutadorController` expondo os endpoints REST para gerenciamento de recrutadores (`/recrutadores/*`), registrado no `DependencyFactory` e no servidor embutido `ServidorAPI`.
+- Interface `IRecrutadorService`, implementação `RecrutadorService` com validações de unicidade, vínculo corporativo e senha, acompanhadas da suíte de testes unitários com Spock Mocks (`RecrutadorServiceSpec`).
+- Interface `IRecrutadorDAO` e implementação `RecrutadorDAO` com tipagem estática e suporte JDBC para operações de persistência e consulta de recrutadores.
+- DTO de cadastro `RecrutadorCadastroDTO`, contrato `IRecrutadorMapper` e implementação `RecrutadorMapper` com tipagem estática, acompanhados de testes Spock.
+- Entidade de domínio `Recrutador` e `RecrutadorBuilder` com tipagem estática estrita (`groovy.transform.CompileStatic`) e testes Spock correspondentes.
+- Tabela `recrutadores` no script DDL do banco de dados (`specs/db/linketinder_db.sql`) com restrições de chave estrangeira, unicidade de e-mail/CPF e validação de senha.
 - Documentação técnica e de diretrizes para agentes e desenvolvedores em `AGENTS.md`.
 - Definição estruturada da skill de desenvolvimento orientado por especificação (`feature-com-spec`).
 

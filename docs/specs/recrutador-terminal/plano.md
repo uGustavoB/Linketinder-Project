@@ -1,0 +1,88 @@
+# Plano de Implementação — Versão Terminal de Recrutadores (CLI)
+
+Este plano organiza as tarefas atômicas e sequenciais para disponibilizar o endpoint REST de edição e implementar toda a experiência interativa via terminal (CLI) para a feature de Recrutadores.
+
+---
+
+- [x] **Tarefa 1: Implementação do Endpoint REST de Edição (`PUT /recrutadores/{id}`)**
+  - **Objetivo:** Adicionar o método `doPut` em `RecrutadorController` (REST) para permitir a atualização cadastral de recrutadores via API JSON, consumindo o serviço existente.
+  - **Arquivos afetados:**
+    - `src/main/groovy/org/uGustavoDev/controller/api/RecrutadorController.groovy`
+    - `src/test/groovy/org/uGustavoDev/controller/api/RecrutadorControllerSpec.groovy`
+  - **Cenários cobertos:** Atualização com dados válidos (`200 OK`), ID inexistente (`404`), dados inválidos/conflito de e-mail/CPF (`400`/`409`).
+  - **Status:** Concluído. Método `doPut` ajustado com respostas estruturadas de erro (400, 404, 409) e coberto por suíte Spock com 6 cenários de teste (`RecrutadorControllerSpec`).
+
+---
+
+- [x] **Tarefa 2: Método de Autenticação no Serviço de Recrutadores**
+  - **Objetivo:** Garantir a presença do contrato e implementação do método `loginRecrutador(String email, String senha)` em `IRecrutadorService` e `RecrutadorService`, permitindo autenticação por e-mail e senha no terminal.
+  - **Arquivos afetados:**
+    - `src/main/groovy/org/uGustavoDev/service/interfaces/IRecrutadorService.groovy`
+    - `src/main/groovy/org/uGustavoDev/service/RecrutadorService.groovy`
+    - `src/test/groovy/org/uGustavoDev/services/RecrutadorServiceSpec.groovy`
+  - **Cenários cobertos:** Login com sucesso (retorna entidade), senha incorreta ou e-mail inexistente (retorna `null`), propagação de `DatabaseOperationException`.
+  - **Status:** Concluído. Método implementado com tipagem estática e coberto por 4 novos cenários de testes unitários no `RecrutadorServiceSpec`.
+
+---
+
+- [x] **Tarefa 3: Criação da `RecrutadorView`, Submenus de Gestão e Expansão do `ViewFacade`**
+  - **Objetivo:** 
+    1. Criar `RecrutadorView` para formulários de dados de recrutador (sem solicitar `empresaId`, pois é herdado da empresa logada), exibição formatada do perfil (com dados da empresa associada) e menu de perfil restrito (sem opção de auto-deleção).
+    2. Implementar menu de gestão de recrutadores para a Empresa (`1 - Cadastrar Recrutador`, `2 - Listar Recrutadores`, `3 - Deletar Recrutador`, `0 - Voltar`) e listagem formatada de recrutadores.
+    3. Expor as operações correspondentes no `ViewFacade`.
+  - **Arquivos afetados:**
+    - `src/main/groovy/org/uGustavoDev/view/RecrutadorView.groovy` (Novo)
+    - `src/main/groovy/org/uGustavoDev/view/EmpresaView.groovy`
+    - `src/main/groovy/org/uGustavoDev/view/ViewFacade.groovy`
+    - `src/test/groovy/org/uGustavoDev/view/RecrutadorViewSpec.groovy` (Novo)
+    - `src/test/groovy/org/uGustavoDev/view/EmpresaViewSpec.groovy` (Novo)
+    - `src/test/groovy/org/uGustavoDev/view/ViewFacadeSpec.groovy` (Novo)
+  - **Cenários cobertos:** Menus e formulários isolados, sem expor opções inválidas ao perfil logado (auto-deleção proibida, herança de empresaId).
+  - **Status:** Concluído. Views criadas/estendidas com tipagem estática e cobertas por 12 testes unitários Spock.
+  - **Validação:** `./gradlew test --tests "org.uGustavoDev.view.*"`
+
+---
+
+## Tarefa 4: Integração de Controladores de View e Navegação no `Terminal.groovy`
+- **Objetivo:**
+  1. Atualizar menu deslogado: Login de 3 opções (Candidato, Empresa, Recrutador). Remover qualquer opção de cadastro de recrutador da tela pública.
+  2. Atualizar menu da Empresa: Inclusão da opção `4 - Gerenciar Recrutadores`, permitindo cadastrar (associando a `empresaLogada.id`), listar e deletar recrutadores vinculados.
+  3. Implementar menu do Recrutador autenticado:
+     - `1 - Meu Perfil`: Ver perfil e editar dados (deleção proibida).
+     - `2 - Gerenciar Vagas da Empresa`: CRUD completo de vagas (Criar, Listar, Editar, Deletar), reaproveitando as rotinas já testadas de vagas com `recrutadorLogado.empresaId`.
+     - `3 - Explorar Candidatos`: Listagem de candidatos sob sigilo e anonimato rigorosos.
+     - `0 - Sair (Logout)`.
+- **Arquivos afetados:**
+  - `src/main/groovy/org/uGustavoDev/controller/view/RecrutadorController.groovy` (Novo)
+  - `src/main/groovy/org/uGustavoDev/controller/view/EmpresaController.groovy`
+  - `src/main/groovy/org/uGustavoDev/Terminal.groovy`
+- **Cenários cobertos:** Navegação de ponta a ponta para todos os perfis conforme regras de negócio.
+- **Status:** Concluído. Controladores de view integrados, injeção de dependências no `DependencyFactory`, fluxos de navegação e autenticação de 3 perfis no `Terminal.groovy`, e testes unitários criados em `RecrutadorControllerSpec` e `EmpresaControllerSpec`.
+- **Validação:** `./gradlew test --tests "org.uGustavoDev.controller.view.*"`
+
+---
+
+## Tarefa 5: Suíte de Testes Automatizados Unitários (Spock)
+- **Objetivo:** Implementar/completar testes unitários Spock cobrindo login de recrutadores, deleção e listagem de recrutadores por empresa, e manutenção de vagas via recrutador.
+- **Arquivos afetados:**
+  - `src/test/groovy/org/uGustavoDev/services/RecrutadorServiceSpec.groovy`
+- **Cenários cobertos:** Sucesso e exceções de persistência e validação.
+- **Status:** Concluído. Suíte em `RecrutadorServiceSpec` expandida com 27 cenários cobrindo regras de negócio, unicidade de CPF/email, validação de senha, busca, listagem, atualização, exclusão e tratamento de falhas de banco de dados (`DatabaseOperationException`).
+- **Validação:** `./gradlew test`
+
+---
+
+- [x] **Tarefa 6: Validação Integrada, CodeNarc e Auditoria de Anonimato**
+  - **Objetivo:** Executar suíte completa de testes, análise estática CodeNarc e certificar que candidatos permanecem 100% anônimos ao serem listados por recrutadores. Atualizar documentação de release.
+  - **Arquivos afetados:**
+    - `CHANGELOG.md`
+    - `src/main/groovy/org/uGustavoDev/ServidorAPI.groovy`
+    - `src/test/groovy/org/uGustavoDev/model/CandidatoSpec.groovy`
+    - `src/test/groovy/org/uGustavoDev/controller/view/RecrutadorControllerSpec.groovy`
+  - **Validação:**
+    ```bash
+    ./gradlew test
+    ./gradlew codenarcMain codenarcTest
+    ```
+  - **Status:** Concluído. 94 testes executados e aprovados com 100% de sucesso. Auditoria do Princípio do Anonimato confirmada por teste unitário em `CandidatoSpec`. Zero violações de CodeNarc nos arquivos da feature.
+
